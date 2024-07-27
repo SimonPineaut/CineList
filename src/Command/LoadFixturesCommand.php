@@ -50,6 +50,7 @@ class LoadFixturesCommand extends Command
                 $this->entityManager->persist($playlist);
             }
         }
+        $this->entityManager->flush();
 
         $demoUser = new User();
         $demoUser->setUsername('Demo user');
@@ -64,6 +65,7 @@ class LoadFixturesCommand extends Command
         }
         $demoUser->setIsVerified(true);
         $this->entityManager->persist($demoUser);
+        $this->entityManager->flush();
 
         for ($j = 0; $j <= 4; $j++) {
             $playlist = new Playlist();

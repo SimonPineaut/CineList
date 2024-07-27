@@ -1,0 +1,203 @@
+.page-playlists {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.playlist {
+    width: 20%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    padding: 20px;
+    background-color: #333;
+    border-radius: 6px;
+
+    .playlist-btn {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 8px;
+        padding: 8px;
+        background-color: #f8f9fa;
+    
+        &:hover {
+            cursor: pointer;
+            transform: scale(1.08);
+        }
+    }
+
+    .delete-btn {
+        right: 8px;
+        background-color: #ff0000;
+    }
+
+    .show-btn {
+        left: 8px;
+        background-color: #f8f9fa;
+    }
+
+    .edit-btn {
+        right: 8px;
+        top: 45px;
+        background-color: #ffff00;
+    }
+
+    .lock-btn {
+        left: 8px;
+        background-color: #f8f9fa;
+    }
+
+    .playlist-username,
+    .created-at {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        color: #f8f9fa;
+        padding: 5px 15px;
+        font-weight: 600;
+        margin-top: 10px;
+
+        img {
+            width: 20px;
+            margin-right: 5px;
+        }
+    }
+
+    .playlist-username {
+        padding: 5px 10px;
+        border-radius: 6px;
+        color: #3EAFEC;
+    }
+
+    .delete-playlist {
+        position: absolute;
+        top: -15px;
+        right: -15px;
+
+        button {
+            padding: 0;
+            margin: 0;
+
+            &:hover {
+                transform: scale(1.05);
+            }
+        }
+
+        img {
+            height: 30px;
+        }
+    }
+}
+
+.playlist-movie-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    flex-grow: 1;
+
+    img {
+        width: 30%;
+        height: auto;
+        margin: 0 10px;
+    }
+
+    .carousel-arrow {
+        width: 30px;
+    }
+
+    .carousel-control-prev {
+        left: -20px;
+    }
+
+    .carousel-control-next {
+        right: -20px;
+    }
+
+    .slider-image {
+        margin: 0 auto;
+    }
+}
+
+.playlist-edit {
+    position: relative;
+    text-align: center;
+    margin: 20px;
+    padding: 20px 0;
+    background-color: #333;
+    border-radius: 6px;
+
+    .title-block {
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+
+    }
+
+    .playlist-action-block {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        border-radius: 6px;
+
+        button {
+            padding: 10px;
+            margin: 0 5px;
+            background-color: white;
+
+            &:hover {
+                transform: scale(1.05);
+                cursor: pointer;
+            }
+
+            img {
+                height: 30px;
+            }
+        }
+    }
+
+    .edit-playlist-movie-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 25px;
+        margin: 25px;
+
+        .playlist-element {
+            width: 14%;
+            position: relative;
+            transition: all 200ms ease-in-out;
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            span {
+                position: absolute;
+                top: -15px;
+                right: -15px;
+
+                img {
+                    height: 30px;
+
+                    &:hover {
+                        cursor: pointer;
+                        transform: scale(1.05);
+                    }
+                }
+            }
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+    }
+}

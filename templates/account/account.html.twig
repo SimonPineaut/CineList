@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-image: url("{{ asset('images/wallpapers/account/login.webp') }}");
+            background-position: center;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="page page-account">
+        {% include "partials/delete_account_modal.html.twig" %}
+        <div class="d-flex flex-column align-items-start bg-dark text-light p-2 mt-4 rounded">
+            <div>Vous êtes connecté(e) en tant que : <span class="fw-bold custom-blue">{{ user.username }}</span></div>
+            <div>Votre email : <span class="fw-bold custom-blue">{{ user.email }}</span></div>
+        </div>
+        {{ form_errors(form) }}
+        {{ form_start(form) }}
+            <div class="authentication-container">
+                <div class="title">
+                    <h3>Changer de mot de passe</h3>
+                </div>
+
+                <div class="pwd-label">
+                    {{ form_label(form.currentPassword) }}
+                </div>
+                <div class="register-password-container">
+                    {{ form_widget(form.currentPassword) }}
+                    <span id="togglePasswordVisibility" class="toggle-pwd">
+                        <img id="togglePwdImg" src="{{ asset('icons/pwd-show.svg') }}" alt="">
+                    </span>
+                    <span id="currentPasswordValidity" class="validation-message"></span>
+                    {{ form_errors(form.currentPassword) }}
+                </div>
+
+                <div class="pwd-label">
+                    {{ form_label(form.newPassword) }}
+                </div>
+                <div class="register-password-container">
+                    {{ form_widget(form.newPassword) }}
+                    <span id="togglePasswordVisibility" class="toggle-pwd">
+                        <img id="togglePwdImg" src="{{ asset('icons/pwd-show.svg') }}" alt="">
+                    </span>
+                    <span id="passwordValidity" class="validation-message"></span>
+                    {{ form_errors(form.newPassword) }}
+                </div>
+
+                <div class="pwd-label">
+                    {{ form_label(form.confirmPassword) }}
+                </div>
+                <div class="register-password-container">
+                    {{ form_widget(form.confirmPassword) }}
+                    <span id="togglePasswordVisibility" class="toggle-pwd">
+                        <img id="togglePwdImg" src="{{ asset('icons/pwd-show.svg') }}" alt="">
+                    </span>
+                    <span id="confirmPasswordValidity" class="validation-message"></span>
+                    {{ form_errors(form.confirmPassword) }}
+                </div>
+                <button type="submit" class="login-btn">Changer le mot de passe</button>
+                <p class="login-register-link">
+                    <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié ?</a>
+                </p>
+            </div>
+        {{ form_end(form) }}
+        <div id="deleteAccountBtn" class="delete-user" data-user-id="{{ user.id }}">
+            Supprimer votre compte
+        </div>
+    </div>
+
+{% endblock %}

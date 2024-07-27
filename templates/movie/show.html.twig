@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ movie.title }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+	<style>
+		body {
+			background-image: url("{{ asset('images/wallpapers/movie/main.webp') }}");
+			background-position: center;
+			background-attachment: fixed;
+			background-size: cover;
+		}
+	</style>
+{% endblock %}
+
+{% block body %}
+	<div class="col-4 text-center bg-dark text-light rounded fs-6 p-2 mx-auto my-4"><span class="custom-blue fs-4 fw-bolder">{{ movie.title }}</span></div>
+	<div class="container mt-4" data-movie-id="{{ movie.id }}">
+		<div class="row">
+			<div class="col-2">
+				{% if movie.poster_path is not null %}
+					<img class="w-100 rounded" src={{ "https://image.tmdb.org/t/p/w500" ~ movie.poster_path }}>
+				{% else %}
+					<img class="w-100 rounded n-a" src={{ asset('images/na2.webp') }}>
+				{% endif %}
+		
+				{% if movie.genres is not null %}
+					<div class="genres">
+						{% for genre in movie.genres %}
+						
+						<a href="{{ path('app_movie_genre', {'genreId': genre.id, 'genreName': genre.name, 'page': 1}) }}"><span>{{ genre.name }}</span></a>
+						{% endfor %}
+					</div>
+				{% endif %}
+			</div>
+			<div class="col-10 d-flex flex-column justify-content-evenly bg-dark p-4 rounded">
+				<div class="d-flex justify-content-between">
+					<div class="movie-show-year">
+						<img src="{{ asset('icons/release-date.svg') }}">
+						<span>{{ movie.release_date|date('d/m/Y') }}</span>
+					</div>
+					{% if movie.origin_country is not null %}
+						<div class="flags">
+							{% for origin_country in movie.origin_country %}
+								<span class="fi fi-{{ origin_country|lower }}"></span>
+							{% endfor %}
+						</div>
+					{% endif %}
+					{% if directors is not null %}
+						<div class="directors">
+							{% for director in directors %}
+								<div class="director">
+									<img src="{{ asset('icons/director.svg') }}">
+									<a href="{{ path('app_person_show', {'id': director.id}) }}">{{director.name}}</a>
+								</div>
+							{% endfor %}
+						</div>
+					{% endif %}
+					<div class="movie-gauge-container">
+						<canvas 
+							id="gauge{{ movie.id }}"
+							class="gauge"  
+							data-movie-id="{{ movie.id }}"
+							data-movie-note="{{ (movie.vote_average * 10)|round }}" 
+							data-movie-note-count="{{ movie.vote_count }}">
+						</canvas>
+					</div>
+				</div>
+		
+				{% if movie.tagline is not null %}
+					<cite>
+						<p class="tagline">{{movie.tagline}}</p>
+					</cite>
+				{% endif %}
+		
+				{% if movie.overview is not null %}
+					<p class="overview">{{movie.overview}}</p>
+				{% endif %}
+				{% include "partials/casting.html.twig" %}
+			</div>
+		</div>
+	</div>
+	{% include "partials/recommendations.html.twig" %}
+	{% include "partials/logout_modal.html.twig" %}
+{% endblock %}

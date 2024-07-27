@@ -1,0 +1,55 @@
+{% set route = app.request.get('_route') %}
+{% set routes = {
+    'search': 'app_movie_search',
+    'genre': 'app_movie_genre',
+} %}
+{% set query = app.request.query.get('query') %}
+<div class="d-flex justify-content-center my-2">
+    {% if currentPage > 1 and totalPages > 1 %}
+        <a class="pagination-link" 
+           href="{{ path(route, 
+                 route == routes.search ? {'page': 1, 'query': query} : 
+                 (route == routes.genre ? {'page': 1, 'genreId': genreId, 'genreName': genreName} : 
+                 {'page': 1})) }}">
+            <span>1</span>
+        </a>
+    {% endif %}
+
+    {% for i in (currentPage - 3)..(currentPage - 1) %}
+        {% if i > 1 %}
+            <a class="pagination-link" 
+               href="{{ path(route, 
+                     route == routes.search ? {'page': i, 'query': query} : 
+                     (route == routes.genre ? {'page': i, 'genreId': genreId, 'genreName': genreName} : 
+                     {'page': i})) }}">
+                {{ i }}
+            </a>
+        {% endif %}
+    {% endfor %}
+
+    {% if currentPage > 0 and currentPage <= totalPages and totalPages > 1 %}
+        <span class="pagination-link bg-light text-dark">{{ currentPage }}</span>
+    {% endif %}
+
+    {% for i in (currentPage + 1)..(currentPage + 3) %}
+        {% if i < totalPages %}
+            <a class="pagination-link" 
+               href="{{ path(route, 
+                     route == routes.search ? {'page': i, 'query': query} : 
+                     (route == routes.genre ? {'page': i, 'genreId': genreId, 'genreName': genreName} : 
+                     {'page': i})) }}">
+                {{ i }}
+            </a>
+        {% endif %}
+    {% endfor %}
+
+    {% if currentPage < totalPages and totalPages > 1 %}
+        <a class="pagination-link" 
+           href="{{ path(route, 
+                 route == routes.search ? {'page': totalPages, 'query': query} : 
+                 (route == routes.genre ? {'page': totalPages, 'genreId': genreId, 'genreName': genreName} : 
+                 {'page': totalPages})) }}">
+            <span>{{ totalPages }}</span>
+        </a>
+    {% endif %}
+</div>

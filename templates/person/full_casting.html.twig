@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}casting de {{ movie.title }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-image: url("{{ asset('images/wallpapers/person/show.webp') }}");
+            background-position: center;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="col-4 text-center bg-dark text-light rounded fs-6 p-2 mx-auto my-4">Casting de <span class="custom-blue fs-4 fw-bolder">{{ movie.title }}</span></div>
+    <div class="page page-full-casting bg-dark text-light rounded mt-4 p-3">
+        {% for actor in actors %}
+            <div class="actor-card">
+                <a href="{{ path('app_person_show', {'id': actor.id}) }}">
+                    {% if actor.profile_path is not null %}
+                        <img class="person-img rounded" src="{{ 'https://image.tmdb.org/t/p/w500' ~ actor.profile_path }}" alt="Affiche du film">
+                    {% else %}
+                        <img class="w-100 rounded n-a" src={{ asset('images/na2.webp') }}>
+                    {% endif %}
+                </a>
+                <a class="actor-name-link text-white" href="{{ path('app_person_show', {'id': actor.id}) }}">{{ actor.name }}</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes favoris{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-image: url("{{ asset('images/wallpapers/movie/main.webp') }}");
+            background-position: center;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="h-100">
+        {% if movies is not empty %}
+            <div class="page page-movie-favorites">
+                {% include "partials/movie_card.html.twig" %}
+            </div>
+        {% else %}
+            <div class="no-results">
+                <p>Aucun résultat</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

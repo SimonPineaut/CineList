@@ -1,0 +1,25 @@
+{% if recommendations is not empty %}
+    <div class="text-center m-4">
+        <span class="bg-dark custom-blue rounded fw-bold fs-3 p-2">Films similaires</span>
+    </div>
+    <div class="recommendations-container">
+        <div class="recommendations bg-dark rounded">
+            {% for recommendation in recommendations %}
+                <div class="recommendation">
+                    {% if recommendation.poster_path %}
+                            <a href="{{ path('app_movie_show', {'id': recommendation.id}) }}" class="recommendation-link">
+                                <img class="recommendation-img" src="{{ 'https://image.tmdb.org/t/p/w500' ~ recommendation.poster_path }}" alt="Affiche du film">
+                            </a>
+                    {% else %}
+                        <a class="movie-img-link" href="{{ path('app_movie_show', {'id': recommendation.id}) }}">
+                            <img class="movie-img n-a" src="{{ asset('images/na2.webp') }}" alt="Affiche non disponible">
+                        </a>
+                    {% endif %}
+                    <div class="">
+                        {{ (recommendation.vote_average * 10)|round }}%
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

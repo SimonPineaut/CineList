@@ -1,0 +1,19 @@
+<div class="casting-container">
+    <div class="casting">
+        {% for actor in actors %}
+                {% if actor.profile_path %}
+                    <div class="actor">
+                        <a href="{{ path('app_person_show', {'id': actor.id}) }}">
+                            <img class="person-img rounded" src="{{ 'https://image.tmdb.org/t/p/w500' ~ actor.profile_path }}" alt="Affiche du film">
+                        </a>
+                        <a class="actor-name-link" href="{{ path('app_person_show', {'id': actor.id}) }}">{{ actor.name }}</a>
+                    </div>
+                {% endif %}
+        {% endfor %}
+    </div>
+    {% if actors %}
+        <a href="{{ path('app_movie_casting', { 'movieId': movie.id}) }}">
+            <img class="more" src="{{ asset('icons/more-light.svg') }}" alt="">
+        </a>
+    {% endif %}
+</div>

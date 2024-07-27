@@ -1,0 +1,22 @@
+.page-movie-genres {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin: 30px auto;
+
+    a {
+        background-color: #f8f9fa;
+        align-content: center;
+        margin: 20px;
+        padding: 20px;
+        border-radius: 6px;
+        text-align: center;
+        text-decoration: none;
+        font-weight: 700;
+        color: #212529;
+
+        &:hover {
+            color: #f8f9fa;
+            background-color: #212529;
+        }
+    }
+}

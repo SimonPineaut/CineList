@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ playlist.name }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-image: url("{{ asset('images/wallpapers/person/show.webp') }}");
+            background-position: center;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="playlist-edit" data-playlist-id="{{ playlist.id }}">
+    <h3 class="d-inline-block text-center text-light rounded p-2">
+        Titre :
+        <span class="fw-bolder fs-2 custom-blue">{{ playlist.name }}</span>
+    </h3>
+    <div class="d-flex justify-content-evenly m-2">
+        <div class="text-light p-2">
+            <span>Date de création :
+                <span class="fw-normal fs-6 custom-blue">{{ playlist.createdAt|format_datetime('relative_medium', 'none', locale='fr') }}<span>
+            </span>
+        </div>
+        <div class="text-light p-2">
+            <span>Auteur :
+                {% if app.user != playlist.user %}
+                    <a href="{{ path('app_playlist_user', {'userId': playlist.user.id}) }}">
+                        <span class="fw-normal fs-6 custom-blue">{{ playlist.user.username }}</span>
+                    </a>
+                {% else %}
+                    <span class="fw-normal fs-6 custom-blue">Vous</span>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+    <div class="edit-playlist-movie-container">
+        {% for movie in movies %}
+            <div class="playlist-element" data-playlist-id="{{ playlist.id }}">
+                {% if app.user == playlist.user %}
+                    <span id="removeFromPlaylistBtn">
+                        <img data-movie-id="{{ movie.id }}"src="{{ asset('icons/delete.svg') }}" alt="">
+                    </span>
+                {% endif %}
+                <a href="{{ path('app_movie_show', {'id': movie.id }) }}">
+                    <img src="{{'https://image.tmdb.org/t/p/w500' ~ movie.poster_path }}" alt="">
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+    {% if app.user != playlist.user %}
+        <div id="importPlaylistBtn" class="playlist-action-block">
+            <button class="btn">
+                <img src="{{ asset('icons/download.svg') }}" alt="">
+            </button>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

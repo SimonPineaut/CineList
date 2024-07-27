@@ -1,0 +1,83 @@
+{% set route = app.request.get('_route') %}
+
+{% macro navbar_link(routeName, label, parameters = {}) %}
+    {% set route = app.request.get('_route') %}
+    <a class="nav-link fw-bold mx-2 custom-blue {% if route == routeName %}active{% endif %}" href="{{ path(routeName, parameters) }}">
+        {{ label }}
+    </a>
+{% endmacro %}
+
+<nav class="sticky-navbar navbar navbar-expand-lg navbar-dark bg-dark p-2" id="navbar">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav w-100 d-lg-flex justify-content-evenly mb-2 mb-lg-0 text-primary">
+                <div class="d-lg-flex">
+                    <li class="nav-item">
+                        {{ _self.navbar_link('app_movie_index', 'Accueil', {'page': 1}) }}
+                    </li>
+                    <li class="nav-item">
+                        {{ _self.navbar_link('app_movie_trending', 'Tendances', {'page': 1}) }}
+                    </li>
+                    <li class="nav-item">
+                        {{ _self.navbar_link('app_movie_top_rated', 'Top', {'page': 1}) }}
+                    </li>
+                    <li class="nav-item">
+                        {{ _self.navbar_link('app_movie_genres', 'Genres') }}
+                    </li>
+                    <li class="nav-item">
+                        {{ _self.navbar_link('app_playlist_index', 'Playlists') }}
+                    </li>
+                </div>
+                {% set query = app.request.query.get('query') %}
+                <form class="d-flex" action="{{ path('app_movie_search', {'page' : 1}) }}" method="get">
+                    <input class="rounded-pill text-center" type="search" name="query" placeholder="chercher un film" value="{{ query }}"
+                        aria-label="Search">
+                    <button class="search-btn" type="submit">
+                        <img class="search-icon" src="{{ asset('icons/search.svg') }}">
+                    </button>
+                </form>
+                {% if is_granted("ROLE_USER") %}
+                    <div class="d-lg-flex">
+                        <li class="nav-item badge-container">
+                            {{ _self.navbar_link('app_movie_favorites', 'Mes favoris') }}
+                            <span id="favoriteCount" class="badge rounded-pill bg-light text-dark">{{ favorites_count() }}</span>
+                        </li>
+                        <li class="nav-item badge-container">
+                            {{ _self.navbar_link('app_playlist_logged_user', 'Mes playlists') }}
+                            <span id="playlistCount" class="badge rounded-pill bg-light text-dark">{{ playlists_count() }}</span>
+                        </li>
+                    </div>
+                    <div class="d-lg-flex">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_account') }}">
+                                <img class="user-icon" src="{{ asset('icons/account.svg') }}">
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="logoutBtn" class="nav-link" href="#">
+                                <img class="logout-icon" src="{{ asset('icons/logout.svg') }}" alt="logout">
+                            </a>
+                        </li>
+                    </div>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold mx-2 custom-blue {% if route == 'app_login' %}active{% endif %}"
+                            href="{{ path('app_login') }}">
+                            Connexion
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold mx-2 custom-blue {% if route == 'app_register' %}active{% endif %}"
+                            href="{{ path('app_register') }}">
+                            Inscription
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% include "partials/logout_modal.html.twig" %}

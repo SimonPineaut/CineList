@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CineList{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-image: url("{{ asset('images/wallpapers/movie/main.webp') }}");
+            background-position: center;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% if movies is not empty %}
+        {% include "partials/pagination.html.twig" %}
+        <div class="page page-movies">
+            {% include "partials/movie_card.html.twig" %}
+        </div>
+        {% include "partials/pagination.html.twig" %}
+    {% else %}
+    <div class="h-75">
+        <div class="no-results">
+            <p>Aucun résultat</p>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

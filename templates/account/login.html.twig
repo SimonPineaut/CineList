@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-image: url("{{ asset('images/wallpapers/account/login.webp') }}");
+            background-position: center;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="page page-account">
+        {% if not app.user %}
+            <form action="{{ path('app_login') }}" method="post">
+                <div class="authentication-container">
+                    <div class="title">
+                        <h3>Connexion</h3>
+                    </div>
+                    <div class="row-div">
+                        <label for="_username">Email</label>
+                        <div id="emailValidity"></div>
+                        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control"
+                            autocomplete="email" required autofocus>
+                    </div>
+                    <div class="row-div">
+                        <label for="_password">Mot de passe</label>
+                        <div class="login-password-container">
+                            <input type="password" name="_password" id="password" class="form-control password-field" autocomplete="current-password"
+                            required>
+                            <span id="togglePasswordVisibility" class="toggle-pwd">
+                                <img  id="togglePwdImg" src="{{ asset('icons/pwd-show.svg') }}" alt="">
+                            </span>
+                            <div id="passwordValidity"></div>
+                        </div>
+                    </div>  
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <div class="remember-me">
+                        <input type="checkbox" name="_remember_me" checked>
+                        Rester connecté(e)
+                    </div>
+                    <button class="login-btn" type="submit">Connexion</button>
+                    <p class="login-register-link">
+                        Pas encore de compte ?
+                        <a href="{{ path('app_register') }}">Inscrivez-vous !</a>
+                    </p>
+                    <p class="login-register-link">
+                        <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié ?</a>
+                    </p>
+                </div>
+            </form>
+        {% else %}
+            <div class="already-logged-in">
+                Vous êtes déjà connecté(e) en tant que <span class="username"> {{ app.user.username }} </span>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

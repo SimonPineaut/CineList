@@ -1,0 +1,16 @@
+// modules
+@import './modules/navbar.scss';
+@import './modules/main.scss';
+@import './modules/note-gauge.scss';
+@import './modules/pagination.scss';
+@import './modules/logout-modal.scss';
+@import './modules/playlist-modal.scss';
+
+// pages
+@import './pages/movie-index.scss';
+@import './pages/movie-show.scss';
+@import './pages/person-show.scss';
+@import './pages/full-casting.scss';
+@import './pages/authentication.scss';
+@import './pages/genres.scss';
+@import './pages/playlist.scss';

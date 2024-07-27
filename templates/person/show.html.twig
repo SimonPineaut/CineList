@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ person.name }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-image: url("{{ asset('images/wallpapers/person/show.webp') }}");
+            background-position: center;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-4">
+                {% if person.profile_path is not null %}
+                    <img class="w-100 rounded" src={{ "https://image.tmdb.org/t/p/w500" ~ person.profile_path }}>
+                {% else %}
+                    <img class="w-100 rounded n-a" src={{ asset('images/na2.webp') }}>
+                {% endif %}
+            </div>
+            <div class="person-text col-8 d-flex flex-column justify-content-evenly bg-dark text-center text-light p-2 rounded">
+                <div>
+                    {% if person.name is not null %}
+                        <h2 class="fw-bold custom-blue">{{person.name}}</h2>
+                    {% endif %}
+                    {% if person.birthday is not null %}
+                        <p class="fw-bold">Né(e) le {{ person.birthday|date('d/m/Y') }}</p>
+                    {% endif %}
+                    {% if person.place_of_birth is not null %}
+                        <p class="fw-bold">à {{person.place_of_birth}}</p>
+                    {% endif %}
+                    {% if person.deathday is not null %}
+                        <p class="fw-bold">Décédé(e) le {{ person.deathday|date('d/m/Y') }}</p>
+                    {% endif %}
+                </div>
+                <div class="person-biography p-2">
+                    {% if person.biography != "" %}
+                        <cite>{{person.biography}}</cite>
+                    {% else %}
+                        <p>Aucune description disponible</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-4 text-center bg-dark text-light rounded fs-4 p-2 mx-auto mt-5 mb-3"><span class="custom-blue fw-bold">Ses films les plus populaires</span></div>
+        <div class="recommendations-container person-top-movies">
+            <div class="recommendations bg-dark rounded mt-3">
+                {% for movie in relatedMovies %}
+                    <div class="recommendation">
+                        {% if movie.poster_path %}
+                                <a href="{{ path('app_movie_show', {'id': movie.id}) }}" class="recommendation-link">
+                                    <img class="recommendation-img" src="{{ 'https://image.tmdb.org/t/p/w500' ~ movie.poster_path }}" alt="Affiche du film">
+                                </a>
+                        {% else %}
+                            <a class="movie-img-link" href="{{ path('app_movie_show', {'id': movie.id}) }}">
+                                <img class="movie-img n-a" src="{{ asset('images/na2.webp') }}" alt="Affiche non disponible">
+                            </a>
+                        {% endif %}
+                        <div class="">
+                            {{ (movie.vote_average * 10)|round }}%
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

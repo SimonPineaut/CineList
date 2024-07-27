@@ -1,0 +1,33 @@
+// .pagination {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     margin: 10px;
+
+    .pagination-link {
+        display: flex;
+        align-items: center;
+        padding: 2px 8px;
+        margin: 10px;
+        text-decoration: none;
+        background-color: #212529;
+        border-radius: 5px;
+        color: #f8f9fa;
+        font-size: 19px;
+        font-weight: 600;
+
+        &:hover {
+            color: #212529;
+            background-color: #f8f9fa;
+        }
+    }
+
+    .current-page {
+        color: #f4f4f4;
+        background-color: rgb(46, 44, 42);
+        font-weight: 600;
+        padding: 3px 7px;
+        margin: 10px;
+        border-radius: 6px;
+    }
+// }

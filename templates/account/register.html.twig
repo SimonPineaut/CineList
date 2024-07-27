@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-image: url("{{ asset('images/wallpapers/account/register.webp') }}");
+            background-position: center;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="page page-account">
+        {% if not app.user %}
+            {{ form_errors(registrationForm) }}
+            {{ form_start(registrationForm) }}
+                <div class="authentication-container">
+                    <div class="title">
+                        <h3>Inscription</h3>
+                    </div>
+                    
+                    <div class="register-email">
+                        {{ form_label(registrationForm.username) }}
+                        <div id="usernameValidity"></div>
+                        {{ form_errors(registrationForm.username) }}
+                        {{ form_widget(registrationForm.username) }}
+                    </div>
+
+                    <div class="register-email">
+                        {{ form_label(registrationForm.email) }}
+                        <div id="emailValidity"></div>
+                        {{ form_errors(registrationForm.email) }}
+                        {{ form_widget(registrationForm.email) }}
+                    </div>
+
+                    <div class="pwd-label">
+                        {{ form_label(registrationForm.plainPassword) }}
+                    </div>
+                    <div class="register-password-container">
+                        {{ form_widget(registrationForm.plainPassword) }}
+                        <span id="togglePasswordVisibility" class="toggle-pwd" >
+                            <img id="togglePwdImg" src="{{ asset('icons/pwd-show.svg') }}" alt="">
+                        </span>
+                        <div id="passwordValidity"></div>
+                        {{ form_errors(registrationForm.plainPassword) }}
+                    </div>
+
+                    <button type="submit" class="login-btn">Inscription</button>
+
+                    <p class="login-register-link">
+                        Vous avez un compte ?
+                        <a href="{{ path('app_login') }}">Connectez-vous !</a>
+                    </p>
+                </div>
+            {{ form_end(registrationForm) }}
+        {% else %}
+            <div class="already-logged-in">
+                Vous êtes déjà connecté(e) en tant que <span class="username"> {{ app.user.username }} </span>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

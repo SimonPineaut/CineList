@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Playlists{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-image: url("{{ asset('images/wallpapers/person/show.webp') }}");
+            background-position: center;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% if playlists is not empty %}
+        <div class="page page-playlists">
+            {% for playlist in playlists %}
+                <div class="playlist" data-playlist-id="{{ playlist.id }}" id="playlist{{ playlist.id }}">
+                    <div class="modal-element d-none" id="deletePlaylistModal{{ playlist.id }}">
+                        <span>Confirmer la suppression de la playlist ?</span>
+                        <div class="confirm-action">
+                            <button class="confirm-yes submit-btn">Oui</button>
+                            <button class="confirm-no submit-btn">Non</button>
+                        </div>
+                    </div>
+                    {% if app.user == playlist.user %}
+                        <a class="playlist-btn edit-btn rounded-circle" href="{{ path('app_playlist_edit', {'id': playlist.id}) }}">
+                            <img src="{{ asset('icons/edit.svg') }}" alt="">
+                        </a>
+                        <a class="playlist-btn delete-btn btn rounded-circle" id="deletePlaylistBtn">
+                            <img src="{{ asset('icons/trash.svg') }}" alt="">
+                        </a>
+                        <a class="playlist-btn lock-btn btn rounded-circle" id="lockPlaylistBtn" data-is-public="{{ playlist.isPublic }}">
+                            {% if playlist.isPublic %}
+                                <img class="unlock" src="{{ asset('icons/unlock.svg') }}" alt="">
+                            {% else %}
+                                <img class="lock" src="{{ asset('icons/lock.svg') }}" alt="">
+                            {% endif %}
+                        </a>
+                    {% else %}
+                        <a class="playlist-btn show-btn rounded-circle" href="{{ path('app_playlist_edit', {'id': playlist.id}) }}">
+                            <img src="{{ asset('icons/more-dark.svg') }}" alt="">
+                        </a>
+                    {% endif %}
+                    <span class="fw-normal mb-2 custom-blue">{{ playlist.name|u.truncate(22, '...') }}</span>
+                    <span class="text-light mb-2">{{ playlist.movieIds|length }} film{% if playlist.movieIds|length > 1 %}s{% endif %}</span>
+                    <div class="playlist-movie-container">
+                        {% for key, movies in moviesByPlaylist %}
+                            {% if key == playlist.id %}
+                                    <div id="playlistCarousel{{ playlist.id }}" class="carousel slide" data-bs-interval="false" data-bs-wrap="false">
+                                        <div class="carousel-inner">
+                                            {% for key, movie in movies %}
+                                                <div class="carousel-item {% if key == 0 %}active{% endif %} ">
+                                                        <img class="d-block w-100 slider-image" src="{{ 'https://image.tmdb.org/t/p/w500' ~ movie.poster_path }}" alt="slide {{ key + 1 }}">
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                        {% if playlist.movieIds|length > 1 %}
+                                            <a class="carousel-control-prev" href="#playlistCarousel{{ playlist.id }}" role="button" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="sr-only">
+                                                    <img class="carousel-arrow" src="{{ asset('icons/prev-img.svg') }}">
+                                                </span>
+                                            </a>
+                                            <a class="carousel-control-next" href="#playlistCarousel{{ playlist.id }}" role="button" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="sr-only">
+                                                    <img class="carousel-arrow" src="{{ asset('icons/next-img.svg') }}">
+                                                </span>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="created-at">
+                        <img src="{{ asset('icons/release-date.svg') }}" alt="Date de création">
+                        <span>{{ playlist.createdAt|format_datetime('relative_medium', 'none', locale='fr') }}</span>
+                    </div>
+                    <div class="playlist-username">
+                        <img src="{{ asset('icons/user.svg') }}" alt="">
+                        {% if app.user != playlist.user %}
+                            <a href="{{ path('app_playlist_user', {'userId': playlist.user.id}) }}">
+                                <span>{{ playlist.user.username }}</span>
+                            </a>
+                        {% else %}
+                            <span class="text-white">Vous</span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="h-75">
+            <div class="no-results">
+                <p>Aucune playlist</p>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,21 @@
+.page-full-casting {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 25px;
+
+    .actor-card {
+        width: 15%;
+
+        .actor-name-link {
+           text-decoration: underline;
+           overflow: hidden;
+        }
+    }
+
+    .person-img {
+       width: 100%;
+       border-radius: 6px 6px 0 0;
+    }
+}

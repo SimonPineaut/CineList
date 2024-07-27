@@ -62,10 +62,6 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		echo "Building successfull"
 	fi
 
-	# echo "Loading fixtures"
-	# php bin/console doctrine:fixtures:load --no-interaction
-	# echo "Fixtures loaded"
-
 	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var
 	setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX var
 fi

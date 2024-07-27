@@ -29,15 +29,18 @@ Une fois positionné à la racine du projet cloné, deux méthodes d'installatio
 ### Prérequis avec Docker
 - <a href="https://www.docker.com/">Docker</a>
 - <a href="https://docs.docker.com/compose/">Docker Compose</a>
-- <a href="https://www.docker.com/products/docker-desktop/">Docker desktop </a> ( optionnel mais recommandé )
+- <a href="https://www.docker.com/products/docker-desktop/">Docker desktop </a>
 - Pour les systèmes Windows, l'utilisation de <a href="https://docs.docker.com/desktop/wsl/"> WSL </a> est recommandée.
 
 ### <strong>Installation avec docker</strong>
-1. **Construire et démarrer les conteneurs Docker**
+
+1. **Démarrer Docker Desktop**
+
+2. **Construire et démarrer les conteneurs Docker**
 ```
 docker compose up --build
 ```
-2. **Ouvrir l'application**
+3. **Ouvrir l'application**
 
 Votre application est prête à cette URL : <a href="https://localhost/">https://localhost</a>
 

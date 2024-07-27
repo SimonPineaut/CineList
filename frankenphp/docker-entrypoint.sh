@@ -50,7 +50,9 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 
 		if [ "$( find ./migrations -iname '*.php' -print -quit )" ]; then
 			php bin/console doctrine:migrations:migrate --no-interaction --all-or-nothing
+			php bin/console load-fixtures
 		fi
+
 	fi
 	
 	if [ -f package.json ]; then
@@ -59,12 +61,8 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		echo "Node dependancies installed successfully"
 		echo "Building assets"
 		npm run build
-		echo "Building successfull"
+		echo "Build successfull"
 	fi
-
-	echo "Loading fixtures"
-	php bin/console doctrine:fixtures:load --no-interaction
-	echo "Fixtures loaded"
 
 	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var
 	setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX var

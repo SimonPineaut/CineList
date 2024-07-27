@@ -10,6 +10,7 @@
         "doctrine/doctrine-bundle": "^2.10",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.16",
+        "fakerphp/faker": "^1.23",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.24",
         "rollerworks/password-strength-bundle": "^3.0",
@@ -103,6 +104,7 @@
         }
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.6",
         "friendsofphp/php-cs-fixer": "^3.35",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.5",

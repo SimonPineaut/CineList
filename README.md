@@ -4,6 +4,8 @@ CineList est un projet personnel d'application web Symfony avec docker qui perme
 
 Cette application est destinée à être utilisée dans un environnement de développement et n'est pas adaptée à un usage en production.
 
+Un utilisateur de démonstration est disponible avec l'email `demo@mail.fr` et le mot de passe `Password0!`.
+
 #### Les principales fonctionnalités sont:
 - La création d'un compte
 - La validation du compte par mail
@@ -12,8 +14,7 @@ Cette application est destinée à être utilisée dans un environnement de dév
 - La consultation des informations d'un membre du casting d'un film
 - La recherche de films
 - L'ajout/retrait d'un film à une liste de favoris
-- La création de playlists
-- L'ajout/retrait d'un film d'une playlist
+- L'ajout/retrait d'un film à une playlist
 - La possibilité de rendre une playlist publique ou privée
 - La copie de playlists d'autres utilisateurs
 

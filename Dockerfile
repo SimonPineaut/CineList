@@ -85,9 +85,6 @@ COPY --link composer.* symfony.* ./
 RUN set -eux; \
 	composer install --no-cache --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress
 
-RUN set -eux; \
-	php bin/console doctrine:fixtures:load --no-interaction
-
 # copy sources
 COPY --link . ./
 RUN rm -Rf frankenphp/

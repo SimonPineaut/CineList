@@ -59,7 +59,7 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		echo "Node dependancies installed successfully"
 		echo "Building assets"
 		npm run build
-		echo "Building successfull"
+		echo "Build successfull"
 	fi
 
 	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var

@@ -48,9 +48,9 @@ class LoadFixturesCommand extends Command
                 }
 
                 $this->entityManager->persist($playlist);
+                $this->entityManager->flush();
             }
         }
-        $this->entityManager->flush();
 
         $demoUser = new User();
         $demoUser->setUsername('Demo user');
@@ -60,26 +60,26 @@ class LoadFixturesCommand extends Command
             'Password0!'
         );
         $demoUser->setPassword($hashedPassword);
-        for ($k = 0; $k < rand(4, 10); $k++) {
+        for ($i = 0; $i < rand(4, 10); $i++) {
             $demoUser->addToFavorites($randomMovieIds[array_rand($randomMovieIds)]);
         }
         $demoUser->setIsVerified(true);
         $this->entityManager->persist($demoUser);
         $this->entityManager->flush();
 
-        for ($j = 0; $j <= 4; $j++) {
+        for ($i = 0; $i <= 4; $i++) {
             $playlist = new Playlist();
-            $playlist->setName($demoUser->getUsername() . ' n°' . $j);
+            $playlist->setName($demoUser->getUsername() . ' n°' . $i);
             $playlist->setCreatedAt(new DateTimeImmutable());
             $playlist->setUser($demoUser);
             $playlist->setIsPublic((bool)random_int(0, 1));
-            for ($k = 0; $k < rand(4, 7); $k++) {
+            for ($j = 0; $j < rand(4, 7); $j++) {
                 $playlist->addMovieId($randomMovieIds[array_rand($randomMovieIds)]);
             }
             $this->entityManager->persist($playlist);
+            $this->entityManager->flush();
         }
 
-        $this->entityManager->flush();
 
         return Command::SUCCESS;
 

@@ -5,7 +5,7 @@ namespace App\Command;
 use Faker\Factory;
 use App\Entity\User;
 use App\Entity\Playlist;
-use Doctrine\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,7 +15,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 #[AsCommand(name: 'load-fixtures')]
 class LoadFixturesCommand extends Command
 {
-    public function __construct(private UserPasswordHasherInterface $userPasswordHasher, private ObjectManager $manager)
+    public function __construct(private UserPasswordHasherInterface $userPasswordHasher, private EntityManagerInterface $entityManager)
 {
 }
 
@@ -35,7 +35,7 @@ class LoadFixturesCommand extends Command
             );
             $user->setPassword($hashedPassword);
             $user->setIsVerified(true);
-            $this->manager->persist($user);
+            $this->entityManager->persist($user);
 
             for ($j = 0; $j <= 3; $j++) {
                 $playlist = new Playlist();
@@ -47,7 +47,7 @@ class LoadFixturesCommand extends Command
                     $playlist->addMovieId($randomMovieIds[array_rand($randomMovieIds)]);
                 }
 
-                $this->manager->persist($playlist);
+                $this->entityManager->persist($playlist);
             }
         }
 
@@ -63,7 +63,7 @@ class LoadFixturesCommand extends Command
             $demoUser->addToFavorites($randomMovieIds[array_rand($randomMovieIds)]);
         }
         $demoUser->setIsVerified(true);
-        $this->manager->persist($demoUser);
+        $this->entityManager->persist($demoUser);
 
         for ($j = 0; $j <= 4; $j++) {
             $playlist = new Playlist();
@@ -74,10 +74,10 @@ class LoadFixturesCommand extends Command
             for ($k=0; $k < rand(4,7); $k++) { 
                 $playlist->addMovieId($randomMovieIds[array_rand($randomMovieIds)]);
             }
-            $this->manager->persist($playlist);
+            $this->entityManager->persist($playlist);
         }
 
-        $this->manager->flush();
+        $this->entityManager->flush();
 
         return Command::SUCCESS;
 

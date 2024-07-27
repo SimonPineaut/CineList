@@ -63,7 +63,7 @@ class LoadFixturesCommand extends Command
             }
         }
 
-        if (!in_array('Demo user', $userEmails)) {
+        if (!in_array('demo@mail.fr', $userEmails)) {
             $demoUser = new User();
             $demoUser->setUsername('Demo user');
             $demoUser->setEmail('demo@mail.fr');

@@ -16,13 +16,6 @@ Cette application est destinée à être utilisée dans un environnement de dév
 - La possibilité de rendre une playlist publique ou privée
 - La copie de playlists d'autres utilisateurs
 
-#### Les fonctionnalités à développer sont:
-- L'authentification à double facteur
-- Lexport et le partage de playlist par mail ou via l'application
-- La recherche avancée (par acteur, par note, par date, etc...)
-- L'ajout d'avatar pour l'utilisateur
-- L'ajout d'un rôle d'administrateur pour gérer les utilisateurs via un dashboard
-
 ## <strong>Installation</strong>
 
 ### Clonage du répertoire du projet
@@ -56,7 +49,7 @@ Un utilisateur de démonstration est disponible avec l'email `demo@mail.fr` et l
 - <a href="https://www.php.net/manual/fr/install.php">PHP</a>
 - <a href="https://getcomposer.org/doc/00-intro.md">Composer</a>
 - <a href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm">Node.js et npm</a>
-- <a href="https://symfony.com/download?ref=material-tailwind">Symfony CLI </a>( optionnel mais recommandé )
+- <a href="https://symfony.com/download?ref=material-tailwind">Symfony CLI</a> ( optionnel mais recommandé )
 
 ### <strong>Installation et configuration sans Docker</strong> 
 

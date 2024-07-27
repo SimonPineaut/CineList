@@ -27,11 +27,11 @@
                         </div>
                     </div>
                     {% if app.user == playlist.user %}
-                        <a class="playlist-btn edit-btn rounded-circle" href="{{ path('app_playlist_edit', {'id': playlist.id}) }}">
-                            <img src="{{ asset('icons/edit.svg') }}" alt="">
-                        </a>
                         <a class="playlist-btn delete-btn btn rounded-circle" id="deletePlaylistBtn">
                             <img src="{{ asset('icons/trash.svg') }}" alt="">
+                        </a>
+                        <a class="playlist-btn edit-btn rounded-circle" href="{{ path('app_playlist_edit', {'id': playlist.id}) }}">
+                            <img src="{{ asset('icons/edit.svg') }}" alt="">
                         </a>
                         <a class="playlist-btn lock-btn btn rounded-circle" id="lockPlaylistBtn" data-is-public="{{ playlist.isPublic }}">
                             {% if playlist.isPublic %}

@@ -1,10 +1,8 @@
-## Présentation de l'application CineList
+## <strong>CineList</strong>
 
 CineList est un projet personnel d'application web Symfony avec docker qui permet aux utilisateurs de créer et de gérer une liste de films favoris et de playlists. Grâce à l'intégration avec l'API TMDB (The Movie Database), les utilisateurs peuvent facilement rechercher des films, consulter des informations détaillées, et ajouter leurs films préférés à leur liste personnelle de favoris ou à la playlist de leur choix.
 
 Cette application est destinée à être utilisée dans un environnement de développement et n'est pas adaptée à un usage en production.
-
-Un utilisateur de démonstration est disponible avec l'email `demo@mail.fr` et le mot de passe `Password0!`.
 
 #### Les principales fonctionnalités sont:
 - La création d'un compte
@@ -25,7 +23,7 @@ Un utilisateur de démonstration est disponible avec l'email `demo@mail.fr` et l
 - L'ajout d'avatar pour l'utilisateur
 - L'ajout d'un rôle d'administrateur pour gérer les utilisateurs via un dashboard
 
-## Installation
+## <strong>Installation</strong>
 
 ### Clonage du répertoire du projet
 ```
@@ -41,7 +39,7 @@ Une fois positionné à la racine du projet cloné, deux méthodes d'installatio
 - Docker desktop, optionnel mais recommandé (<a href="https://www.docker.com/products/docker-desktop/"> documentation officielle </a>).
 - Pour les systèmes Windows, Docker nécessitant Linux, l'utilisation de WSL est recommandée (<a href="https://docs.docker.com/desktop/wsl/"> documentation officielle </a>).
 
-### Installation avec docker
+### <strong>Installation avec docker</strong>
 1. **Construire et démarrer les conteneurs Docker**
 ```
 docker compose up --build
@@ -52,13 +50,15 @@ Votre application est prête à cette URL : <a href="https://localhost/">https:/
 
 Lors du processus d'inscription, un mail de confirmation vous sera envoyé. La boîte mail est disponible à cette URL : <a href="http://localhost:8025/">http://localhost:8025/</a>
 
+Un utilisateur de démonstration est disponible avec l'email `demo@mail.fr` et le mot de passe `Password0!`.
+
 ### Prérequis sans Docker
 - PHP (<a href="https://www.php.net/manual/fr/install.php"> documentation officielle </a>)
 - Composer (<a href="https://getcomposer.org/doc/00-intro.md"> documentation officielle </a>)
 - Node.js et npm (<a href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm"> documentation officielle </a>)
 - Symfony CLI (optionnel mais recommandé) (<a href="https://symfony.com/download?ref=material-tailwind"> documentation officielle </a>)
 
-### Installation et configuration sans Docker 
+### <strong>Installation et configuration sans Docker</strong> 
 
 1. **Installation des dépendances PHP**
 ```
@@ -91,20 +91,29 @@ php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 ```
 
-7. **Compilation des assets**
+7. **Chargement des fixtures**
+```
+php bin/console load-fixtures
+```
+
+8. **Compilation des assets**
 ```
 npm run dev
 ```
 
-8. **Démarrage du serveur de développement**
+9. **Démarrage du serveur de développement**
 ```
 symfony server:start
 ```
 Votre application est prête à cette URL : <a href="https://localhost:8000">https://localhost:8000</a>
 
-# Quelques commandes utiles
+Lors du processus d'inscription, un mail de confirmation vous sera envoyé. L'URL de la boîte mail de test dépendra de votre choix de mailer via la variable d'environnement `MAILER_DSN`.
 
-## Avec Docker
+Un utilisateur de démonstration est disponible avec l'email `demo@mail.fr` et le mot de passe `Password0!`.
+
+# <strong>Quelques commandes utiles</strong>
+
+## <strong>Avec Docker</strong>
 
 **Vérifier l'état des conteneurs Docker**
 ```
@@ -141,7 +150,7 @@ docker compose exec <NOM_DU_CONTAINER> npm install <NOM_DU_PACKAGE>
 docker compose exec <NOM_DU_CONTAINER> npm run build
 ``` 
 
-## Sans Docker
+## <strong>Sans Docker</strong>
 
 **Afficher les commandes disponibles**
 ```

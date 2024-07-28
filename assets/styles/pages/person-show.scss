@@ -10,6 +10,10 @@
 .person-img {
    width: 100%;
    border-radius: 6px 6px 0 0;
+
+   &:hover {
+      transform: scale(1.02);
+   }
 }
 
 .person-top-movies {

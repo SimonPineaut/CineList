@@ -15,7 +15,10 @@
 {% endblock %}
 
 {% block body %}
-    <div class="col-4 text-center bg-dark text-light rounded fs-6 p-2 mx-auto my-4">Casting de <span class="custom-blue fs-4 fw-bolder">{{ movie.title }}</span></div>
+    <div class="col-4 text-center bg-dark text-light rounded fs-6 p-2 mx-auto my-4">
+        <span class="fs-4 me-2">Casting de</span> 
+        <a class="custom-blue-1 fs-4 fw-bolder text-decoration-none" href="{{ path('app_movie_show', {'id': movie.id}) }}">{{ movie.title }}</a>
+    </div>
     <div class="page page-full-casting bg-dark text-light rounded mt-4 p-3">
         {% for actor in actors %}
             <div class="actor-card">

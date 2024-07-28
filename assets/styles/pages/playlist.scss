@@ -13,7 +13,7 @@
     align-items: center;
     justify-content: center;
     margin: 20px;
-    padding: 20px;
+    padding: 10px;
     background-color: #333;
     border-radius: 6px;
 
@@ -23,7 +23,7 @@
         justify-content: center;
         align-items: center;
         top: 8px;
-        padding: 8px;
+        padding: 6px;
         background-color: #f8f9fa;
     
         &:hover {
@@ -43,9 +43,9 @@
     }
 
     .edit-btn {
-        right: 8px;
-        top: 45px;
-        background-color: #ffff00;
+        left: 45px;
+        padding: 7px;
+        background-color: #ffffff;
     }
 
     .lock-btn {
@@ -58,11 +58,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 100%;
-        color: #f8f9fa;
-        padding: 5px 15px;
-        font-weight: 600;
-        margin-top: 10px;
 
         img {
             width: 20px;
@@ -113,11 +108,11 @@
     }
 
     .carousel-control-prev {
-        left: -20px;
+        left: -10px;
     }
 
     .carousel-control-next {
-        right: -20px;
+        right: -10px;
     }
 
     .slider-image {

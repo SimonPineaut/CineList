@@ -18,7 +18,7 @@
     {% if movies is not empty %}
         {% include "partials/pagination.html.twig" %}
         <div class="page page-movies">
-            {% include "partials/movie_card.html.twig" %}
+            {% include "movie/movie_card.html.twig" %}
         </div>
         {% include "partials/pagination.html.twig" %}
     {% else %}

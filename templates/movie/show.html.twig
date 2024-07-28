@@ -15,10 +15,23 @@
 {% endblock %}
 
 {% block body %}
-	<div class="col-4 text-center bg-dark text-light rounded fs-6 p-2 mx-auto my-4"><span class="custom-blue fs-4 fw-bolder">{{ movie.title }}</span></div>
-	<div class="container mt-4" data-movie-id="{{ movie.id }}">
+	<div class="col-4 text-center bg-dark text-light rounded fs-6 p-2 mx-auto my-4">
+		<span class="fs-4 fw-bolder">{{ movie.title }}</span>
+	</div>
+	<div class="movie container mt-4" data-movie-id="{{ movie.id }}">
 		<div class="row">
 			<div class="col-2">
+				{% include "partials/playlist_modal.html.twig" %}
+				<div class="action-icons-container">
+					{% if is_granted("ROLE_USER") %}
+						<img id="playlistLink" data-movie-id="{{ movie.id }}" class="action-icon" src="{{ asset('icons/playlist.svg') }}" alt="Ajouter à une playlist">
+						{% if  movie.id in favoriteMovies %}
+							<img class="action-icon action-icon-right favorite" src="{{ asset('icons/favorite.svg') }}" alt="Retirer des favoris">
+						{% else %}
+							<img class="action-icon action-icon-right not-favorite" src="{{ asset('icons/not-favorite.svg') }}" alt="Ajouter aux favoris">
+						{% endif %}
+					{% endif %}
+				</div>
 				{% if movie.poster_path is not null %}
 					<img class="w-100 rounded" src={{ "https://image.tmdb.org/t/p/w500" ~ movie.poster_path }}>
 				{% else %}
@@ -69,7 +82,7 @@
 				</div>
 		
 				{% if movie.tagline is not null %}
-					<cite>
+					<cite class="text-light my-2">
 						<p class="tagline">{{movie.tagline}}</p>
 					</cite>
 				{% endif %}
@@ -80,6 +93,11 @@
 				{% include "partials/casting.html.twig" %}
 			</div>
 		</div>
+		{% if trailer is not empty %}
+			<div class="mx-auto my-3 p-4 bg-dark rounded">
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/{{ trailer.key }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+			</div>
+		{% endif %}
 	</div>
 	{% include "partials/recommendations.html.twig" %}
 	{% include "partials/logout_modal.html.twig" %}

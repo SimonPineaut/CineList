@@ -18,8 +18,8 @@
     <div class="page page-account">
         {% include "partials/delete_account_modal.html.twig" %}
         <div class="d-flex flex-column align-items-start bg-dark text-light p-2 mt-4 rounded">
-            <div>Vous êtes connecté(e) en tant que : <span class="fw-bold custom-blue">{{ user.username }}</span></div>
-            <div>Votre email : <span class="fw-bold custom-blue">{{ user.email }}</span></div>
+            <div>Vous êtes connecté(e) en tant que : <span class="fw-bold custom-blue-1">{{ user.username }}</span></div>
+            <div>Votre email : <span class="fw-bold custom-blue-1">{{ user.email }}</span></div>
         </div>
         {{ form_errors(form) }}
         {{ form_start(form) }}

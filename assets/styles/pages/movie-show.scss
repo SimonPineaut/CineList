@@ -21,7 +21,6 @@
 .tagline {
    text-align: center;
    font-weight: 800;
-   color: #a9c9e4;
 }
 
 .genres {
@@ -104,7 +103,7 @@
    justify-content: center;
    color: white;
    margin: 0 auto;
-   width: 80%;
+   width: 90%;
    height: 50%;
    scrollbar-width: thin;
    scrollbar-color: #f8f9fa transparent;
@@ -166,6 +165,10 @@
 
    .more {
       width: 50px;
+
+      &:hover {
+         transform: scale(1.02);
+      }
    }
 }
 

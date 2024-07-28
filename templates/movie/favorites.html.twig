@@ -16,7 +16,7 @@
 
 {% block body %}
     <div class="h-100">
-        {% if movies is not empty %}
+        {% if movies is defined and movies is not empty %}
             <div class="page page-movie-favorites">
                 {% include "movie/movie_card.html.twig" %}
             </div>

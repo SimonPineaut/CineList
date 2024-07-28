@@ -18,6 +18,10 @@
     <body class="bg-light">
         {% block header %}
             {% include "partials/navbar.html.twig" %}
+            
+            {% if app.user %}
+                {{ render(controller('App\\Controller\\MovieController::advancedSearch')) }}
+            {% endif %}
         {% endblock %}
         
         <div class="flash-container">

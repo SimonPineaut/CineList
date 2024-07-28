@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\AdvancedSearchType;
 use App\Service\ApiService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -58,6 +59,26 @@ class MovieController extends AbstractController
 
         return $this->renderMoviePage('movie/index.html.twig', $request, 'https://api.themoviedb.org/3/search/movie', [
             'query' => $searchTerm,
+        ]);
+    }
+
+    #[Route('search/advanced', name: 'app_movie_advanced_search', methods: ['POST'])]
+    public function advancedSearch(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $form = $this->createForm(AdvancedSearchType::class);
+        $form->handleRequest($request);
+        $form = $this->createForm(AdvancedSearchType::class);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            
+            dd($data);
+        }
+
+        return $this->render('partials/advanced_search.html.twig', [
+            'form' => $form,
         ]);
     }
 

@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block body %}
-    {% if movies is not empty %}
+    {% if movies is defined and movies is not empty %}
         {% include "partials/pagination.html.twig" %}
         <div class="page page-movies">
             {% include "movie/movie_card.html.twig" %}

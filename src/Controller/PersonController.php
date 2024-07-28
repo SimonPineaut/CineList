@@ -33,7 +33,7 @@ class PersonController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         
-        $relatedMovies = $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&with_people={$id}", [
+        $relatedMovies = $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&vote_count.gte=100&with_people={$id}", [
             'language' => 'fr',
         ]);
 

@@ -16,7 +16,7 @@
 
 {% block body %}
     {% if playlists is not empty %}
-        <div class="page page-playlists">
+        <div class="page-playlists">
             {% for playlist in playlists %}
                 <div class="playlist" data-playlist-id="{{ playlist.id }}" id="playlist{{ playlist.id }}">
                     <div class="modal-element d-none" id="deletePlaylistModal{{ playlist.id }}">
@@ -45,8 +45,7 @@
                             <img src="{{ asset('icons/more-dark.svg') }}" alt="">
                         </a>
                     {% endif %}
-                    <span class="fw-normal mb-2 custom-blue">{{ playlist.name|u.truncate(22, '...') }}</span>
-                    <span class="text-light mb-2">{{ playlist.movieIds|length }} film{% if playlist.movieIds|length > 1 %}s{% endif %}</span>
+                    <a href="{{ path('app_playlist_edit', {'id': playlist.id}) }}" class="fw-bold m-4 custom-blue-1 text-decoration-none">{{ playlist.name|u.truncate(22, '...') }}</a>
                     <div class="playlist-movie-container">
                         {% for key, movies in moviesByPlaylist %}
                             {% if key == playlist.id %}
@@ -76,14 +75,15 @@
                             {% endif %}
                         {% endfor %}
                     </div>
+                    <span class="text-light mt-2 custom-blue-1">{{ playlist.movieIds|length }} film{% if playlist.movieIds|length > 1 %}s{% endif %}</span>
                     <div class="created-at">
                         <img src="{{ asset('icons/release-date.svg') }}" alt="Date de création">
-                        <span>{{ playlist.createdAt|format_datetime('relative_medium', 'none', locale='fr') }}</span>
+                        <span class="text-light m-2">{{ playlist.createdAt|format_datetime('relative_medium', 'none', locale='fr') }}</span>
                     </div>
                     <div class="playlist-username">
                         <img src="{{ asset('icons/user.svg') }}" alt="">
                         {% if app.user != playlist.user %}
-                            <a href="{{ path('app_playlist_user', {'userId': playlist.user.id}) }}">
+                            <a href="{{ path('app_playlist_user', {'userId': playlist.user.id}) }}" class="custom-blue-1 text-decoration-none">
                                 <span>{{ playlist.user.username }}</span>
                             </a>
                         {% else %}

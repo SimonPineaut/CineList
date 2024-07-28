@@ -2,7 +2,7 @@
 
 {% macro navbar_link(routeName, label, parameters = {}) %}
     {% set route = app.request.get('_route') %}
-    <a class="nav-link fw-bold mx-2 custom-blue {% if route == routeName %}active{% endif %}" href="{{ path(routeName, parameters) }}">
+    <a class="nav-link fw-bold mx-2 custom-blue-1 {% if route == routeName %}active{% endif %}" href="{{ path(routeName, parameters) }}">
         {{ label }}
     </a>
 {% endmacro %}
@@ -64,13 +64,13 @@
                     </div>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link fw-bold mx-2 custom-blue {% if route == 'app_login' %}active{% endif %}"
+                        <a class="nav-link fw-bold mx-2 custom-blue-1 {% if route == 'app_login' %}active{% endif %}"
                             href="{{ path('app_login') }}">
                             Connexion
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold mx-2 custom-blue {% if route == 'app_register' %}active{% endif %}"
+                        <a class="nav-link fw-bold mx-2 custom-blue-1 {% if route == 'app_register' %}active{% endif %}"
                             href="{{ path('app_register') }}">
                             Inscription
                         </a>

@@ -37,13 +37,15 @@ class MovieController extends AbstractController
         $directors = $this->getDirectors($id);
         $actors = $this->getFirstActors($id);
         $favoriteMovies = $this->getUserFavoriteMovies();
-
+        $trailer = $this->getMovieTrailer($id);
+        
         return $this->render('movie/show.html.twig', [
             'movie' => $movie,
             'recommendations' => $recommendations,
             'directors' => $directors,
             'actors' => $actors,
             'favoriteMovies' => $favoriteMovies,
+            'trailer' => $trailer,
         ]);
     }
 
@@ -89,7 +91,7 @@ class MovieController extends AbstractController
         $actors = $this->getAllActors($movieId);
         $movie = $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/movie/{$movieId}", ['language' => 'fr']);
 
-        return $this->render('person/full_casting.html.twig', [
+        return $this->render('movie/full_casting.html.twig', [
             'actors' => $actors,
             'movie' => $movie,
         ]);
@@ -119,6 +121,16 @@ class MovieController extends AbstractController
         $recommendations = $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/movie/{$id}/recommendations", ['language' => 'fr']);
 
         return $recommendations['results'];
+    }
+
+    private function getMovieTrailer(string $id): array
+    {
+        $videos = $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/movie/{$id}/videos", ['language' => 'fr']);
+        $trailer = array_filter($videos['results'], function ($video) {
+            return $video['type'] === 'Trailer' && $video['site'] === 'YouTube';
+        });
+        
+        return $trailer[0] ?? [];
     }
 
     private function getDirectors(string $movieID): array

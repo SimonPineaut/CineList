@@ -16,7 +16,7 @@
 
 {% block body %}
     <div class="container mt-4">
-        <div class="row">
+        <div class="row mb-5">
             <div class="col-4">
                 {% if person.profile_path is not null %}
                     <img class="w-100 rounded" src={{ "https://image.tmdb.org/t/p/w500" ~ person.profile_path }}>
@@ -25,21 +25,21 @@
                 {% endif %}
             </div>
             <div class="person-text col-8 d-flex flex-column justify-content-evenly bg-dark text-center text-light p-2 rounded">
-                <div>
+                <div class="fw-bold custom-blue-2">
                     {% if person.name is not null %}
-                        <h2 class="fw-bold custom-blue">{{person.name}}</h2>
+                        <h2>{{person.name}}</h2>
                     {% endif %}
                     {% if person.birthday is not null %}
-                        <p class="fw-bold">Né(e) le {{ person.birthday|date('d/m/Y') }}</p>
+                        <p>Né(e) le {{ person.birthday|date('d/m/Y') }}</p>
                     {% endif %}
                     {% if person.place_of_birth is not null %}
-                        <p class="fw-bold">à {{person.place_of_birth}}</p>
+                        <p>à {{person.place_of_birth}}</p>
                     {% endif %}
                     {% if person.deathday is not null %}
-                        <p class="fw-bold">Décédé(e) le {{ person.deathday|date('d/m/Y') }}</p>
+                        <p>Décédé(e) le {{ person.deathday|date('d/m/Y') }}</p>
                     {% endif %}
                 </div>
-                <div class="person-biography p-2">
+                <div class="person-biography p-4">
                     {% if person.biography != "" %}
                         <cite>{{person.biography}}</cite>
                     {% else %}
@@ -48,7 +48,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-4 text-center bg-dark text-light rounded fs-4 p-2 mx-auto mt-5 mb-3"><span class="custom-blue fw-bold">Ses films les plus populaires</span></div>
+        <div class="bg-dark d-inline text-light rounded fs-4 p-2 mx-auto mb-3">
+            Autres films de <span class="fw-bold custom-blue-2">{{ person.name }}</span>
+        </div>
         <div class="recommendations-container person-top-movies">
             <div class="recommendations bg-dark rounded mt-3">
                 {% for movie in relatedMovies %}

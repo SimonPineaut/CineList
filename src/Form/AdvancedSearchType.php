@@ -74,14 +74,31 @@ class AdvancedSearchType extends AbstractType
             ->add('vote_average_gte', NumberType::class, [
                 'required' => false,
                 'label' => 'Note (min)',
+                'constraints' => [
+                    new Range([
+                        'min' => 0,
+                        'max' => 10,
+                        'notInRangeMessage' => 'La note doit être comprise entre {{ min }} et {{ max }}',
+                    ]),
+                ],
             ])
             ->add('vote_average_lte', NumberType::class, [
                 'required' => false,
                 'label' => 'Note (max)',
+                'constraints' => [
+                    new Range([
+                        'min' => 0,
+                        'max' => 10,
+                        'notInRangeMessage' => 'La note doit être comprise entre {{ min }} et {{ max }}',
+                    ]),
+                ],
             ])
             ->add('vote_count_gte', NumberType::class, [
                 'required' => false,
                 'label' => 'Nombre de votes (min)',
+                'constraints' => [
+                    new Positive(),
+                ],
             ])
             ->add('vote_count_lte', NumberType::class, [
                 'required' => false,

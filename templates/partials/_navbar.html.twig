@@ -94,10 +94,8 @@
 <script>
     document.getElementById('advancedSearchBtn').addEventListener('click', function(event) {
         event.preventDefault();
-            // Afficher la modal
             document.getElementById('advancedSearchModal').style.display = 'flex';
 
-            // Charger le formulaire via AJAX
             fetch('{{ path('app_movie_advanced_search_form') }}')
                 .then(response => response.text())
                 .then(html => {
@@ -128,10 +126,8 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Traitez les résultats ici
                         console.log(data.data);
                     } else {
-                        // Affichez les erreurs de validation
                         let errorsContainer = document.getElementById('formErrors');
                         errorsContainer.innerHTML = '';
                         data.errors.forEach(error => {
@@ -145,8 +141,6 @@
                 .catch(error => console.error('Error:', error));
             });
         }
-
-
 </script>
 
 {% endblock %}

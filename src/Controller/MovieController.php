@@ -113,17 +113,16 @@ class MovieController extends AbstractController
     }
 
     // handle advanced search form
-    #[Route('search/advanced', name: 'app_movie_advanced_search', methods: ['POST'])]
-    public function advancedSearch(Request $request): Response
+    #[Route('search/advanced', name: 'app_movie_advanced_search_data', methods: ['POST'])]
+    public function advancedSearchData(Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $form = $this->createForm(AdvancedSearchType::class);
         $form->handleRequest($request);
-dump('no');
+
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            dump('ok');
 
             return $this->json([
                 'success' => true,

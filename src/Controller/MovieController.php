@@ -13,7 +13,8 @@ class MovieController extends AbstractController
 {
     public function __construct(
         private ApiService $apiService,
-    ) {}
+    ) {
+    }
 
     #[Route('/', name: 'app_movie_index', methods: ['GET'])]
     public function index(Request $request): Response
@@ -39,7 +40,7 @@ class MovieController extends AbstractController
         $actors = $this->getFirstActors($id);
         $favoriteMovies = $this->getUserFavoriteMovies();
         $trailer = $this->getMovieTrailer($id);
-        
+
         return $this->render('movie/show.html.twig', [
             'movie' => $movie,
             'recommendations' => $recommendations,
@@ -62,26 +63,6 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route('search/advanced', name: 'app_movie_advanced_search', methods: ['POST'])]
-    public function advancedSearch(Request $request): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-        $form = $this->createForm(AdvancedSearchType::class);
-        $form->handleRequest($request);
-        $form = $this->createForm(AdvancedSearchType::class);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            
-            dd($data);
-        }
-
-        return $this->render('movie/partials/_advanced_search.html.twig', [
-            'form' => $form,
-        ]);
-    }
-
     #[Route('favorites/movie', name: 'app_movie_favorites', methods: ['GET'])]
     public function fetchFavorites(): Response
     {
@@ -100,7 +81,7 @@ class MovieController extends AbstractController
     public function fetchTopRated(Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
-        
+
         return $this->renderMoviePage('movie/index.html.twig', $request, 'https://api.themoviedb.org/3/movie/top_rated');
     }
 
@@ -108,13 +89,56 @@ class MovieController extends AbstractController
     public function getFullCasting(string $movieId): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
-        
+
         $actors = $this->getAllActors($movieId);
         $movie = $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/movie/{$movieId}", ['language' => 'fr']);
 
         return $this->render('movie/full_casting.html.twig', [
             'actors' => $actors,
             'movie' => $movie,
+        ]);
+    }
+
+    // display advanced search form
+    #[Route('search/advanced/form', name: 'app_movie_advanced_search_form', methods: ['GET'])]
+    public function getAdvancedSearchForm(): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $form = $this->createForm(AdvancedSearchType::class);
+
+        return $this->render('movie/partials/_advanced_search_form.html.twig', [
+            'form' => $form,
+        ]);
+    }
+
+    // handle advanced search form
+    #[Route('search/advanced', name: 'app_movie_advanced_search', methods: ['POST'])]
+    public function advancedSearch(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $form = $this->createForm(AdvancedSearchType::class);
+        $form->handleRequest($request);
+dump('no');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            dump('ok');
+
+            return $this->json([
+                'success' => true,
+                'data' => $data,
+            ]);
+        }
+
+        $errors = [];
+        foreach ($form->getErrors(true) as $error) {
+            $errors[] = $error->getMessage();
+        }
+
+        return $this->json([
+            'success' => false,
+            'errors' => $errors,
         ]);
     }
 
@@ -150,7 +174,7 @@ class MovieController extends AbstractController
         $trailer = array_filter($videos['results'], function ($video) {
             return $video['type'] === 'Trailer' && $video['site'] === 'YouTube';
         });
-        
+
         return $trailer[0] ?? [];
     }
 

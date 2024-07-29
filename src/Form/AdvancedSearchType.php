@@ -32,18 +32,16 @@ class AdvancedSearchType extends AbstractType
             ->add('primary_release_year', IntegerType::class, [
                 'required' => false,
                 'label' => 'Année de sortie',
-                // 'label_attr' => ['class' => 'register-label'],
-                'attr' => [
-                    'class' => '',
-                ],
                 'constraints' => [
-                    new Positive(),
+                    new Positive([
+                        'message' => 'Année de sortie invalide'
+                    ]),
                 ],
             ])
             ->add('primary_release_date_gte', DateType::class, [
                 'required' => false,
                 'widget' => 'single_text',
-                'label' => 'Date de sortie (à partir de)',
+                'label' => 'Date de sortie (min)',
                 'constraints' => [
                     new Range([
                         'min' => '1900',
@@ -54,79 +52,65 @@ class AdvancedSearchType extends AbstractType
             ->add('primary_release_date_lte', DateType::class, [
                 'required' => false,
                 'widget' => 'single_text',
-                'label' => 'Date de sortie (jusqu\'à)',
+                'label' => 'Date de sortie (max)',
             ])
-            // ->add('sort_by', ChoiceType::class, [
-            //     'choices' => [
-            //         'Popularité décroissante' => 'popularity.desc',
-            //         'Popularité croissante' => 'popularity.asc',
-            //         'Date de sortie décroissante' => 'release_date.desc',
-            //         'Date de sortie croissante' => 'release_date.asc',
-            //         'Revenus décroissants' => 'revenue.desc',
-            //         'Revenus croissants' => 'revenue.asc',
-            //         'Date de sortie principale décroissante' => 'primary_release_date.desc',
-            //         'Date de sortie principale croissante' => 'primary_release_date.asc',
-            //         'Titre original décroissant' => 'original_title.desc',
-            //         'Titre original croissant' => 'original_title.asc',
-            //         'Moyenne des votes décroissante' => 'vote_average.desc',
-            //         'Moyenne des votes croissante' => 'vote_average.asc',
-            //         'Nombre de votes décroissant' => 'vote_count.desc',
-            //         'Nombre de votes croissant' => 'vote_count.asc',
-            //     ],
-            //     'required' => false,
-            //     'label' => 'Trier par',
-            //     'placeholder' => 'Sélectionnez une option',
-            // ])
-            // ->add('vote_average_gte', NumberType::class, [
-            //     'required' => false,
-            //     'label' => 'Note (min)',
-            // ])
-            // ->add('vote_average_lte', NumberType::class, [
-            //     'required' => false,
-            //     'label' => 'Note (max)',
-            // ])
-            // ->add('vote_count_gte', NumberType::class, [
-            //     'required' => false,
-            //     'label' => 'Nombre de votes (min)',
-            // ])
-            // ->add('vote_count_lte', NumberType::class, [
-            //     'required' => false,
-            //     'label' => 'Nombre de votes (max)',
-            // ])
-            // ->add('with_cast', TextType::class, [
-            //     'required' => false,
-            //     'label' => 'Avec acteurs',
-            // ])
-            // ->add('with_genres', TextType::class, [
-            //     'required' => false,
-            //     'label' => 'Avec genres',
-            // ])
-            // ->add('with_keywords', TextType::class, [
-            //     'required' => false,
-            //     'label' => 'Avec mots-clés',
-            // ])
-            // ->add('with_people', TextType::class, [
-            //     'required' => false,
-            //     'label' => 'Avec personnes',
-            // ])
-            // ->add('without_genres', TextType::class, [
-            //     'required' => false,
-            //     'label' => 'Sans genres',
-            // ])
-            // ->add('without_keywords', TextType::class, [
-            //     'required' => false,
-            //     'label' => 'Sans mots-clés',
-            // ])
-            ->add('save', SubmitType::class, [
-                'attr' => ['class' => 'save'],
+            ->add('sort_by', ChoiceType::class, [
+                'choices' => [
+                    'Note ⭣' => 'vote_average.desc',
+                    'Note ⭡' => 'vote_average.asc',
+                    'Titre original ⭣' => 'original_title.desc',
+                    'Titre original ⭡' => 'original_title.asc',
+                    'Date de sortie ⭣' => 'primary_release_date.desc',
+                    'Date de sortie ⭡' => 'primary_release_date.asc',
+                    'Nombre de votes ⭣' => 'vote_count.desc',
+                    'Nombre de votes ⭡' => 'vote_count.asc',
+                    'Revenus ⭣' => 'revenue.desc',
+                    'Revenus ⭡' => 'revenue.asc',
+                ],
+                'required' => false,
+                'label' => 'Trier par',
+                'placeholder' => 'Sélectionnez une option',
+            ])
+            ->add('vote_average_gte', NumberType::class, [
+                'required' => false,
+                'label' => 'Note (min)',
+            ])
+            ->add('vote_average_lte', NumberType::class, [
+                'required' => false,
+                'label' => 'Note (max)',
+            ])
+            ->add('vote_count_gte', NumberType::class, [
+                'required' => false,
+                'label' => 'Nombre de votes (min)',
+            ])
+            ->add('vote_count_lte', NumberType::class, [
+                'required' => false,
+                'label' => 'Nombre de votes (max)',
+            ])
+            ->add('with_cast', TextType::class, [
+                'required' => false,
+                'label' => 'Avec acteurs',
+            ])
+            ->add('with_genres', TextType::class, [
+                'required' => false,
+                'label' => 'Avec genres',
+            ])
+            ->add('without_genres', TextType::class, [
+                'required' => false,
+                'label' => 'Sans genres',
+            ])
+            ->add('with_keywords', TextType::class, [
+                'required' => false,
+                'label' => 'Avec mots-clés',
+            ])
+            ->add('without_keywords', TextType::class, [
+                'required' => false,
+                'label' => 'Sans mots-clés',
+            ])
+            ->add('with_people', TextType::class, [
+                'required' => false,
+                'label' => 'Avec personnes',
             ]);
-
-        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event): void {
-            $data = $event->getData();
-            $form = $event->getForm();
-            $errors = $this->getFormErrors($form);
-            dd($errors);
-        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -134,26 +118,5 @@ class AdvancedSearchType extends AbstractType
         $resolver->setDefaults([
             // Configure your form options here
         ]);
-    }
-
-    private static function getFormErrors(FormInterface $form): array
-    {
-        $errors = [];
-
-        foreach ($form->getErrors() as $error) {
-            $errors[] = $error->getMessage();
-        }
-
-        foreach ($form->all() as $key => $child) {
-            if ($child instanceof FormInterface) {
-                $err = self::getFormErrors($child);
-                dump($err);
-                if (count($err) > 0) {
-                    $errors[$key] = $err;
-                }
-            }
-        }
-
-        return $errors;
     }
 }

@@ -1,0 +1,45 @@
+{% for movie in movies %} 
+    <div class="movie" data-movie-id="{{ movie.id }}">
+        {% include "partials/modals/_playlist_modal.html.twig" %}
+        <div class="position-relative">
+            {% if is_granted("ROLE_USER") %}
+                {% include "movie/partials/_action_icons.html.twig" %}
+            {% endif %}
+        </div>
+        {% if movie.poster_path %}
+            <a class="movie-img-link" href="{{ path('app_movie_show', {'id': movie.id}) }}">
+                <img class="w-100 rounded-top" src="{{ 'https://image.tmdb.org/t/p/w500' ~ movie.poster_path }}" alt="Affiche du film">
+            </a>
+        {% else %}
+            <a class="movie-img-link" href="{{ path('app_movie_show', {'id': movie.id}) }}">
+                <img class="w-100 rounded-top n-a" src="{{ asset('images/na2.webp') }}" alt="Affiche non disponible" alt="Affiche du film">
+            </a>
+        {% endif %}
+        <div class="text-center bg-dark rounded-bottom p-2">
+            <a class="text-decoration-none fw-bold text-light my-3" href="{{ path('app_movie_show', {'id': movie.id}) }}">
+                {{ movie.title|u.truncate(25, '...') }}
+            </a>
+            <div class="d-flex mt-2">
+                <div class="d-flex align-items-center w-100">
+                    <img class="movie-year-img" src="{{ asset('icons/release-date.svg') }}" alt="Date de sortie">
+                    {% if movie.release_date is defined %}
+                        <span class="fw-bold text-light">{{ movie.release_date|date('Y') }}</span>
+                    {% else %}
+                        <span class="fw-bold text-light">N/A</span>
+                    {% endif %}
+                </div>
+                <div class="movie-gauge-container">
+                    {% if movie.vote_average is defined %}
+                        <canvas 
+                            id="gauge{{ movie.id }}"
+                            class="gauge"  
+                            data-movie-id="{{ movie.id }}"
+                            data-movie-note="{{ (movie.vote_average * 10)|round }}" 
+                            data-movie-note-count="{{ movie.vote_count }}">
+                        </canvas>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

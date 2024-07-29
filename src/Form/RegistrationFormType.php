@@ -65,7 +65,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Mot de passe',
                 'label_attr' => ['class' => 'register-label'],
                 'attr' => [
-                    'class' => 'password-field',
+                    'class' => 'password-field form-control',
                     'autocomplete' => 'new-password',
                 ],
                 'constraints' => [

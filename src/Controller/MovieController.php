@@ -77,7 +77,7 @@ class MovieController extends AbstractController
             dd($data);
         }
 
-        return $this->render('partials/advanced_search.html.twig', [
+        return $this->render('movie/partials/_advanced_search.html.twig', [
             'form' => $form,
         ]);
     }

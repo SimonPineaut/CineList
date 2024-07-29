@@ -12,8 +12,8 @@ const displayModal = (modalId, confirmAction) => {
         confirmNoButton.removeEventListener('click', confirmNoHandler);
     };
 
-    const confirmYesButton = modal.querySelector('.confirm-yes');
-    const confirmNoButton = modal.querySelector('.confirm-no');
+    const confirmYesButton = modal.querySelector('#confirmYes');
+    const confirmNoButton = modal.querySelector('#confirmNo');
 
     const confirmYesHandler = async () => {
         await confirmAction();

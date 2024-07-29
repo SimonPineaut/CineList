@@ -238,22 +238,13 @@ class PlaylistController extends AbstractController
         return new JsonResponse($data);
     }
 
-    #[Route('show/{id}', name: 'app_playlist_show', methods: ['GET'])]
+    #[Route('/{id}/show', name: 'app_playlist_show', methods: ['GET', 'POST'])]
     public function show(Playlist $playlist): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        return $this->render('playlist/show.html.twig', [
-            'playlist' => $playlist,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_playlist_edit', methods: ['GET', 'POST'])]
-    public function edit(Playlist $playlist, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $moviesByPlaylist = $this->getMoviesByPlaylist([$playlist]);
 
-        return $this->render('playlist/edit.html.twig', [
+        return $this->render('playlist/show.html.twig', [
             'playlist' => $playlist,
             'movies' => $moviesByPlaylist[$playlist->getId()],
         ]);

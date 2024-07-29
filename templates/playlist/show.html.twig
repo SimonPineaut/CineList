@@ -48,6 +48,7 @@
                 {% endif %}
                 <a href="{{ path('app_movie_show', {'id': movie.id }) }}">
                     <img src="{{'https://image.tmdb.org/t/p/w500' ~ movie.poster_path }}" alt="">
+                    <span class="position-relative">{{ movie.title }}</span>
                 </a>
             </div>
         {% endfor %}

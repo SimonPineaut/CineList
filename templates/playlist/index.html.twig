@@ -19,18 +19,12 @@
         <div class="page-playlists">
             {% for playlist in playlists %}
                 <div class="playlist" data-playlist-id="{{ playlist.id }}" id="playlist{{ playlist.id }}">
-                    <div class="modal-element d-none" id="deletePlaylistModal{{ playlist.id }}">
-                        <span>Confirmer la suppression de la playlist ?</span>
-                        <div class="confirm-action">
-                            <button class="confirm-yes submit-btn">Oui</button>
-                            <button class="confirm-no submit-btn">Non</button>
-                        </div>
-                    </div>
+                    {% include "partials/modals/_delete_playlist_modal.html.twig" %}
                     {% if app.user == playlist.user %}
                         <a class="playlist-btn delete-btn btn rounded-circle" id="deletePlaylistBtn">
                             <img src="{{ asset('icons/trash.svg') }}" alt="">
                         </a>
-                        <a class="playlist-btn edit-btn rounded-circle" href="{{ path('app_playlist_edit', {'id': playlist.id}) }}">
+                        <a class="playlist-btn edit-btn rounded-circle" href="{{ path('app_playlist_show', {'id': playlist.id}) }}">
                             <img src="{{ asset('icons/edit.svg') }}" alt="">
                         </a>
                         <a class="playlist-btn lock-btn btn rounded-circle" id="lockPlaylistBtn" data-is-public="{{ playlist.isPublic }}">
@@ -41,11 +35,11 @@
                             {% endif %}
                         </a>
                     {% else %}
-                        <a class="playlist-btn show-btn rounded-circle" href="{{ path('app_playlist_edit', {'id': playlist.id}) }}">
+                        <a class="playlist-btn show-btn rounded-circle" href="{{ path('app_playlist_show', {'id': playlist.id}) }}">
                             <img src="{{ asset('icons/more-dark.svg') }}" alt="">
                         </a>
                     {% endif %}
-                    <a href="{{ path('app_playlist_edit', {'id': playlist.id}) }}" class="fw-bold m-4 custom-blue-1 text-decoration-none">{{ playlist.name|u.truncate(22, '...') }}</a>
+                    <a href="{{ path('app_playlist_show', {'id': playlist.id}) }}" class="fw-bold m-4 custom-blue-1 text-decoration-none">{{ playlist.name|u.truncate(22, '...') }}</a>
                     <div class="playlist-movie-container">
                         {% for key, movies in moviesByPlaylist %}
                             {% if key == playlist.id %}
@@ -94,10 +88,8 @@
             {% endfor %}
         </div>
     {% else %}
-        <div class="h-75">
-            <div class="no-results">
-                <p>Aucune playlist</p>
-            </div>
+        <div class="vh-100">
+            <p class="w-75 mx-auto text-center rounded bg-dark text-light mt-5 p-3 fs-3">Aucune playlist</p>
         </div>
     {% endif %}
 {% endblock %}

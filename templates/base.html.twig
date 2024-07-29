@@ -15,16 +15,16 @@
         {% endblock %}
 
     </head>
-    <body class="bg-light">
+    <body class="bg-dark">
         {% block header %}
-            {% include "partials/navbar.html.twig" %}
+            {% include "partials/_navbar.html.twig" %}
             
-            {% if app.user %}
+            {# {% if app.user %}
                 {{ render(controller('App\\Controller\\MovieController::advancedSearch')) }}
-            {% endif %}
+            {% endif %} #}
         {% endblock %}
         
-        <div class="flash-container">
+        <div class="d-flex justify-content-center align-items-center w-75 mx-auto z-index">
             {% if error is defined and error is not null %}
                 <div id="flashMessage">
                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -35,7 +35,7 @@
         {% block body %}{% endblock %}
 
         {% block footer %}
-            {% include "partials/footer.html.twig" %}
+            {% include "partials/_footer.html.twig" %}
         {% endblock %}
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

@@ -3,7 +3,11 @@
 namespace App\Form;
 
 use DateTime;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\Range;
@@ -15,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Validator\Constraints\Positive;
 
 class AdvancedSearchType extends AbstractType
 {
@@ -32,16 +37,19 @@ class AdvancedSearchType extends AbstractType
                     'class' => '',
                 ],
                 'constraints' => [
-                    new Range([
-                        'min' => '1900',
-                        'max' => $currentYear,
-                    ]),
+                    new Positive(),
                 ],
             ])
             ->add('primary_release_date_gte', DateType::class, [
                 'required' => false,
                 'widget' => 'single_text',
                 'label' => 'Date de sortie (à partir de)',
+                'constraints' => [
+                    new Range([
+                        'min' => '1900',
+                        'max' => $currentYear,
+                    ]),
+                ],
             ])
             ->add('primary_release_date_lte', DateType::class, [
                 'required' => false,
@@ -111,7 +119,14 @@ class AdvancedSearchType extends AbstractType
             // ])
             ->add('save', SubmitType::class, [
                 'attr' => ['class' => 'save'],
-            ]);;
+            ]);
+
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event): void {
+            $data = $event->getData();
+            $form = $event->getForm();
+            $errors = $this->getFormErrors($form);
+            dd($errors);
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -119,5 +134,26 @@ class AdvancedSearchType extends AbstractType
         $resolver->setDefaults([
             // Configure your form options here
         ]);
+    }
+
+    private static function getFormErrors(FormInterface $form): array
+    {
+        $errors = [];
+
+        foreach ($form->getErrors() as $error) {
+            $errors[] = $error->getMessage();
+        }
+
+        foreach ($form->all() as $key => $child) {
+            if ($child instanceof FormInterface) {
+                $err = self::getFormErrors($child);
+                dump($err);
+                if (count($err) > 0) {
+                    $errors[$key] = $err;
+                }
+            }
+        }
+
+        return $errors;
     }
 }

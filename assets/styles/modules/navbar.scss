@@ -1,75 +1,35 @@
-.navbar-links {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .sticky-navbar {
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 50;
-}
 
-.navbar-form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    input {
-        border-radius: 15px;
-        border: none;
-        text-align: center;
-        font-weight: 600;
-        padding: 10px;
+    .search-icon,
+    .user-icon,
+    .logout-icon {
+        width: 34px;
     }
 
-    button {
-        padding: 0;
+    .search-icon {
+        padding: 5px;
+
+        &:hover {
+            transform: scale(1.1);
+        }
     }
-}
 
-.navbar-user {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    .active {
+        border-bottom: 2px solid #f8f9fa;
+        color: #f8f9fa;
+    }
 
-.search-btn {
-    background-color: transparent;
-    border: none;
-    padding: .2em .5em;
-    margin: 0 .2em;
-}
-
-.search-icon,
-.user-icon,
-.logout-icon {
-    width: 34px;
-}
-
-.search-icon {
-    padding: 5px;
-}
-
-.search-icon:hover,
-.navbar-link:hover {
-    background-color: #666;
-    color: #212529;
-    border-radius: 6px;
-}
-
-.active {
-    border-bottom: 3px solid #f8f9fa;
-    color: #f8f9fa;
-}
-
-.badge-container {
-    position: relative;
-
-    span {
-        position: absolute;
-        right: -10px;
-        top: 0;
+    .badge-container {
+        position: relative;
+    
+        span {
+            position: absolute;
+            right: -10px;
+            top: 0;
+        }
     }
 }

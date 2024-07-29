@@ -7,7 +7,7 @@
     </a>
 {% endmacro %}
 
-<nav class="sticky-navbar navbar navbar-expand-lg navbar-dark bg-dark p-2" id="navbar">
+<nav class="sticky-navbar navbar navbar-expand-lg navbar-dark bg-black p-2" id="navbar">
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -35,7 +35,7 @@
                 <form class="d-flex" action="{{ path('app_movie_search', {'page' : 1}) }}" method="get">
                     <input class="rounded-pill text-center" type="search" name="query" placeholder="chercher un film" value="{{ query }}"
                         aria-label="Search">
-                    <button class="search-btn" type="submit">
+                    <button class="border-0 bg-transparent p-2" type="submit">
                         <img class="search-icon" src="{{ asset('icons/search.svg') }}">
                     </button>
                 </form>
@@ -80,4 +80,4 @@
         </div>
     </div>
 </nav>
-{% include "partials/logout_modal.html.twig" %}
+{% include "partials/modals/_logout_modal.html.twig" %}

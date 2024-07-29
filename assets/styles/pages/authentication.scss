@@ -47,13 +47,13 @@
     .register-password-container,
     .login-password-container {
         position: relative;
-        width: min-content;
 
         .password-field {
             width: auto;
         }
 
-        .toggle-pwd {
+        .toggle-pwd,
+        .toggle-register-pwd {
             position: absolute;
             right: 0;
             top: 0;
@@ -67,6 +67,10 @@
             &:hover {
                 cursor: pointer;
             }
+        }
+
+        .toggle-register-pwd {
+            top: 22px;
         }
     }
 
@@ -102,7 +106,7 @@
     justify-content: center;
     align-items: center;
     padding: 6px 12px;
-    margin: 24px;
+    margin: 10px;
     border: 2px solid #f8f9fa;
     background-color: #212529;
     border-radius: 5px;
@@ -115,6 +119,10 @@
         background-color: #f8f9fa;
         border: 2px solid #212529;
     }
+}
+
+.login-btn {
+    margin: 24px;
 }
 
 .delete-user {

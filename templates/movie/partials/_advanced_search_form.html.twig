@@ -1,5 +1,6 @@
 <div class="bg-dark text-white w-100">
     <h3 class="w-50 mx-auto bg-light text-center text-dark rounded p-2">Recherche avancée</h3>
+    
     <form method="post" action="{{ path('app_movie_advanced_search_data') }}" class="w-100 d-flex justify-content-center align-items-center flex-wrap">
         {{ form_start(form, {'action': path('app_movie_advanced_search_data'), 'method': 'POST'}) }}
             <div class="d-flex flex-column m-2 p-2">
@@ -16,6 +17,7 @@
                 {{ form_label(form.primary_release_date_lte) }}
                 {{ form_widget(form.primary_release_date_lte) }}
             </div>
+
             <div class="d-flex flex-column m-2 p-2">
                 {{ form_label(form.sort_by) }}
                 {{ form_widget(form.sort_by) }}
@@ -30,6 +32,7 @@
                 {{ form_label(form.vote_average_lte) }}
                 {{ form_widget(form.vote_average_lte) }}
             </div>
+
             <div class="d-flex flex-column m-2 p-2">
                 {{ form_label(form.vote_count_gte) }}
                 {{ form_widget(form.vote_count_gte) }}
@@ -69,6 +72,7 @@
                 {{ form_label(form.with_people) }}
                 {{ form_widget(form.with_people) }}
             </div>
+
             <button type="submit" class="btn bg-light text-dark">Appliquer</button>
         {{ form_end(form) }}
     </form>

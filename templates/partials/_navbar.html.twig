@@ -126,7 +126,9 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        console.log(data.data);
+                        let formValues = data.data;
+                        
+                        console.log(new URLSearchParams(formValues).toString());
                     } else {
                         let errorsContainer = document.getElementById('formErrors');
                         errorsContainer.innerHTML = '';

@@ -123,10 +123,27 @@ class MovieController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
+            $filteredData = array_filter($data, function($value) {
+                return $value !== null;
+            });
+            $formatedData = [];
+
+            foreach ($filteredData as $key => $value) {
+                if (str_contains($key, '_lte') ) {
+                    $modifiedKey = str_replace('_lte', '.lte', $key);
+                    $formatedData[$modifiedKey] = $value;
+                }
+                else if (str_contains($key, '_gte') ) {
+                    $modifiedKey = str_replace('_gte', '.gte', $key);
+                    $formatedData[$modifiedKey] = $value;
+                } else {
+                    $formatedData[$key] = $value;
+                }
+            }
 
             return $this->json([
                 'success' => true,
-                'data' => $data,
+                'data' => $formatedData,
             ]);
         }
 

@@ -40,3 +40,17 @@ body {
 .custom-blue-2 {
     color: #a9c9e4;
 }
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    img {
+        width: 30px;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+}

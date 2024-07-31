@@ -5,9 +5,14 @@
     z-index: 50;
 
     .search-icon,
+    .advanced-search-icon,
     .user-icon,
     .logout-icon {
         width: 34px;
+
+        &:hover {
+            transform: scale(1.1);
+        }
     }
 
     .search-icon {

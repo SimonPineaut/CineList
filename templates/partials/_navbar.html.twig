@@ -33,14 +33,14 @@
                 </div>
                 {% set query = app.request.query.get('query') %}
                 <form class="d-flex align-items-center" action="{{ path('app_movie_search', {'page' : 1}) }}" method="get">
-                    <input class="rounded-pill text-center border-0" type="search" name="query" placeholder="chercher un film" value="{{ query }}"
+                    <input class="rounded-pill text-center border-0 p-2" type="search" name="query" placeholder="chercher un film" value="{{ query }}"
                         aria-label="Search">
                     <div class="d-flex flex-column">
                         <button class="border-0 bg-transparent" type="submit">
                             <img class="search-icon" src="{{ asset('icons/search.svg') }}">
                         </button>
                         <button id="advancedSearchBtn" class="border-0 bg-transparent">
-                            <img class="search-icon" src="{{ asset('icons/plus.svg') }}">
+                            <img class="advanced-search-icon" src="{{ asset('icons/plus.svg') }}">
                         </button>
                     </div>
                 </form>
@@ -89,60 +89,3 @@
 {% include "partials/modals/_logout_modal.html.twig" %}
 
 {% include "partials/modals/_advanced_search_modal.html.twig" %}
-
-{% block javacsripts %}
-<script>
-    document.getElementById('advancedSearchBtn').addEventListener('click', function(event) {
-        event.preventDefault();
-            document.getElementById('advancedSearchModal').style.display = 'flex';
-
-            fetch('{{ path('app_movie_advanced_search_form') }}')
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('modalFormContainer').innerHTML = html;
-                    attachFormSubmitHandler();
-                });
-        });
-
-        document.getElementById('closeModal').addEventListener('click', function() {
-            document.getElementById('advancedSearchModal').style.display = 'none';
-        });
-
-        function attachFormSubmitHandler() {
-            let form = document.querySelector('#modalFormContainer form');
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-
-                let formData = new FormData(form);
-                let action = form.action;
-
-                fetch(action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        let formValues = data.data;
-                        
-                        console.log(new URLSearchParams(formValues).toString());
-                    } else {
-                        let errorsContainer = document.getElementById('formErrors');
-                        errorsContainer.innerHTML = '';
-                        data.errors.forEach(error => {
-                            console.log(error);
-                            let errorElement = document.createElement('div');
-                            errorElement.innerText = error;
-                            errorsContainer.appendChild(errorElement);
-                        });
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            });
-        }
-</script>
-
-{% endblock %}

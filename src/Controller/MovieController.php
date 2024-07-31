@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
-use App\Form\AdvancedSearchType;
+use DateTime;
 use App\Service\ApiService;
+use App\Form\AdvancedSearchType;
+use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -99,81 +101,104 @@ class MovieController extends AbstractController
         ]);
     }
 
+    #[Route('search/advanced', name: 'app_movie_advanced_search', methods: ['GET'])]
+    public function advancedSearch(Request $request): Response
+    {
+        $advancedSearch = $request->getQueryString();
+
+        return $this->renderMoviePage('movie/index.html.twig', $request, 'https://api.themoviedb.org/3/discover/movie?' . $advancedSearch);
+    }
+
     // display advanced search form
     #[Route('search/advanced/form', name: 'app_movie_advanced_search_form', methods: ['GET'])]
-    public function getAdvancedSearchForm(): Response
+    public function getAdvancedSearchForm(Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
-        $form = $this->createForm(AdvancedSearchType::class);
+        $previousQueryData = [];
+        parse_str($request->getQueryString(), $previousQueryData);
+
+        $form = $this->createForm(AdvancedSearchType::class, $previousQueryData);
 
         return $this->render('movie/partials/_advanced_search_form.html.twig', [
             'form' => $form,
         ]);
     }
 
-    // handle advanced search form
-    #[Route('search/advanced', name: 'app_movie_advanced_search_data', methods: ['POST'])]
-    public function advancedSearchData(Request $request): Response
+    // validate advanced search form
+    #[Route('search/advanced/validate', name: 'app_movie_advanced_search_validate', methods: ['POST'])]
+    public function validateAdvancedSearchData(Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
-
         $form = $this->createForm(AdvancedSearchType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $filteredData = array_filter($data, function($value) {
-                return $value !== null;
+                return $value !== null && $value !== '' && $value !== [];
             });
-            $formatedData = [];
+            $formattedData = [];
 
             foreach ($filteredData as $key => $value) {
-                if (str_contains($key, '_lte') ) {
-                    $modifiedKey = str_replace('_lte', '.lte', $key);
-                    $formatedData[$modifiedKey] = $value;
-                }
-                else if (str_contains($key, '_gte') ) {
-                    $modifiedKey = str_replace('_gte', '.gte', $key);
-                    $formatedData[$modifiedKey] = $value;
+                $modifiedKey = $key;
+
+                if (str_contains($key, '_lte') || str_contains($key, '_gte')) {
+                    $operator = str_contains($key, '_lte') ? '.lte' : '.gte';
+                    $modifiedKey = str_replace(['_lte', '_gte'], $operator, $key);
+
+                    if (in_array($key, ['primary_release_date_lte', 'primary_release_date_gte'])) {
+                        $dateString = $value . '/01/01 12:00:00';
+                        $date = new DateTimeImmutable($dateString);
+                        $formattedData[$modifiedKey] = $date->format('Y-m-d');
+                    } else {
+                        $formattedData[$modifiedKey] = $value;
+                    }
+                } elseif ($key === 'with_genres' || $key === 'without_genres') {
+                    $formattedData[$key] = implode(',', $value);
                 } else {
-                    $formatedData[$key] = $value;
+                    $formattedData[$key] = $value;
                 }
             }
+            $queryString = http_build_query($formattedData);
 
             return $this->json([
                 'success' => true,
-                'data' => $formatedData,
+                'data' => $queryString,
+            ]);
+        } elseif ($form->isSubmitted()) {
+            $errors = [];
+            foreach ($form->getErrors(true) as $error) {
+                $errors[] = $error->getMessage();
+            }
+
+            return $this->json([
+                'success' => false,
+                'errors' => $errors,
             ]);
         }
-
-        $errors = [];
-        foreach ($form->getErrors(true) as $error) {
-            $errors[] = $error->getMessage();
-        }
-
-        return $this->json([
-            'success' => false,
-            'errors' => $errors,
-        ]);
     }
 
     private function renderMoviePage(string $template, Request $request, string $url, array $additionalParams = []): Response
     {
         $page = $this->apiService->getPage($request);
+        $advancedSearch = $request->getQueryString();
         $params = array_merge(['language' => 'fr', 'page' => $page], $additionalParams);
         $results = $this->apiService->fetchFromApi('GET', $url, $params);
         $currentPage = $results['page'];
         $totalPages = min($results['total_pages'], 500);
+        $totalResults = $results['total_results'];
         $movies = $results['results'];
         $favoriteMovies = $this->getUserFavoriteMovies();
 
         return $this->render($template, [
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
+            'totalResults' => $totalResults,
             'movies' => $movies,
             'favoriteMovies' => $favoriteMovies,
             'page' => $page,
+            'advancedSearch' => $advancedSearch ?? [],
         ]);
     }
 

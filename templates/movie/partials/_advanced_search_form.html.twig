@@ -1,79 +1,82 @@
-<div class="bg-dark text-white w-100">
-    <h3 class="w-50 mx-auto bg-light text-center text-dark rounded p-2">Recherche avancée</h3>
-    
-    <form method="post" action="{{ path('app_movie_advanced_search_data') }}" class="w-100 d-flex justify-content-center align-items-center flex-wrap">
-        {{ form_start(form, {'action': path('app_movie_advanced_search_data'), 'method': 'POST'}) }}
-            <div class="d-flex flex-column m-2 p-2">
-                {{ form_label(form.primary_release_year) }}
-                {{ form_widget(form.primary_release_year) }}
-            </div>
+{{ form_start(form, {
+    'action': path('app_movie_advanced_search_validate'),
+    'method': 'POST',
+    'attr': {
+        'id': 'advancedSearchForm',
+        'class': 'd-flex flex-wrap w-100'
+        }
+}) }}
+    <div>
+        <div class="d-flex flex-column m-2 p-2">
+            {{ form_label(form.primary_release_year) }}
+            {{ form_widget(form.primary_release_year) }}
+        </div>
+        <div class="d-flex flex-column m-2 p-2">
+            {{ form_label(form.primary_release_date_gte) }}
+            {{ form_widget(form.primary_release_date_gte) }}
+        </div>
+        <div class="d-flex flex-column m-2 p-2">
+            {{ form_label(form.primary_release_date_lte) }}
+            {{ form_widget(form.primary_release_date_lte) }}
+        </div>
+    </div>
 
-            <div class="d-flex flex-column m-2 p-2">
-                {{ form_label(form.primary_release_date_gte) }}
-                {{ form_widget(form.primary_release_date_gte) }}
-            </div>
+    <div>
+        <div class="d-flex flex-column m-2 p-2">
+            {{ form_label(form.vote_average_gte) }}
+            {{ form_widget(form.vote_average_gte) }}
+        </div>
+        <div class="d-flex flex-column m-2 p-2">
+            {{ form_label(form.vote_average_lte) }}
+            {{ form_widget(form.vote_average_lte) }}
+        </div>
+        <div class="d-flex flex-column m-2 p-2">
+            {{ form_label(form.vote_count_gte) }}
+            {{ form_widget(form.vote_count_gte) }}
+        </div>
+        <div class="d-flex flex-column m-2 p-2">
+            {{ form_label(form.vote_count_lte) }}
+            {{ form_widget(form.vote_count_lte) }}
+        </div>
+    </div>
 
-            <div class="d-flex flex-column m-2 p-2">
-                {{ form_label(form.primary_release_date_lte) }}
-                {{ form_widget(form.primary_release_date_lte) }}
-            </div>
+    <div>
+        <div class="d-flex flex-column m-2 p-2">
+            {{ form_label(form.with_genres) }}
+            {{ form_widget(form.with_genres) }}
+        </div>
+        <div class="d-flex flex-column m-2 p-2">
+            {{ form_label(form.without_genres) }}
+            {{ form_widget(form.without_genres) }}
+        </div>
+    </div>
 
-            <div class="d-flex flex-column m-2 p-2">
-                {{ form_label(form.sort_by) }}
-                {{ form_widget(form.sort_by) }}
-            </div>
+    <div>
+        <div class="d-flex flex-column m-2 p-2">
+            {{ form_label(form.with_keywords) }}
+            {{ form_widget(form.with_keywords) }}
+        </div>
+        <div class="d-flex flex-column m-2 p-2">
+            {{ form_label(form.without_keywords) }}
+            {{ form_widget(form.without_keywords) }}
+        </div>
+    </div>
 
-            <div class="d-flex flex-column m-2 p-2">
-                {{ form_label(form.vote_average_gte) }}
-                {{ form_widget(form.vote_average_gte) }}
-            </div>
+    <div>
+        <div class="d-flex flex-column m-2 p-2">
+            {{ form_label(form.with_cast) }}
+            {{ form_widget(form.with_cast) }}
+        </div>
+        <div class="d-flex flex-column m-2 p-2">
+            {{ form_label(form.with_people) }}
+            {{ form_widget(form.with_people) }}
+        </div>
+    </div>
 
-            <div class="d-flex flex-column m-2 p-2">
-                {{ form_label(form.vote_average_lte) }}
-                {{ form_widget(form.vote_average_lte) }}
-            </div>
+    <div class="d-flex flex-column m-2 p-2">
+        {{ form_label(form.sort_by) }}
+        {{ form_widget(form.sort_by) }}
+    </div>
 
-            <div class="d-flex flex-column m-2 p-2">
-                {{ form_label(form.vote_count_gte) }}
-                {{ form_widget(form.vote_count_gte) }}
-            </div>
-
-            <div class="d-flex flex-column m-2 p-2">
-                {{ form_label(form.vote_count_lte) }}
-                {{ form_widget(form.vote_count_lte) }}
-            </div>
-
-            <div class="d-flex flex-column m-2 p-2">
-                {{ form_label(form.with_cast) }}
-                {{ form_widget(form.with_cast) }}
-            </div>
-
-            <div class="d-flex flex-column m-2 p-2">
-                {{ form_label(form.with_genres) }}
-                {{ form_widget(form.with_genres) }}
-            </div>
-
-            <div class="d-flex flex-column m-2 p-2">
-                {{ form_label(form.without_genres) }}
-                {{ form_widget(form.without_genres) }}
-            </div>
-
-            <div class="d-flex flex-column m-2 p-2">
-                {{ form_label(form.with_keywords) }}
-                {{ form_widget(form.with_keywords) }}
-            </div>
-
-            <div class="d-flex flex-column m-2 p-2">
-                {{ form_label(form.without_keywords) }}
-                {{ form_widget(form.without_keywords) }}
-            </div>
-
-            <div class="d-flex flex-column m-2 p-2">
-                {{ form_label(form.with_people) }}
-                {{ form_widget(form.with_people) }}
-            </div>
-
-            <button type="submit" class="btn bg-light text-dark">Appliquer</button>
-        {{ form_end(form) }}
-    </form>
-</div>
+    <button type="submit" class="btn bg-light text-dark">Appliquer</button>
+{{ form_end(form) }}

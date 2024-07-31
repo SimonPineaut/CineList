@@ -58,4 +58,20 @@ class GenreController extends AbstractController
             'genreName' => $genreName,
         ]);
     }
+
+    public function getGenreFormOptions(): Array
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $results = $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/genre/movie/list", [
+            'language' => 'fr',
+        ]);
+        $genres = $results['genres'];
+        $formattedGenres = [];
+        foreach ($genres as $genre) {
+            $formattedGenres[$genre['name']] = $genre['id'];
+        }
+
+        return $formattedGenres;
+    }
 }

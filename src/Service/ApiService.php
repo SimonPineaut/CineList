@@ -32,7 +32,7 @@ class ApiService extends AbstractController
         return 200 === $response->getStatusCode() ? true : false;
     }
 
-    public function fetchFromApi(string $method, string $endpoint, array $params): array
+    public function fetchFromApi(string $method, string $endpoint, array $params = []): array
     {
         try {
             $response = $this->client->request($method, $endpoint, [

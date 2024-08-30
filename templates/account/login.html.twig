@@ -17,7 +17,7 @@
 {% block body %}
     <div class="page page-account">
         {% if not app.user %}
-            <form action="{{ path('app_login') }}" method="post">
+            <form action="{{ path('login') }}" method="post">
                 <div class="authentication-container">
                     <div class="title">
                         <h3>Connexion</h3>
@@ -47,10 +47,10 @@
                     </div>
                     <p class="text-center">
                         Pas encore de compte ?
-                        <a href="{{ path('app_register') }}">Inscrivez-vous !</a>
+                        <a href="{{ path('register') }}">Inscrivez-vous !</a>
                     </p>
                     <p class="text-center">
-                        <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié ?</a>
+                        <a href="{{ path('forgot_password_request') }}">Mot de passe oublié ?</a>
                     </p>
                 </div>
             </form>

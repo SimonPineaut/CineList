@@ -16,23 +16,23 @@
             <ul class="navbar-nav w-100 d-lg-flex justify-content-evenly align-items-center mb-2 mb-lg-0 text-primary">
                 <div class="d-lg-flex">
                     <li class="nav-item">
-                        {{ _self.navbar_link('app_movie_index', 'Accueil', {'page': 1}) }}
+                        {{ _self.navbar_link('movie_index', 'Accueil', {'page': 1}) }}
                     </li>
                     <li class="nav-item">
-                        {{ _self.navbar_link('app_movie_trending', 'Tendances', {'page': 1}) }}
+                        {{ _self.navbar_link('movie_trending', 'Tendances', {'page': 1}) }}
                     </li>
                     <li class="nav-item">
-                        {{ _self.navbar_link('app_movie_top_rated', 'Top', {'page': 1}) }}
+                        {{ _self.navbar_link('movie_top_rated', 'Top', {'page': 1}) }}
                     </li>
                     <li class="nav-item">
-                        {{ _self.navbar_link('app_movie_genres', 'Genres') }}
+                        {{ _self.navbar_link('movie_genres', 'Genres') }}
                     </li>
                     <li class="nav-item">
-                        {{ _self.navbar_link('app_playlist_index', 'Playlists') }}
+                        {{ _self.navbar_link('playlist_index', 'Playlists') }}
                     </li>
                 </div>
                 {% set query = app.request.query.get('query') %}
-                <form class="d-flex align-items-center" action="{{ path('app_movie_search', {'page' : 1}) }}" method="get">
+                <form class="d-flex align-items-center" action="{{ path('movie_search', {'page' : 1}) }}" method="get">
                     <input class="rounded-pill text-center border-0 p-2" type="search" name="query" placeholder="chercher un film" value="{{ query }}"
                         aria-label="Search">
                     <div class="d-flex flex-column">
@@ -47,17 +47,17 @@
                 {% if is_granted("ROLE_USER") %}
                     <div class="d-lg-flex">
                         <li class="nav-item badge-container">
-                            {{ _self.navbar_link('app_movie_favorites', 'Mes favoris') }}
+                            {{ _self.navbar_link('movie_favorites', 'Mes favoris') }}
                             <span id="favoriteCount" class="badge rounded-pill bg-light text-dark">{{ favorites_count() }}</span>
                         </li>
                         <li class="nav-item badge-container">
-                            {{ _self.navbar_link('app_playlist_logged_user', 'Mes playlists') }}
+                            {{ _self.navbar_link('playlist_logged_user', 'Mes playlists') }}
                             <span id="playlistCount" class="badge rounded-pill bg-light text-dark">{{ playlists_count() }}</span>
                         </li>
                     </div>
                     <div class="d-lg-flex">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_account') }}">
+                            <a class="nav-link" href="{{ path('account') }}">
                                 <img class="user-icon" src="{{ asset('icons/account.svg') }}">
                             </a>
                         </li>
@@ -69,14 +69,14 @@
                     </div>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link fw-bold mx-2 custom-blue-1 {% if route == 'app_login' %}active{% endif %}"
-                            href="{{ path('app_login') }}">
+                        <a class="nav-link fw-bold mx-2 custom-blue-1 {% if route == 'login' %}active{% endif %}"
+                            href="{{ path('login') }}">
                             Connexion
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold mx-2 custom-blue-1 {% if route == 'app_register' %}active{% endif %}"
-                            href="{{ path('app_register') }}">
+                        <a class="nav-link fw-bold mx-2 custom-blue-1 {% if route == 'register' %}active{% endif %}"
+                            href="{{ path('register') }}">
                             Inscription
                         </a>
                     </li>

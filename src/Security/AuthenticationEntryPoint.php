@@ -19,6 +19,6 @@ class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
     {
         $request->getSession()->getFlashBag()->add('danger', 'Vous devez être connecté pour accéder à cette page');
 
-        return new RedirectResponse($this->urlGenerator->generate('app_login'));
+        return new RedirectResponse($this->urlGenerator->generate('login'));
     }
 }

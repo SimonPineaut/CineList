@@ -56,11 +56,11 @@
                 {% for movie in relatedMovies %}
                     <div class="recommendation">
                         {% if movie.poster_path %}
-                                <a href="{{ path('app_movie_show', {'id': movie.id}) }}" class="recommendation-link">
+                                <a href="{{ path('movie_show', {'id': movie.id}) }}" class="recommendation-link">
                                     <img class="recommendation-img" src="{{ 'https://image.tmdb.org/t/p/w500' ~ movie.poster_path }}" alt="Affiche du film">
                                 </a>
                         {% else %}
-                            <a class="movie-img-link" href="{{ path('app_movie_show', {'id': movie.id}) }}">
+                            <a class="movie-img-link" href="{{ path('movie_show', {'id': movie.id}) }}">
                                 <img class="w-100 rounded-top n-a" src="{{ asset('images/na2.webp') }}" alt="Affiche non disponible">
                             </a>
                         {% endif %}

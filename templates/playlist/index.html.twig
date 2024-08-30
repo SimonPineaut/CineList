@@ -24,7 +24,7 @@
                         <a class="playlist-btn delete-btn btn rounded-circle" id="deletePlaylistBtn">
                             <img src="{{ asset('icons/trash.svg') }}" alt="">
                         </a>
-                        <a class="playlist-btn edit-btn rounded-circle" href="{{ path('app_playlist_show', {'id': playlist.id}) }}">
+                        <a class="playlist-btn edit-btn rounded-circle" href="{{ path('playlist_show', {'id': playlist.id}) }}">
                             <img src="{{ asset('icons/edit.svg') }}" alt="">
                         </a>
                         <a class="playlist-btn lock-btn btn rounded-circle" id="lockPlaylistBtn" data-is-public="{{ playlist.isPublic }}">
@@ -35,11 +35,11 @@
                             {% endif %}
                         </a>
                     {% else %}
-                        <a class="playlist-btn show-btn rounded-circle" href="{{ path('app_playlist_show', {'id': playlist.id}) }}">
+                        <a class="playlist-btn show-btn rounded-circle" href="{{ path('playlist_show', {'id': playlist.id}) }}">
                             <img src="{{ asset('icons/more-dark.svg') }}" alt="">
                         </a>
                     {% endif %}
-                    <a href="{{ path('app_playlist_show', {'id': playlist.id}) }}" class="fw-bold m-4 custom-blue-1 text-decoration-none">{{ playlist.name|u.truncate(22, '...') }}</a>
+                    <a href="{{ path('playlist_show', {'id': playlist.id}) }}" class="fw-bold m-4 custom-blue-1 text-decoration-none">{{ playlist.name|u.truncate(22, '...') }}</a>
                     <div class="playlist-movie-container">
                         {% for key, movies in moviesByPlaylist %}
                             {% if key == playlist.id %}
@@ -77,7 +77,7 @@
                     <div class="playlist-username">
                         <img src="{{ asset('icons/user.svg') }}" alt="">
                         {% if app.user != playlist.user %}
-                            <a href="{{ path('app_playlist_user', {'userId': playlist.user.id}) }}" class="custom-blue-1 text-decoration-none">
+                            <a href="{{ path('playlist_user', {'userId': playlist.user.id}) }}" class="custom-blue-1 text-decoration-none">
                                 <span>{{ playlist.user.username }}</span>
                             </a>
                         {% else %}

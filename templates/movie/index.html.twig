@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block body %}
-    {% if app.request.get('_route') == 'app_movie_advanced_search' %}
+    {% if app.request.get('_route') == 'movie_advanced_search' %}
         {% include "movie/partials/_search_results_reminder.html.twig" %}
     {% endif %}
     {% if movies is defined and movies is not empty %}

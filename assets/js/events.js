@@ -2,7 +2,7 @@ import { toggleFavoriteStatus, handlePlaylistModal, handleNewPlaylistClick, hand
 import { displayLogoutModal, displayDeletePlaylistModal, displayDeleteAccountModal } from './modals.js';
 import { togglePasswordVisibility } from './passwordVisibility.js';
 import { displayFlashMessages } from './flashMessages.js';
-import { showModal, closeModal, submitForm } from './advancedSearch.js';
+import { showModal, closeModal } from './advancedSearch.js';
 import { checkUsernameValidity, checkEmailValidity, checkPasswordValidity, comparePasswords } from './inputValidityCheck.js';
 
 export const initializeEventListeners = () => {

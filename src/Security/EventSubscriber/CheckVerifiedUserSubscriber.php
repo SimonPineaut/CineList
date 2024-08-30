@@ -40,7 +40,7 @@ class CheckVerifiedUserSubscriber implements EventSubscriberInterface
         }
 
         $userId = $event->getPassport()->getUser()->getId();
-        $url = $this->router->generate('app_verify_resend_email', ['userId' => $userId]);
+        $url = $this->router->generate('verify_resend_email', ['userId' => $userId]);
 
         $response = new RedirectResponse($url);
         $event->setResponse($response);

@@ -37,7 +37,7 @@
 					<div class="genres">
 						{% for genre in movie.genres %}
 						
-						<a href="{{ path('app_movie_genre', {'genreId': genre.id, 'genreName': genre.name, 'page': 1}) }}"><span>{{ genre.name }}</span></a>
+						<a href="{{ path('movie_genre', {'genreId': genre.id, 'genreName': genre.name, 'page': 1}) }}"><span>{{ genre.name }}</span></a>
 						{% endfor %}
 					</div>
 				{% endif %}
@@ -60,7 +60,7 @@
 							{% for director in directors %}
 								<div class="director">
 									<img src="{{ asset('icons/director.svg') }}">
-									<a href="{{ path('app_person_show', {'id': director.id}) }}">{{director.name}}</a>
+									<a href="{{ path('person_show', {'id': director.id}) }}">{{director.name}}</a>
 								</div>
 							{% endfor %}
 						</div>

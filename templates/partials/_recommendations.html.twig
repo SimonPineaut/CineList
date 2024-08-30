@@ -7,11 +7,11 @@
             {% for recommendation in recommendations %}
                 <div class="recommendation">
                     {% if recommendation.poster_path %}
-                            <a href="{{ path('app_movie_show', {'id': recommendation.id}) }}" class="recommendation-link">
+                            <a href="{{ path('movie_show', {'id': recommendation.id}) }}" class="recommendation-link">
                                 <img class="recommendation-img" src="{{ 'https://image.tmdb.org/t/p/w500' ~ recommendation.poster_path }}" alt="Affiche du film">
                             </a>
                     {% else %}
-                        <a class="movie-img-link" href="{{ path('app_movie_show', {'id': recommendation.id}) }}">
+                        <a class="movie-img-link" href="{{ path('movie_show', {'id': recommendation.id}) }}">
                             <img class="w-100 rounded-top n-a" src="{{ asset('images/na2.webp') }}" alt="Affiche non disponible">
                         </a>
                     {% endif %}

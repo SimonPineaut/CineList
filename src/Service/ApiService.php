@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -12,15 +11,19 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class ApiService extends AbstractController
 {
     private string $apiKey;
+    private string $tmdbApiBaseUrl;
 
-    public function __construct(ParameterBagInterface $params,private HttpClientInterface $client)
-    {
+    public function __construct(
+        ParameterBagInterface $params,
+        private HttpClientInterface $client
+    ) {
         $this->apiKey = $params->get('api_key');
+        $this->tmdbApiBaseUrl = $params->get('tmdb_api_base_url');
     }
 
     public function isValidateApiKey(): bool
     {
-        $response = $this->client->request('GET', 'https://api.themoviedb.org/3/authentication', [
+        $response = $this->client->request('GET', $this->tmdbApiBaseUrl . '/authentication', [
             'headers' => [
                 'accept' => 'application/json',
             ],
@@ -38,25 +41,25 @@ class ApiService extends AbstractController
             $response = $this->client->request($method, $endpoint, [
                 'query' => array_merge($params, ['api_key' => $this->apiKey])
             ]);
-        
+
             if ($response->getStatusCode() !== Response::HTTP_OK) {
                 throw new \Exception('Erreur de requête API: ' . $response->getStatusCode());
             }
-            
+
             return $response->toArray();
         } catch (\Exception $e) {
             throw new \Exception('Erreur lors de la requête API: ' . $e->getMessage());
         }
     }
-    
+
     public function getPage(Request $request): int
     {
         $page = $request->get('page', 1);
-        
+
         if (!is_numeric($page) || (int)$page < 1) {
             throw $this->createNotFoundException('Ressource non trouvée, vérifiez l\'URL');
         }
-    
+
         return (int)$page;
     }
 }

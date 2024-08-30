@@ -1,81 +1,84 @@
 {{ form_start(form, {
-    'action': path('app_movie_advanced_search_validate'),
+    'action': path('movie_advanced_search_validate'),
     'method': 'POST',
     'attr': {
-        'id': 'advancedSearchForm',
-        'class': 'd-flex flex-wrap w-100'
+        'id': 'advancedSearchForm'
         }
 }) }}
-    <div>
-        <div class="d-flex flex-column m-2 p-2">
-            {{ form_label(form.primary_release_year) }}
-            {{ form_widget(form.primary_release_year) }}
-        </div>
-        <div class="d-flex flex-column m-2 p-2">
-            {{ form_label(form.primary_release_date_gte) }}
-            {{ form_widget(form.primary_release_date_gte) }}
-        </div>
-        <div class="d-flex flex-column m-2 p-2">
-            {{ form_label(form.primary_release_date_lte) }}
-            {{ form_widget(form.primary_release_date_lte) }}
-        </div>
-    </div>
+    <div class="d-flex advanced-search">
+        <fieldset>
+            <legend class="custom-blue-2">Par année de sortie</legend>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_widget(form.primary_release_year) }}
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend class="custom-blue-2">Par période</legend>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.primary_release_date_gte) }}
+                {{ form_widget(form.primary_release_date_gte) }}
+            </div>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.primary_release_date_lte) }}
+                {{ form_widget(form.primary_release_date_lte) }}
+            </div>
+        </fieldset>
 
-    <div>
-        <div class="d-flex flex-column m-2 p-2">
-            {{ form_label(form.vote_average_gte) }}
-            {{ form_widget(form.vote_average_gte) }}
-        </div>
-        <div class="d-flex flex-column m-2 p-2">
-            {{ form_label(form.vote_average_lte) }}
-            {{ form_widget(form.vote_average_lte) }}
-        </div>
-        <div class="d-flex flex-column m-2 p-2">
-            {{ form_label(form.vote_count_gte) }}
-            {{ form_widget(form.vote_count_gte) }}
-        </div>
-        <div class="d-flex flex-column m-2 p-2">
-            {{ form_label(form.vote_count_lte) }}
-            {{ form_widget(form.vote_count_lte) }}
-        </div>
-    </div>
+        <fieldset>
+            <legend class="custom-blue-2">Par vote</legend>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.vote_average_gte) }}
+                {{ form_widget(form.vote_average_gte) }}
+            </div>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.vote_average_lte) }}
+                {{ form_widget(form.vote_average_lte) }}
+            </div>
+        </fieldset>
 
-    <div>
-        <div class="d-flex flex-column m-2 p-2">
-            {{ form_label(form.with_genres) }}
-            {{ form_widget(form.with_genres) }}
-        </div>
-        <div class="d-flex flex-column m-2 p-2">
-            {{ form_label(form.without_genres) }}
-            {{ form_widget(form.without_genres) }}
-        </div>
-    </div>
+        <fieldset>
+            <legend class="custom-blue-2">Par genres</legend>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.with_genres) }}
+                {{ form_widget(form.with_genres) }}
+            </div>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.without_genres) }}
+                {{ form_widget(form.without_genres) }}
+            </div>
+        </fieldset>
 
-    <div>
-        <div class="d-flex flex-column m-2 p-2">
-            {{ form_label(form.with_keywords) }}
-            {{ form_widget(form.with_keywords) }}
-        </div>
-        <div class="d-flex flex-column m-2 p-2">
-            {{ form_label(form.without_keywords) }}
-            {{ form_widget(form.without_keywords) }}
-        </div>
-    </div>
+        <fieldset>
+            <legend class="custom-blue-2">Par mots-clés</legend>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.with_keywords) }}
+                {{ form_widget(form.with_keywords) }}
+            </div>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.without_keywords) }}
+                {{ form_widget(form.without_keywords) }}
+            </div>
+        </fieldset>
 
-    <div>
-        <div class="d-flex flex-column m-2 p-2">
-            {{ form_label(form.with_cast) }}
-            {{ form_widget(form.with_cast) }}
-        </div>
-        <div class="d-flex flex-column m-2 p-2">
-            {{ form_label(form.with_people) }}
-            {{ form_widget(form.with_people) }}
-        </div>
-    </div>
+        <fieldset>
+            <legend class="custom-blue-2">Par personnalité</legend>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.with_cast) }}
+                {{ form_widget(form.with_cast) }}
+            </div>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.with_people) }}
+                {{ form_widget(form.with_people) }}
+            </div>
+        </fieldset>
 
-    <div class="d-flex flex-column m-2 p-2">
-        {{ form_label(form.sort_by) }}
-        {{ form_widget(form.sort_by) }}
+        <fieldset>
+            <legend class="custom-blue-2">Ordre</legend>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.sort_by) }}
+                {{ form_widget(form.sort_by) }}
+            </div>
+        </fieldset>
     </div>
 
     <button type="submit" class="btn bg-light text-dark">Appliquer</button>

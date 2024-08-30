@@ -2,41 +2,46 @@
 
 namespace App\Controller;
 
-use DateTime;
+use DateTimeImmutable;
 use App\Service\ApiService;
 use App\Form\AdvancedSearchType;
-use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class MovieController extends AbstractController
 {
+    private string $tmdbApiBaseUrl;
+
     public function __construct(
         private ApiService $apiService,
+        ParameterBagInterface $params,
     ) {
+        $this->tmdbApiBaseUrl = $params->get('tmdb_api_base_url');
     }
 
-    #[Route('/', name: 'app_movie_index', methods: ['GET'])]
+    #[Route('/', name: 'movie_index', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        return $this->renderMoviePage('movie/index.html.twig', $request, 'https://api.themoviedb.org/3/movie/popular');
+        return $this->renderMoviePage('movie/index.html.twig', $request, $this->tmdbApiBaseUrl . '/movie/popular');
     }
 
-    #[Route('/trending', name: 'app_movie_trending', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('/trending', name: 'movie_trending', methods: ['GET'])]
     public function trending(Request $request): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
 
-        return $this->renderMoviePage('movie/index.html.twig', $request, 'https://api.themoviedb.org/3/trending/movie/day');
+        return $this->renderMoviePage('movie/index.html.twig', $request, $this->tmdbApiBaseUrl . '/trending/movie/day');
     }
 
-    #[Route('show/movie/{id}', name: 'app_movie_show', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('show/movie/{id}', name: 'movie_show', methods: ['GET'])]
     public function show(string $id): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        $movie = $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/movie/{$id}", ['language' => 'fr']);
+        $movie = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/movie/{$id}", ['language' => 'fr']);
         $recommendations = $this->getMovieRecommendations($id);
         $directors = $this->getDirectors($id);
         $actors = $this->getFirstActors($id);
@@ -53,25 +58,23 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route('search/movie', name: 'app_movie_search', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('search/movie', name: 'movie_search', methods: ['GET'])]
     public function search(Request $request): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
         $searchTerm = $request->get('query');
 
-        return $this->renderMoviePage('movie/index.html.twig', $request, 'https://api.themoviedb.org/3/search/movie', [
+        return $this->renderMoviePage('movie/index.html.twig', $request, $this->tmdbApiBaseUrl . '/search/movie', [
             'query' => $searchTerm,
         ]);
     }
 
-    #[Route('favorites/movie', name: 'app_movie_favorites', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('favorites/movie', name: 'movie_favorites', methods: ['GET'])]
     public function fetchFavorites(): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
         $favoriteMovies = $this->getUserFavoriteMovies();
-        $movies = array_map(fn ($id) => $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/movie/{$id}", ['language' => 'fr']), $favoriteMovies);
+        $movies = array_map(fn ($id) => $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/movie/{$id}", ['language' => 'fr']), $favoriteMovies);
 
         return $this->render('movie/favorites.html.twig', [
             'movies' => $movies,
@@ -79,21 +82,19 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route('top-rated/movie', name: 'app_movie_top_rated', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('top-rated/movie', name: 'movie_top_rated', methods: ['GET'])]
     public function fetchTopRated(Request $request): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
-        return $this->renderMoviePage('movie/index.html.twig', $request, 'https://api.themoviedb.org/3/movie/top_rated');
+        return $this->renderMoviePage('movie/index.html.twig', $request, $this->tmdbApiBaseUrl . '/movie/top_rated');
     }
 
-    #[Route('casting/movie/{movieId}', name: 'app_movie_casting', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('casting/movie/{movieId}', name: 'movie_casting', methods: ['GET'])]
     public function getFullCasting(string $movieId): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
         $actors = $this->getAllActors($movieId);
-        $movie = $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/movie/{$movieId}", ['language' => 'fr']);
+        $movie = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/movie/{$movieId}", ['language' => 'fr']);
 
         return $this->render('movie/full_casting.html.twig', [
             'actors' => $actors,
@@ -101,24 +102,25 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route('search/advanced', name: 'app_movie_advanced_search', methods: ['GET'])]
+    #[Route('search/advanced', name: 'movie_advanced_search', methods: ['GET'])]
     public function advancedSearch(Request $request): Response
     {
         $advancedSearch = $request->getQueryString();
 
-        return $this->renderMoviePage('movie/index.html.twig', $request, 'https://api.themoviedb.org/3/discover/movie?' . $advancedSearch);
+        return $this->renderMoviePage('movie/index.html.twig', $request, $this->tmdbApiBaseUrl . '/discover/movie?' . $advancedSearch);
     }
 
     // display advanced search form
-    #[Route('search/advanced/form', name: 'app_movie_advanced_search_form', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('search/advanced/form', name: 'movie_advanced_search_form', methods: ['GET'])]
     public function getAdvancedSearchForm(Request $request): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        $previousSearchData = $request->query->all();
+dd($previousSearchData);
+        foreach ($request->query->all() as $key => $value) {
 
-        $previousQueryData = [];
-        parse_str($request->getQueryString(), $previousQueryData);
-
-        $form = $this->createForm(AdvancedSearchType::class, $previousQueryData);
+        }
+        $form = $this->createForm(AdvancedSearchType::class, $previousSearchData);
 
         return $this->render('movie/partials/_advanced_search_form.html.twig', [
             'form' => $form,
@@ -126,10 +128,10 @@ class MovieController extends AbstractController
     }
 
     // validate advanced search form
-    #[Route('search/advanced/validate', name: 'app_movie_advanced_search_validate', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('search/advanced/validate', name: 'movie_advanced_search_validate', methods: ['POST'])]
     public function validateAdvancedSearchData(Request $request): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
         $form = $this->createForm(AdvancedSearchType::class);
         $form->handleRequest($request);
 
@@ -199,19 +201,21 @@ class MovieController extends AbstractController
             'favoriteMovies' => $favoriteMovies,
             'page' => $page,
             'advancedSearch' => $advancedSearch ?? [],
+            'genreId' => [],
+            'genreName' =>  [],
         ]);
     }
 
     private function getMovieRecommendations(string $id): array
     {
-        $recommendations = $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/movie/{$id}/recommendations", ['language' => 'fr']);
+        $recommendations = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/movie/{$id}/recommendations", ['language' => 'fr']);
 
         return $recommendations['results'];
     }
 
     private function getMovieTrailer(string $id): array
     {
-        $videos = $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/movie/{$id}/videos", ['language' => 'fr']);
+        $videos = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/movie/{$id}/videos", ['language' => 'fr']);
         $trailer = array_filter($videos['results'], function ($video) {
             return $video['type'] === 'Trailer' && $video['site'] === 'YouTube';
         });
@@ -221,21 +225,21 @@ class MovieController extends AbstractController
 
     private function getDirectors(string $movieID): array
     {
-        $credits = $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/movie/{$movieID}/credits", []);
+        $credits = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/movie/{$movieID}/credits", []);
 
         return array_filter($credits['crew'], fn ($crewMember) => $crewMember['job'] === 'Director');
     }
 
     private function getFirstActors(string $movieID): array
     {
-        $credits = $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/movie/{$movieID}/credits", []);
+        $credits = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/movie/{$movieID}/credits", []);
 
         return array_slice($credits['cast'], 0, 5);
     }
 
     private function getAllActors(string $movieID): array
     {
-        $credits = $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/movie/{$movieID}/credits", []);
+        $credits = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/movie/{$movieID}/credits", []);
 
         return $credits['cast'];
     }

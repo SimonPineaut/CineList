@@ -49,11 +49,13 @@ export const handlePlaylistModal = async (event) => {
     select.innerHTML = '';
 
     const playlists = await fetchData(`${origin}/playlist/fetch-user-playlists`);
-    if (playlists && Object.keys(playlists).length > 0) {
-        Object.entries(playlists).forEach(([key, value]) => {
+    if (Array.isArray(playlists) && playlists.length > 0) {
+        playlists.forEach(playlist => {
+            const [id, name] = Object.entries(playlist)[0];
             const option = document.createElement('option');
-            option.value = key;
-            option.text = value;
+            option.value = id;
+            option.text = name;
+            
             select.appendChild(option);
         });
         existingPlaylistRadio.disabled = false;

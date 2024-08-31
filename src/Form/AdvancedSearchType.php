@@ -11,12 +11,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Validator\Constraints\Positive;
 
 class AdvancedSearchType extends AbstractType
 {
-    public function __construct(private GenreController $genreController)
-    {
-    }
+    public function __construct(private GenreController $genreController) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -24,7 +23,7 @@ class AdvancedSearchType extends AbstractType
         $builder
             ->add('primary_release_year', IntegerType::class, [
                 'required' => false,
-                'label' => false,
+                'label' => 'Année de sortie',
                 'constraints' => [
                     new Range([
                         'min' => '1800',
@@ -57,20 +56,16 @@ class AdvancedSearchType extends AbstractType
             ])
             ->add('sort_by', ChoiceType::class, [
                 'choices' => [
+                    '' => '',
                     'Note ⭣' => 'vote_average.desc',
                     'Note ⭡' => 'vote_average.asc',
                     'Date de sortie ⭣' => 'primary_release_date.desc',
                     'Date de sortie ⭡' => 'primary_release_date.asc',
                     'Nombre de votes ⭣' => 'vote_count.desc',
                     'Nombre de votes ⭡' => 'vote_count.asc',
-                    'Titre ⭣' => 'original_title.desc',
-                    'Titre ⭡' => 'original_title.asc',
                 ],
                 'required' => false,
                 'label' => 'Trier par',
-                'attr' => [
-                    'class' => 'advanced-search-select'
-                ],
             ])
             ->add('vote_average_gte', IntegerType::class, [
                 'required' => false,
@@ -94,6 +89,20 @@ class AdvancedSearchType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('vote_count_gte', IntegerType::class, [
+                'required' => false,
+                'label' => 'Nombre (min)',
+                'constraints' => [
+                    new Positive(),
+                ],
+            ])
+            ->add('vote_count_lte', IntegerType::class, [
+                'required' => false,
+                'label' => 'Nombre (max)',
+                'constraints' => [
+                    new Positive(),
+                ],
+            ])
             ->add('with_cast', TextType::class, [
                 'required' => false,
                 'label' => 'Avec',
@@ -101,7 +110,7 @@ class AdvancedSearchType extends AbstractType
             ->add('with_genres', ChoiceType::class, [
                 'required' => false,
                 'choices' => $genres,
-                'label' => 'Inclus',
+                'label' => 'Avec',
                 'multiple' => true,
                 'attr' => [
                     'class' => 'advanced-search-select'
@@ -110,23 +119,19 @@ class AdvancedSearchType extends AbstractType
             ->add('without_genres', ChoiceType::class, [
                 'required' => false,
                 'choices' => $genres,
-                'label' => 'Exclus',
+                'label' => 'Sans',
                 'multiple' => true,
                 'attr' => [
                     'class' => 'advanced-search-select'
                 ],
             ])
-            ->add('with_keywords', TextType::class, [
+            ->add('with_cast', TextType::class, [
                 'required' => false,
-                'label' => 'Avec',
-            ])
-            ->add('without_keywords', TextType::class, [
-                'required' => false,
-                'label' => 'Sans',
+                'label' => 'Acteurs',
             ])
             ->add('with_people', TextType::class, [
                 'required' => false,
-                'label' => 'Avec',
+                'label' => 'Personnes',
             ]);
     }
 

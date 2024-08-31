@@ -1,9 +1,20 @@
 .advanced-search {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    
     fieldset {
         text-align: center;
     }
 
     label {
+        text-align: start;
+    }
+
+    .select2-selection__choice__display {
+        background-color: #22b4e2;
+    }
+
+    .select2-container {
         text-align: start;
     }
 }

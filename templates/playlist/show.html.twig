@@ -23,14 +23,14 @@
     <div class="d-flex justify-content-evenly m-2">
         <div class="text-light p-2">
             <span>Date de création :
-                <span class="fw-normal fs-6 custom-blue-1">{{ playlist.createdAt|format_datetime('relative_medium', 'none', locale='fr') }}<span>
+                <span class="fw-normal fs-6 custom-blue-2">{{ playlist.createdAt|format_datetime('relative_medium', 'none', locale='fr') }}<span>
             </span>
         </div>
         <div class="text-light p-2">
             <span>Auteur :
                 {% if app.user != playlist.user %}
                     <a href="{{ path('playlist_user', {'userId': playlist.user.id}) }}">
-                        <span class="fw-normal fs-6 custom-blue-1">{{ playlist.user.username }}</span>
+                        <span class="fw-normal fs-6 custom-blue-2">{{ playlist.user.username }}</span>
                     </a>
                 {% else %}
                     <span class="fw-normal fs-6 custom-blue-1">Vous</span>
@@ -42,13 +42,13 @@
         {% for movie in movies %}
             <div class="playlist-element" data-playlist-id="{{ playlist.id }}">
                 {% if app.user == playlist.user %}
-                    <span id="removeFromPlaylistBtn">
+                    <span class="remove-from-playlist-btn" id="removeFromPlaylistBtn">
                         <img data-movie-id="{{ movie.id }}"src="{{ asset('icons/delete.svg') }}" alt="">
                     </span>
                 {% endif %}
-                <a href="{{ path('movie_show', {'id': movie.id }) }}">
+                <a href="{{ path('movie_show', {'id': movie.id }) }}" class="text-decoration-none custom-blue-2">
                     <img src="{{'https://image.tmdb.org/t/p/w500' ~ movie.poster_path }}" alt="">
-                    <span class="position-relative">{{ movie.title }}</span>
+                    <span class="position-relative">{{ movie.title|u.truncate(22, '...') }}</span>
                 </a>
             </div>
         {% endfor %}
@@ -56,7 +56,7 @@
     {% if app.user != playlist.user %}
         <div id="importPlaylistBtn" class="playlist-action-block">
             <button class="btn">
-                <img src="{{ asset('icons/download.svg') }}" alt="">
+                <img src="{{ asset('icons/copy.svg') }}" alt="">
             </button>
         </div>
     {% endif %}

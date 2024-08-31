@@ -39,7 +39,7 @@
                             <img src="{{ asset('icons/more-dark.svg') }}" alt="">
                         </a>
                     {% endif %}
-                    <a href="{{ path('playlist_show', {'id': playlist.id}) }}" class="fw-bold m-4 custom-blue-1 text-decoration-none">{{ playlist.name|u.truncate(22, '...') }}</a>
+                    <a href="{{ path('playlist_show', {'id': playlist.id}) }}" class="fw-bold mt-5 mb-2 custom-blue-1 text-decoration-none">{{ playlist.name|u.truncate(22, '...') }}</a>
                     <div class="playlist-movie-container">
                         {% for key, movies in moviesByPlaylist %}
                             {% if key == playlist.id %}

@@ -1,37 +1,6 @@
-{% set labels = {
-    'primary_release_year': 'année de sortie',
-    'primary_release_date_gte': 'à partir de l\'année',
-    'primary_release_date_lte': 'jusqu\'à l\'année',
-    'sort_by': 'trier par',
-    'vote_average_gte': 'note (min)',
-    'vote_average_lte': 'note (max)',
-    'vote_count_gte': 'nombre de votes (min)',
-    'vote_count_lte': 'nombre de votes (max)',
-    'with_cast': 'avec acteurs',
-    'with_genres': 'avec genres',
-    'without_genres': 'sans genres',
-    'with_keywords': 'avec les mots clés',
-    'without_keywords': 'sans les mots clés',
-    'with_people': 'avec personnes'
-} %}
-
-<p><strong>{{ totalResults }}</strong> résultat(s) pour votre recherche</p>
-<div>
-    {% for key, value in app.request.query %}
-    {# <pre>
-        {{ dump(key, value) }}
-    </pre> #}
-        {# {% if key == 'primary_release_date_gte' or key == 'primary_release_date_lte' %}
-            <p>{{ labels[key] }} : {{ value|date("Y") }}</p>
-        {% elseif key == 'with_genres' or key == 'without_genres' %}
-            <p>
-                Avec les genres :
-            {% for genreName in value %}
-                <span>{{ genreName }}</span>
-            {% endfor %}
-            </p>
-        {% else %}
-            <p>{{ labels[key] }} : {{ value }}</p>
-        {% endif %} #}
-    {% endfor %}
+<div class="bg-dark p-1 text-center">
+    <p>
+        <strong class="custom-blue-1">{{ totalResults }}</strong>
+        <span class="text-light"> résultat(s) pour votre recherche</span>
+    </p>
 </div>

@@ -17,7 +17,7 @@
         {% endif %}
         <div class="text-center bg-dark rounded-bottom p-2">
             <a class="text-decoration-none fw-bold text-light my-3" href="{{ path('movie_show', {'id': movie.id}) }}">
-                {{ movie.title|u.truncate(25, '...') }}
+                {{ movie.title|u.truncate(22, '...') }}
             </a>
             <div class="d-flex mt-2">
                 <div class="d-flex align-items-center w-100">

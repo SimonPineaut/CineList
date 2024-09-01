@@ -57,12 +57,12 @@ class AdvancedSearchType extends AbstractType
             ->add('sort_by', ChoiceType::class, [
                 'choices' => [
                     '' => '',
-                    'Note ⭣' => 'vote_average.desc',
-                    'Note ⭡' => 'vote_average.asc',
-                    'Date de sortie ⭣' => 'primary_release_date.desc',
-                    'Date de sortie ⭡' => 'primary_release_date.asc',
-                    'Nombre de votes ⭣' => 'vote_count.desc',
-                    'Nombre de votes ⭡' => 'vote_count.asc',
+                    'Note +/-' => 'vote_average.desc',
+                    'Note -/+' => 'vote_average.asc',
+                    'Date de sortie +/-' => 'primary_release_date.desc',
+                    'Date de sortie -/+' => 'primary_release_date.asc',
+                    'Nombre de votes +/-' => 'vote_count.desc',
+                    'Nombre de votes -/+' => 'vote_count.asc',
                 ],
                 'required' => false,
                 'label' => 'Trier par',

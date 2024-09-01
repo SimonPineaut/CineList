@@ -103,10 +103,6 @@ class AdvancedSearchType extends AbstractType
                     new Positive(),
                 ],
             ])
-            ->add('with_cast', TextType::class, [
-                'required' => false,
-                'label' => 'Avec',
-            ])
             ->add('with_genres', ChoiceType::class, [
                 'required' => false,
                 'choices' => $genres,
@@ -123,15 +119,7 @@ class AdvancedSearchType extends AbstractType
                 'multiple' => true,
                 'attr' => [
                     'class' => 'advanced-search-select'
-                ],
-            ])
-            ->add('with_cast', TextType::class, [
-                'required' => false,
-                'label' => 'Acteurs',
-            ])
-            ->add('with_people', TextType::class, [
-                'required' => false,
-                'label' => 'Personnes',
+                ]
             ]);
     }
 

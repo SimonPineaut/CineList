@@ -6,14 +6,14 @@
         }
 }) }}
     <div class="advanced-search">
-        <fieldset>
+        <fieldset class="border-left">
             <legend class="custom-blue-2">Année</legend>
             <div class="d-flex flex-column m-2 p-2">
                 {{ form_label(form.primary_release_year) }}
                 {{ form_widget(form.primary_release_year) }}
             </div>
         </fieldset>
-        <fieldset>
+        <fieldset class="border-left">
             <legend class="custom-blue-2">Période</legend>
             <div class="d-flex flex-column m-2 p-2">
                 {{ form_label(form.primary_release_date_gte) }}
@@ -25,7 +25,7 @@
             </div>
         </fieldset>
 
-        <fieldset>
+        <fieldset class="border-left">
             <legend class="custom-blue-2">Note</legend>
             <div class="d-flex flex-column m-2 p-2">
                 {{ form_label(form.vote_average_gte) }}
@@ -37,7 +37,7 @@
             </div>
         </fieldset>
 
-        <fieldset>
+        <fieldset class="border-left">
             <legend class="custom-blue-2">Votes</legend>
             <div class="d-flex flex-column m-2 p-2">
                 {{ form_label(form.vote_count_gte) }}
@@ -49,7 +49,7 @@
             </div>
         </fieldset>
 
-        <fieldset>
+        <fieldset class="border-left">
             <legend class="custom-blue-2">Genres</legend>
             <div class="d-flex flex-column m-2 p-2">
                 {{ form_label(form.with_genres) }}
@@ -61,19 +61,7 @@
             </div>
         </fieldset>
 
-        <fieldset>
-            <legend class="custom-blue-2">Personnalité</legend>
-            <div class="d-flex flex-column m-2 p-2">
-                {{ form_label(form.with_cast) }}
-                {{ form_widget(form.with_cast) }}
-            </div>
-            <div class="d-flex flex-column m-2 p-2">
-                {{ form_label(form.with_people) }}
-                {{ form_widget(form.with_people) }}
-            </div>
-        </fieldset>
-
-        <fieldset>
+        <fieldset class="border-left">
             <legend class="custom-blue-2">Ordre</legend>
             <div class="d-flex flex-column m-2 p-2">
                 {{ form_label(form.sort_by) }}

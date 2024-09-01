@@ -1,7 +1,12 @@
 {% set route = app.request.get('_route') %}
 {% set query = app.request.query.get('query') %}
+{% set advancedQuery = app.request.query.all %}
 {% set genreId = genreId is defined ? genreId : '' %}
 {% set genreName = genreName is defined ? genreName : '' %}
+
+{% if advancedQuery is not empty %}
+    {% set query = app.request.query.all|url_encode|raw %}
+{% endif %}
 
 {% macro pagination_link(page, route, query, genreId, genreName) %}
     <a class="pagination-link" href="{{ path(route, {

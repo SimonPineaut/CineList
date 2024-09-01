@@ -5,10 +5,18 @@
     z-index: 50;
 
     .search-icon,
-    .advanced-search-icon,
     .user-icon,
     .logout-icon {
         width: 34px;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+
+    
+    .advanced-search-icon {
+        width: 28px;
 
         &:hover {
             transform: scale(1.1);

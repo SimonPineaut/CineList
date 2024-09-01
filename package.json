@@ -27,6 +27,7 @@
     "dependencies": {
         "flag-icons": "^7.2.3",
         "normalize.css": "^8.0.1",
+        "select2": "^4.1.0-rc.0",
         "toastr": "^2.1.4"
     }
 }

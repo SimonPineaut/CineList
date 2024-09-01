@@ -10,8 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
@@ -21,12 +22,11 @@ class UserController extends AbstractController
         private UserPasswordHasherInterface $passwordHasher,
     ) {}
 
-    #[Route('/account', name: 'app_account')]
+    #[IsGranted('ROLE_USER')]
+    #[Route('/account', name: 'account')]
     public function changePassword(Request $request): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
         $user = $this->getUser();
-
         $form = $this->createForm(ModifyPasswordFormType::class);
         $form->handleRequest($request);
 
@@ -45,7 +45,7 @@ class UserController extends AbstractController
 
                 $this->addFlash('success', 'Votre mot de passe a bien été modifié !');
 
-                return $this->redirectToRoute('app_account');
+                return $this->redirectToRoute('account');
             }
         }
 
@@ -55,10 +55,10 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/account/old-password', name: 'app_old_password')]
+    #[IsGranted('ROLE_USER')]
+    #[Route('/account/old-password', name: 'old_password')]
     public function iscurrentPasswordValid(Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
         $user = $this->getUser();
         $data = json_decode($request->getContent(), true);
         $currentPassword = $data['currentPassword'];
@@ -70,7 +70,7 @@ class UserController extends AbstractController
         }
     }
 
-    #[Route('account/delete/{id}', name: 'app_user_delete', methods: ['POST'])]
+    #[Route('account/delete/{id}', name: 'user_delete', methods: ['POST'])]
     public function delete(User $user, EntityManagerInterface $entityManager, Request $request): JsonResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');

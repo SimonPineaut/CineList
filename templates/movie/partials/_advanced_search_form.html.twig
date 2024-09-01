@@ -1,0 +1,74 @@
+{{ form_start(form, {
+    'action': path('movie_advanced_search_validate'),
+    'method': 'POST',
+    'attr': {
+        'id': 'advancedSearchForm'
+        }
+}) }}
+    <div class="advanced-search">
+        <fieldset class="border-left">
+            <legend class="custom-blue-2">Année</legend>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.primary_release_year) }}
+                {{ form_widget(form.primary_release_year) }}
+            </div>
+        </fieldset>
+        <fieldset class="border-left">
+            <legend class="custom-blue-2">Période</legend>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.primary_release_date_gte) }}
+                {{ form_widget(form.primary_release_date_gte) }}
+            </div>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.primary_release_date_lte) }}
+                {{ form_widget(form.primary_release_date_lte) }}
+            </div>
+        </fieldset>
+
+        <fieldset class="border-left">
+            <legend class="custom-blue-2">Note</legend>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.vote_average_gte) }}
+                {{ form_widget(form.vote_average_gte) }}
+            </div>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.vote_average_lte) }}
+                {{ form_widget(form.vote_average_lte) }}
+            </div>
+        </fieldset>
+
+        <fieldset class="border-left">
+            <legend class="custom-blue-2">Votes</legend>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.vote_count_gte) }}
+                {{ form_widget(form.vote_count_gte) }}
+            </div>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.vote_count_lte) }}
+                {{ form_widget(form.vote_count_lte) }}
+            </div>
+        </fieldset>
+
+        <fieldset class="border-left">
+            <legend class="custom-blue-2">Genres</legend>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.with_genres) }}
+                {{ form_widget(form.with_genres) }}
+            </div>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.without_genres) }}
+                {{ form_widget(form.without_genres) }}
+            </div>
+        </fieldset>
+
+        <fieldset class="border-left">
+            <legend class="custom-blue-2">Ordre</legend>
+            <div class="d-flex flex-column m-2 p-2">
+                {{ form_label(form.sort_by) }}
+                {{ form_widget(form.sort_by) }}
+            </div>
+        </fieldset>
+    </div>
+
+        <button type="submit" class="submit-btn mx-auto">Appliquer</button>
+{{ form_end(form) }}

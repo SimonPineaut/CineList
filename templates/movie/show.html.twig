@@ -21,15 +21,10 @@
 	<div class="movie container mt-4" data-movie-id="{{ movie.id }}">
 		<div class="row">
 			<div class="col-2">
-				{% include "partials/playlist_modal.html.twig" %}
-				<div class="action-icons-container">
+				{% include "partials/modals/_playlist_modal.html.twig" %}
+				<div class="position-relative">
 					{% if is_granted("ROLE_USER") %}
-						<img id="playlistLink" data-movie-id="{{ movie.id }}" class="action-icon" src="{{ asset('icons/playlist.svg') }}" alt="Ajouter à une playlist">
-						{% if  movie.id in favoriteMovies %}
-							<img class="action-icon action-icon-right favorite" src="{{ asset('icons/favorite.svg') }}" alt="Retirer des favoris">
-						{% else %}
-							<img class="action-icon action-icon-right not-favorite" src="{{ asset('icons/not-favorite.svg') }}" alt="Ajouter aux favoris">
-						{% endif %}
+						{% include "movie/partials/_action_icons.html.twig" %}
 					{% endif %}
 				</div>
 				{% if movie.poster_path is not null %}
@@ -42,7 +37,7 @@
 					<div class="genres">
 						{% for genre in movie.genres %}
 						
-						<a href="{{ path('app_movie_genre', {'genreId': genre.id, 'genreName': genre.name, 'page': 1}) }}"><span>{{ genre.name }}</span></a>
+						<a href="{{ path('movie_genre', {'genreId': genre.id, 'genreName': genre.name, 'page': 1}) }}"><span>{{ genre.name }}</span></a>
 						{% endfor %}
 					</div>
 				{% endif %}
@@ -65,7 +60,7 @@
 							{% for director in directors %}
 								<div class="director">
 									<img src="{{ asset('icons/director.svg') }}">
-									<a href="{{ path('app_person_show', {'id': director.id}) }}">{{director.name}}</a>
+									<a href="{{ path('person_show', {'id': director.id}) }}">{{director.name}}</a>
 								</div>
 							{% endfor %}
 						</div>
@@ -90,7 +85,7 @@
 				{% if movie.overview is not null %}
 					<p class="overview">{{movie.overview}}</p>
 				{% endif %}
-				{% include "partials/casting.html.twig" %}
+				{% include "partials/_casting.html.twig" %}
 			</div>
 		</div>
 		{% if trailer is not empty %}
@@ -99,6 +94,5 @@
 			</div>
 		{% endif %}
 	</div>
-	{% include "partials/recommendations.html.twig" %}
-	{% include "partials/logout_modal.html.twig" %}
+	{% include "partials/_recommendations.html.twig" %}
 {% endblock %}

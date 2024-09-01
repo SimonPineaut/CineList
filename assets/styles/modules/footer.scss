@@ -1,0 +1,14 @@
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 10;
+
+    a {
+        text-decoration: none;
+    }
+
+    img {
+        width: 30px;
+    }
+}

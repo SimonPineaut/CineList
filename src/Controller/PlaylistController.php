@@ -4,136 +4,124 @@ namespace App\Controller;
 
 use DateTimeImmutable;
 use App\Entity\Playlist;
-use App\Repository\PlaylistRepository;
-use App\Repository\UserRepository;
 use App\Service\ApiService;
+use App\Repository\UserRepository;
+use App\Repository\PlaylistRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[Route('/playlist')]
 class PlaylistController extends AbstractController
 {
-    public function __construct(private PlaylistRepository $playlistRepository, private ApiService $apiService)
-    {
+    private string $tmdbApiBaseUrl;
+
+    public function __construct(
+        private PlaylistRepository $playlistRepository,
+        private ApiService $apiService,
+        ParameterBagInterface $params
+    ) {
+        $this->tmdbApiBaseUrl = $params->get('tmdb_api_base_url');
     }
 
-    #[Route('/', name: 'app_playlist_index', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('/', name: 'playlist_index', methods: ['GET'])]
     public function index(): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        $playlists = $this->playlistRepository->findAll();
-        $filteredPlaylists = array_filter(
-            $playlists,
-            function ($playlist) {
-            return $playlist->isPublic();
-        });
-        $moviesByPlaylist = $this->getMoviesByPlaylist($filteredPlaylists);
-
-        return $this->render('playlist/index.html.twig', [
-            'playlists' => $filteredPlaylists,
-            'moviesByPlaylist' => $moviesByPlaylist,
-        ]);
-    }
-
-    #[Route('/logged-user-playlists', name: 'app_playlist_logged_user', methods: ['GET'])]
-    public function getLoggedUserPlaylists(): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        $userId = $this->getUser()->getId();
-        $playlists = $this->playlistRepository->findBy(['user' => $userId]);
-        $moviesByPlaylist = $this->getMoviesByPlaylist($playlists);
+        $playlists = array_filter(
+            $this->playlistRepository->findAll(),
+            fn(Playlist $playlist) => $playlist->isPublic()
+        );
 
         return $this->render('playlist/index.html.twig', [
             'playlists' => $playlists,
-            'moviesByPlaylist' => $moviesByPlaylist,
+            'moviesByPlaylist' => $this->getMoviesByPlaylist($playlists),
         ]);
     }
 
-    #[Route('/user-playlists/{userId}', name: 'app_playlist_user', methods: ['GET'])]
-    public function getUserPlaylists(string $userId, UserRepository $userRepository): Response
+    #[IsGranted('ROLE_USER')]
+    #[Route('/logged-user-playlists', name: 'playlist_logged_user', methods: ['GET'])]
+    public function getLoggedUserPlaylists(): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        $playlists = $this->playlistRepository->findBy(['user' => $userId]);
-        $filteredPlaylists = array_filter(
-            $playlists,
-            function ($playlist) {
-            return $playlist->isPublic();
-        });
-        $moviesByPlaylist = $this->getMoviesByPlaylist($filteredPlaylists);
-        $user = $userRepository->findOneBy(['id' => $userId]);
-        $username = $user->getUsername();
+        $playlists = $this->playlistRepository->findBy(['user' => $this->getUser()]);
 
         return $this->render('playlist/index.html.twig', [
-            'playlists' => $filteredPlaylists,
-            'moviesByPlaylist' => $moviesByPlaylist,
-            'username' => $username,
+            'playlists' => $playlists,
+            'moviesByPlaylist' => $this->getMoviesByPlaylist($playlists),
         ]);
     }
 
-    #[Route('/create-playlist', name: 'app_playlist_create', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('/user-playlists/{userId}', name: 'playlist_user', methods: ['GET'])]
+    public function getUserPlaylists(string $userId, UserRepository $userRepository): Response
+    {
+        $user = $userRepository->find($userId) ?? throw new NotFoundHttpException('User not found');
+        $playlists = array_filter(
+            $this->playlistRepository->findBy(['user' => $userId]),
+            fn(Playlist $playlist) => $playlist->isPublic()
+        );
+
+        return $this->render('playlist/index.html.twig', [
+            'playlists' => $playlists,
+            'moviesByPlaylist' => $this->getMoviesByPlaylist($playlists),
+            'username' => $user->getUsername(),
+        ]);
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/create-playlist', name: 'playlist_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        $user = $this->getUser();
         $playlistData = json_decode($request->getContent(), true);
-        $playlistTitle = $playlistData['title'];
-        $movieId = $playlistData['movieId'];
-        $playlist = new Playlist();
-        $playlist->setName($playlistTitle);
-        $playlist->addMovieId($movieId);
-        $playlist->setCreatedAt(new DateTimeImmutable());
-        $playlist->setUser($user);
-        $playlist->setIsPublic(false);
-        
+        $playlist = (new Playlist())
+            ->setName($playlistData['title'] ?? 'Untitled Playlist')
+            ->addMovieId($playlistData['movieId'])
+            ->setCreatedAt(new DateTimeImmutable())
+            ->setUser($this->getUser())
+            ->setIsPublic(false);
+
         $entityManager->persist($playlist);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Ajouté à la playlist "' . $playlistTitle . '"');
+        $this->addFlash('success', "Ajouté à la playlist '{$playlist->getName()}'");
 
-        return new JsonResponse(['success' => 'Film ajouté à la playlist créée'], 200);
+        return new JsonResponse(['success' => 'Film ajouté à la playlist créée'], Response::HTTP_OK);
     }
 
-    #[Route('/update-playlist-status', name: 'app_playlist_update_status', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('/update-playlist-status', name: 'playlist_update_status', methods: ['POST'])]
     public function updateStatus(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        $user = $this->getUser();
         $playlistData = json_decode($request->getContent(), true);
-        $playlistId = $playlistData['playlistId'];
-        $playlist = $this->playlistRepository->findOneBy(['id' => $playlistId]);
-        if ($user->getId() !== $playlist->getUser()->getId()) {
-            return new JsonResponse(['error' => 'Modification impossible'], 403);
-        }
-        
-        if ($playlist->isPublic()) {
-            $playlist->setIsPublic(false);
-            $this->addFlash('info', 'La playlist ' . $playlist->getName() . ' est désormais privée');
-        } else {
-            $playlist->setIsPublic(true);
-            $this->addFlash('info', 'La playlist ' . $playlist->getName() . ' est désormais publique');
-        }
-        
+        $playlist = $this->playlistRepository->find($playlistData['playlistId']) 
+            ?? throw new NotFoundHttpException('Playlist not found');
+
+        $playlist->setIsPublic(!$playlist->isPublic());
         $entityManager->persist($playlist);
         $entityManager->flush();
 
-        return new JsonResponse(['success' => 'Status de la playlist modifié'], 200);
+        $status = $playlist->isPublic() ? 'publique' : 'privée';
+        $this->addFlash('info', "La playlist '{$playlist->getName()}' est désormais $status");
+
+        return new JsonResponse(['success' => 'Status de la playlist modifié'], Response::HTTP_OK);
     }
 
-    #[Route('/import-playlist/{id}', name: 'app_playlist_import', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('/import-playlist/{id}', name: 'playlist_import', methods: ['GET'])]
     public function import(Playlist $playlist, EntityManagerInterface $entityManager): JsonResponse
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        $user = $this->getUser();
+        $copiedPlaylist = (new Playlist())
+            ->setName('Copie de ' . $playlist->getName())
+            ->setCreatedAt(new DateTimeImmutable())
+            ->setUser($this->getUser())
+            ->setIsPublic(false);
 
-        $copiedPlaylist = new Playlist;
-        $copiedPlaylist->setName('copie de ' . $playlist->getName());
-        $copiedPlaylist->setCreatedAt(new DateTimeImmutable());
-        $copiedPlaylist->setUser($user);
-        $copiedPlaylist->setIsPublic(false);
         foreach ($playlist->getMovieIds() as $movieId) {
             $copiedPlaylist->addMovieId($movieId);
         }
@@ -143,139 +131,102 @@ class PlaylistController extends AbstractController
 
         $this->addFlash('success', 'Playlist copiée');
 
-        return new JsonResponse(['success' => 'Playlist copiée'], 200);
+        return new JsonResponse(['success' => 'Playlist copiée'], Response::HTTP_OK);
     }
 
-    #[Route('/add-to-playlist', name: 'app_playlist_add', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('/add-to-playlist', name: 'playlist_add', methods: ['POST'])]
     public function addToPlaylist(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
         $playlistData = json_decode($request->getContent(), true);
-        $playlistId = $playlistData['playlistId'];
-        $movieId = $playlistData['movieId'];
-        $playlist = $this->playlistRepository->findOneBy(['id' => $playlistId]);
-        $playlistName = $playlist->getName();
-        $movieIds = $playlist->getMovieIds();
-        if (in_array($movieId, $movieIds)) {
-            $this->addFlash('warning', 'Déjà dans la playlist "' . $playlistName . '"');
-    
-            return new JsonResponse(['warning' => 'Déjà dans cette playlist'], 200);
-        } else {
-            $playlist->addMovieId($movieId);
-            $playlist->setUpdatedAt(new DateTimeImmutable());
-            $entityManager->persist($playlist);
-            $entityManager->flush();
-    
-            $this->addFlash('success', 'Ajouté à la playlist' . $playlistName . '"');
-    
-            return new JsonResponse(['success' => 'Ajouté à la playlist'], 200);
+        $playlist = $this->playlistRepository->find($playlistData['playlistId']) 
+            ?? throw new NotFoundHttpException('Playlist not found');
+
+        if (in_array($playlistData['movieId'], $playlist->getMovieIds())) {
+            $this->addFlash('warning', "Le film est déjà dans la playlist '{$playlist->getName()}'");
+            return new JsonResponse(['warning' => 'Déjà dans cette playlist'], Response::HTTP_OK);
         }
+
+        $playlist->addMovieId($playlistData['movieId']);
+        $playlist->setUpdatedAt(new DateTimeImmutable());
+
+        $entityManager->persist($playlist);
+        $entityManager->flush();
+
+        $this->addFlash('success', "Ajouté à la playlist '{$playlist->getName()}'");
+
+        return new JsonResponse(['success' => 'Ajouté à la playlist'], Response::HTTP_OK);
     }
 
-    #[Route('/remove-from-playlist', name: 'app_playlist_remove_from_playlist', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('/remove-from-playlist', name: 'playlist_remove_from_playlist', methods: ['POST'])]
     public function removeFromPlaylist(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
         $playlistData = json_decode($request->getContent(), true);
-        $playlistId = $playlistData['playlistId'];
-        $movieId = $playlistData['movieId'];
-        $playlist = $this->playlistRepository->findOneBy(['id' => $playlistId]);
-        $playlistName = $playlist->getName();
+        $playlist = $this->playlistRepository->find($playlistData['playlistId']) 
+            ?? throw new NotFoundHttpException('Playlist not found');
 
-        if ($playlist) {
-            $playlist = $playlist->removeMovieId($movieId);
-            
-            $entityManager->persist($playlist);
-            $entityManager->flush();
-    
-            $this->addFlash('success', 'Retiré de la playlist "' . $playlistName . '"');
-    
-            return new JsonResponse(['success' => 'Retiré de la playlist'], 200);
-        } else {
-            $this->addFlash('error', 'Erreur lors du retrait de la playlist');
-    
-            return new JsonResponse(['error' => 'Erreur lors du retrait de la playlist'], 500);
-        }
+        $playlist->removeMovieId($playlistData['movieId']);
+
+        $entityManager->persist($playlist);
+        $entityManager->flush();
+
+        $this->addFlash('success', "Retiré de la playlist '{$playlist->getName()}'");
+
+        return new JsonResponse(['success' => 'Retiré de la playlist'], Response::HTTP_OK);
     }
 
-    #[Route('/delete-playlist', name: 'app_playlist_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('/delete-playlist', name: 'playlist_delete', methods: ['POST'])]
     public function deletePlaylist(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
         $playlistData = json_decode($request->getContent(), true);
-        $playlistId = $playlistData['playlistId'];
-        $playlist = $this->playlistRepository->findOneBy(['id' => $playlistId]);
-        $playlistName = $playlist->getName();
+        $playlist = $this->playlistRepository->find($playlistData['playlistId']) 
+            ?? throw new NotFoundHttpException('Playlist not found');
 
-        if ($playlist) {
-            $entityManager->remove($playlist);
-            $entityManager->flush();
-    
-            $this->addFlash('warning', 'Playlist "' . $playlistName .'" supprimée');
-    
-            return new JsonResponse(['success' => 'Playlist supprimée'], 200);
-        } else {
-            $this->addFlash('error', 'Erreur lors de la suppression de la playlist');
-    
-            return new JsonResponse(['error' => 'Erreur lors de la suppression de la playlist'], 500);
-        }
-        
+        $entityManager->remove($playlist);
+        $entityManager->flush();
+
+        $this->addFlash('warning', "Playlist '{$playlist->getName()}' supprimée");
+
+        return new JsonResponse(['success' => 'Playlist supprimée'], Response::HTTP_OK);
     }
-    
-    #[Route('/fetch-user-playlists', name: 'app_playlist_get_user_playlists', methods: ['GET'])]
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/fetch-user-playlists', name: 'playlist_get_user_playlists', methods: ['GET'])]
     public function fetchUserPlaylists(): JsonResponse
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        $userId = $this->getUser()->getId();
-        
-        $playlists = $this->playlistRepository->findBy(['user' => $userId]);
-        
-        $data = [];
-        for ($i=0; $i < count($playlists); $i++) { 
-            $data[$playlists[$i]->getId()] = $playlists[$i]->getName();
-        }
+        $playlists = $this->playlistRepository->findBy(['user' => $this->getUser()]);
 
-        return new JsonResponse($data);
+        $data = array_map(fn(Playlist $playlist) => [
+            $playlist->getId() => $playlist->getName()
+        ], $playlists);
+
+        return new JsonResponse($data, Response::HTTP_OK);
     }
 
-    #[Route('show/{id}', name: 'app_playlist_show', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('/{id}/show', name: 'playlist_show', methods: ['GET', 'POST'])]
     public function show(Playlist $playlist): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
         return $this->render('playlist/show.html.twig', [
             'playlist' => $playlist,
+            'movies' => $this->getMoviesByPlaylist([$playlist])[$playlist->getId()],
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_playlist_edit', methods: ['GET', 'POST'])]
-    public function edit(Playlist $playlist, EntityManagerInterface $entityManager): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        $moviesByPlaylist = $this->getMoviesByPlaylist([$playlist]);
-
-        return $this->render('playlist/edit.html.twig', [
-            'playlist' => $playlist,
-            'movies' => $moviesByPlaylist[$playlist->getId()],
-        ]);
-    }
-    
     private function getMoviesByPlaylist(array $playlists): array
     {
         $moviesByPlaylist = [];
         foreach ($playlists as $playlist) {
-            $playlistId = $playlist->getId();
-            $movieIds = $playlist->getMovieIds();
-
-            $movies = array_map(
+            $moviesByPlaylist[$playlist->getId()] = array_map(
                 fn($movieId) => $this->apiService->fetchFromApi(
-                    'GET', 
-                    "https://api.themoviedb.org/3/movie/{$movieId}", 
+                    'GET',
+                    "{$this->tmdbApiBaseUrl}/movie/{$movieId}",
                     ['language' => 'fr']
                 ),
-                $movieIds
+                $playlist->getMovieIds()
             );
-
-            $moviesByPlaylist[$playlistId] = $movies;
         }
 
         return $moviesByPlaylist;

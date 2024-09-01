@@ -1,0 +1,23 @@
+<div id="playlistModal{{ movie.id }}" class="playlist-modal position-relative d-none">
+    <img id="closePlaylistModalBtn{{ movie.id }}" class="close-playlist-modal-btn" src="{{ asset('icons/close.svg') }}" alt="">
+    <fieldset class="position-absolute w-100 bg-dark text-light rounded p-2">
+        <legend class="w-75 p-2 fs-5">Ajouter à :</legend>
+        <div class="d-flex justify-content-center w-100">
+            <input type="radio" id="existingPlaylistRadio" name="existing-playlist-{{ movie.id }}" value="existing-playlist"/>
+            <label id="existingLabel" class="ms-2" for="existing-playlist-{{ movie.id }}"></label>
+        </div>
+        <div class="d-flex justify-content-center w-100">
+            <input type="radio" id="newPlaylistRadio" name="new-playlist-{{ movie.id }}" value="new-playlist"/>
+            <label for="new-playlist-{{ movie.id }}" class="ms-2">Nouvelle playlist</label>
+        </div>
+        <hr>
+        <div id="existingPlaylistBlock" class="d-flex flex-column align-items-center w-100">
+            <select name="playlist-select" class="text-center m-2 w-100"></select>
+            <button id="existingPlaylistBtn" class="submit-btn">Ajouter</button>
+        </div>
+        <div id="newPlaylistBlock" class="d-flex flex-column align-items-center w-100">
+            <input type="text" placeholder="titre" name="playlist-title" class="text-center m-2 w-100">
+            <button id="newPlaylistBtn" class="submit-btn">Créer</button>
+        </div>
+    </fieldset>
+</div>

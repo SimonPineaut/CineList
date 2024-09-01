@@ -22,7 +22,7 @@ class LoginFlashMessageHandler implements AuthenticationSuccessHandlerInterface
         $username = $user->getUsername();
         $request->getSession()->getFlashBag()->add('info', 'Bienvenue !');
 
-        $targetUrl = $this->router->generate('app_movie_index'); 
+        $targetUrl = $this->router->generate('movie_index'); 
 
         return new RedirectResponse($targetUrl);
     }

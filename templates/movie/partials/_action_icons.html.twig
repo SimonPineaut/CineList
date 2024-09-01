@@ -1,0 +1,6 @@
+<img id="playlistLink" data-movie-id="{{ movie.id }}" class="action-icon" src="{{ asset('icons/playlist.svg') }}" alt="Ajouter à une playlist">
+{% if  movie.id in favoriteMovies %}
+    <img class="action-icon right favorite" src="{{ asset('icons/favorite.svg') }}" alt="Retirer des favoris">
+{% else %}
+    <img class="action-icon right not-favorite" src="{{ asset('icons/not-favorite.svg') }}" alt="Ajouter aux favoris">
+{% endif %}

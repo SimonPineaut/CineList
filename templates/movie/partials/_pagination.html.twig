@@ -1,0 +1,49 @@
+{% set route = app.request.get('_route') %}
+{% set query = app.request.query.get('query') %}
+{% set genreId = genreId is defined ? genreId : '' %}
+{% set genreName = genreName is defined ? genreName : '' %}
+{% set params = {} %}
+
+{% for key, value in app.request.query.all %}
+    {% set formatedKey = key|replace({'_lte': '.lte', '_gte': '.gte'}) %}
+    {% set params = params|merge({(formatedKey): value}) %}
+{% endfor %}
+
+{% macro pagination_link(page, route, query, genreId, genreName, params) %}
+<a class="pagination-link" href="{{ path(route, params|merge({
+    'query': query,
+    'genreId': genreId,
+    'genreName': genreName,
+    'page': page
+}) | filter(v => v is not null)) }}">
+    {{ page }}
+</a>
+{% endmacro %}
+
+<div class="d-flex justify-content-center my-2">
+    {% if currentPage > 1 %}
+        {{ _self.pagination_link(1, route, query, genreId, genreName, params) }}
+    {% endif %}
+
+    {% for i in (currentPage - 3)..(currentPage - 1) %}
+        {% if i > 1 %}
+            {{ _self.pagination_link(i, route, query, genreId, genreName, params) }}
+        {% endif %}
+    {% endfor %}
+
+    {% if currentPage > 0 and currentPage <= totalPages %}
+        <span class="pagination-link bg-light text-dark">{{ currentPage }}</span>
+    {% endif %}
+
+    {% for i in (currentPage + 1)..(currentPage + 3) %}
+        {% if i < totalPages %}
+            {{ _self.pagination_link(i, route, query, genreId, genreName, params) }}
+        {% endif %}
+    {% endfor %}
+
+    {% if currentPage < totalPages %}
+        {{ _self.pagination_link(totalPages, route, query, genreId, genreName, params) }}
+    {% endif %}
+</div>
+
+

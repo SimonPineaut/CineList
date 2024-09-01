@@ -17,7 +17,7 @@
 {% block body %}
     <div class="page page-account">
         {% if not app.user %}
-            <form action="{{ path('app_login') }}" method="post">
+            <form action="{{ path('login') }}" method="post">
                 <div class="authentication-container">
                     <div class="title">
                         <h3>Connexion</h3>
@@ -40,17 +40,17 @@
                         </div>
                     </div>  
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                    <div class="remember-me">
+                    <button class="login-btn" type="submit">Connexion</button>
+                    <div class="mb-3">
                         <input type="checkbox" name="_remember_me" checked>
                         Rester connecté(e)
                     </div>
-                    <button class="login-btn" type="submit">Connexion</button>
-                    <p class="login-register-link">
+                    <p class="text-center">
                         Pas encore de compte ?
-                        <a href="{{ path('app_register') }}">Inscrivez-vous !</a>
+                        <a href="{{ path('register') }}">Inscrivez-vous !</a>
                     </p>
-                    <p class="login-register-link">
-                        <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié ?</a>
+                    <p class="text-center">
+                        <a href="{{ path('forgot_password_request') }}">Mot de passe oublié ?</a>
                     </p>
                 </div>
             </form>

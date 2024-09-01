@@ -16,7 +16,7 @@
 
 {% block body %}
     <div class="page page-account">
-        {% include "partials/delete_account_modal.html.twig" %}
+        {% include "partials/modals/_delete_account_modal.html.twig" %}
         <div class="d-flex flex-column align-items-start bg-dark text-light p-2 mt-4 rounded">
             <div>Vous êtes connecté(e) en tant que : <span class="fw-bold custom-blue-1">{{ user.username }}</span></div>
             <div>Votre email : <span class="fw-bold custom-blue-1">{{ user.email }}</span></div>
@@ -28,7 +28,7 @@
                     <h3>Changer de mot de passe</h3>
                 </div>
 
-                <div class="pwd-label">
+                <div class="pwd-label custom-blue-2">
                     {{ form_label(form.currentPassword) }}
                 </div>
                 <div class="register-password-container">
@@ -40,7 +40,7 @@
                     {{ form_errors(form.currentPassword) }}
                 </div>
 
-                <div class="pwd-label">
+                <div class="pwd-label custom-blue-2">
                     {{ form_label(form.newPassword) }}
                 </div>
                 <div class="register-password-container">
@@ -52,7 +52,7 @@
                     {{ form_errors(form.newPassword) }}
                 </div>
 
-                <div class="pwd-label">
+                <div class="pwd-label custom-blue-2">
                     {{ form_label(form.confirmPassword) }}
                 </div>
                 <div class="register-password-container">
@@ -64,8 +64,8 @@
                     {{ form_errors(form.confirmPassword) }}
                 </div>
                 <button type="submit" class="login-btn">Changer le mot de passe</button>
-                <p class="login-register-link">
-                    <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié ?</a>
+                <p class="text-center">
+                    <a href="{{ path('forgot_password_request') }}">Mot de passe oublié ?</a>
                 </p>
             </div>
         {{ form_end(form) }}

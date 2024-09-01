@@ -27,7 +27,7 @@ class RegistrationController extends AbstractController
         $this->emailVerifier = $emailVerifier;
     }
 
-    #[Route('/register', name: 'app_register')]
+    #[Route('/register', name: 'register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
@@ -47,7 +47,7 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             $this->emailVerifier->sendEmailConfirmation(
-                'app_verify_email',
+                'verify_email',
                 $user,
                 (new TemplatedEmail())
                     ->from(new Address('noreply@CineList.com', 'L\'équipe CineList'))
@@ -58,7 +58,7 @@ class RegistrationController extends AbstractController
 
             $this->addFlash('success', 'Un email de confirmation vous a été envoyé. Veuillez vérifier votre boîte mail');
 
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('login');
         }
 
         return $this->render('account/register.html.twig', [
@@ -66,7 +66,7 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/verify/email', name: 'app_verify_email')]
+    #[Route('/verify/email', name: 'verify_email')]
     public function verifyUserEmail(Request $request, TranslatorInterface $translator, UserRepository $userRepository): Response
     {
         $id = $request->query->get('id');
@@ -84,7 +84,7 @@ class RegistrationController extends AbstractController
         if ($user->isVerified()) {
             $this->addFlash('warning', 'Votre compte est déjà validé, vous pouvez vous connecter');
             
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('login');
         };
 
         try {
@@ -92,15 +92,15 @@ class RegistrationController extends AbstractController
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle', 'fr'));
 
-            return $this->redirectToRoute('app_register');
+            return $this->redirectToRoute('register');
         }
 
         $this->addFlash('success', 'Votre adresse email a bien été validée. Connectez-vous');
 
-        return $this->redirectToRoute('app_login');
+        return $this->redirectToRoute('login');
     }
 
-    #[Route('/verify/resend', name: 'app_verify_resend_email')]
+    #[Route('/verify/resend', name: 'verify_resend_email')]
     public function resendVerifyEmail(UserRepository $userRepository, Request $request)
     {
         $userId = $request->query->get('userId');
@@ -116,7 +116,7 @@ class RegistrationController extends AbstractController
         };
 
         $this->emailVerifier->sendEmailConfirmation(
-            'app_verify_email',
+            'verify_email',
             $user,
             (new TemplatedEmail())
                 ->from(new Address('noreply@CineList.com', 'L\'équipe CineList'))
@@ -130,7 +130,7 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/verify/username', name: 'app_verify_username', methods: 'POST')]
+    #[Route('/verify/username', name: 'verify_username', methods: 'POST')]
     public function isUserNameAvailable(UserRepository $userRepository, Request $request): JsonResponse
     {
         $usernameData = json_decode($request->getContent(), true);

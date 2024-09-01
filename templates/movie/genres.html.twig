@@ -17,7 +17,7 @@
 {% block body %}
     <div class="page page-movie-genres">
         {% for genre in genres %}
-            <a href="{{ path('app_movie_genre', {'genreId': genre.id, 'genreName': genre.name, 'page': 1}) }}">{{ genre.name }}</a>
+            <a href="{{ path('movie_genre', {'genreId': genre.id, 'genreName': genre.name, 'page': 1}) }}">{{ genre.name }}</a>
         {% endfor %}
     </div>
 {% endblock %}

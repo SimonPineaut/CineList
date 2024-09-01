@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class FetchFlashMessagesController extends AbstractController
 {
-    #[Route('/ajax-flashes', name: 'app_fetch_flash_messages')]
+    #[Route('/ajax-flashes', name: 'fetch_flash_messages')]
     public function index(Request $request): JsonResponse
     {
         $flashMessages = $request->getSession()->getFlashBag()->all();

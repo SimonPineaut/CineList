@@ -18,68 +18,7 @@
     }
 }
 
-
-.movie-img {
-    width: 100%;
-    border-radius: 6px 6px 0 0;
-}
-
-.movie-infos {
-    text-align: center;
-    background-color: #081c22;
-    border-radius:  0 0 6px 6px;
-    padding: .5em;
-}
-
-.movie-title {
-    text-decoration: none;
-    color: #22b4e2 ;
-    font-weight: 600;
-}
-
-.movie-numbers {
-    display: flex;
-    margin-top: 10px;
-}
-
-.movie-year {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    font-size: 16px;
-    font-weight: 600;
-    color: #f8f9fa;
-
-    img {
-        margin: 0 8px;
-        width: 20px;
-    }
-}
-
-.movie-vote {
-    justify-content: flex-end;
-    width: 100%;
-}
-
-.action-icons-container {
-    position: relative;
-}
-
-.action-icon {
-    height: 30px;
-    position: absolute;
-    top: 5px;
-}
-
-.action-icon:hover {
-    cursor: pointer;
-    transform: scale(1.1);
-}
-
-.action-icon-left {
-    left: 5px;
-}
-
-.action-icon-right {
-    right: 5px;
+.movie-year-img {
+    margin: 0 8px;
+    width: 20px;
 }

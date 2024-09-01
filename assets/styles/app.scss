@@ -1,10 +1,15 @@
+// dependancies
+@import 'select2/dist/css/select2.css';
+
 // modules
 @import './modules/navbar.scss';
 @import './modules/main.scss';
 @import './modules/note-gauge.scss';
 @import './modules/pagination.scss';
-@import './modules/logout-modal.scss';
+@import './modules/modals.scss';
 @import './modules/playlist-modal.scss';
+@import './modules/footer.scss';
+@import './modules/advanced-search.scss';
 
 // pages
 @import './pages/movie-index.scss';

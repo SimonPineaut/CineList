@@ -15,17 +15,18 @@
 {% endblock %}
 
 {% block body %}
-    {% if movies is not empty %}
-        {% include "partials/pagination.html.twig" %}
+    {% if app.request.get('_route') == 'movie_advanced_search' %}
+        {% include "movie/partials/_search_results_reminder.html.twig" %}
+    {% endif %}
+    {% if movies is defined and movies is not empty %}
+        {% include "movie/partials/_pagination.html.twig" %}
         <div class="page page-movies">
-            {% include "movie/movie_card.html.twig" %}
+            {% include "movie/partials/_movie_card.html.twig" %}
         </div>
-        {% include "partials/pagination.html.twig" %}
+        {% include "movie/partials/_pagination.html.twig" %}
     {% else %}
-    <div class="h-75">
-        <div class="no-results">
-            <p>Aucun résultat</p>
+        <div class="vh-100">
+            <p class="w-75 mx-auto text-center rounded bg-dark text-light mt-5 p-3 fs-3">Aucun film trouvé</p>
         </div>
-    </div>
     {% endif %}
 {% endblock %}

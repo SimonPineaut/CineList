@@ -5,20 +5,26 @@ namespace App\Controller;
 use App\Service\ApiService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class PersonController extends AbstractController
 {
+    private string $tmdbApiBaseUrl;
+
     public function __construct(
         private ApiService $apiService,
-    ) {}
+        ParameterBagInterface $params,
+    ) {
+        $this->tmdbApiBaseUrl = $params->get('tmdb_api_base_url');
+    }
 
-    #[Route('show/person/{id}', name: 'app_person_show', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    #[Route('show/person/{id}', name: 'person_show', methods: ['GET'])]
     public function show(string $id): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        
-        $person = $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/person/{$id}", [
+    {        
+        $person = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl. "/person/{$id}", [
             'language' => 'fr',
         ]);
         $relatedMovies = $this->getRelatedMovies($id);
@@ -29,11 +35,10 @@ class PersonController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     public function getRelatedMovies(string $id): array
-    {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        
-        $relatedMovies = $this->apiService->fetchFromApi('GET', "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&vote_count.gte=100&with_people={$id}", [
+    {        
+        $relatedMovies = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/discover/movie?sort_by=vote_average.desc&vote_count.gte=100&with_people={$id}", [
             'language' => 'fr',
         ]);
 

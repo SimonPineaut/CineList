@@ -37,7 +37,7 @@ class ChangePasswordFormType extends AbstractType
                             'requireCaseDiff' => true,
                             'requireNumbers' => true,
                             'requireSpecialCharacter' => true,
-                            'tooShortMessage' => 'Votre mot de passe doit faire au moins {{ length }} caractères',
+                            'tooShortMessage' => 'Votre mot de passe doit faire au moins 8 caractères',
                             'missingLettersMessage' => 'Votre mot de passe doit inclure au moins 1 lettre',
                             'requireCaseDiffMessage' => 'Votre mot de passe doit contenir des majuscules et des minuscules',
                             'missingNumbersMessage' => 'Votre mot de passe doit inclure au moins 1 chiffre',

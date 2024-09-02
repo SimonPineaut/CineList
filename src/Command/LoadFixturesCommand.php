@@ -53,7 +53,7 @@ class LoadFixturesCommand extends Command
                     $playlist->setCreatedAt(new DateTimeImmutable());
                     $playlist->setUser($user);
                     $playlist->setIsPublic((bool)random_int(0, 1));
-                    for ($k = 0; $k < rand(4, 10); $k++) {
+                    for ($k = 0; $k < rand(4, 8); $k++) {
                         $playlist->addMovieId($randomMovieIds[array_rand($randomMovieIds)]);
                     }
 

@@ -21,9 +21,9 @@ final class LogoutListener
         $request->getSession()->getFlashBag()->add('success', 'Vous avez été déconnecté(e)');
 
         if ($request->isXmlHttpRequest()) {
-            $response = new JsonResponse(['redirect' => $this->urlGenerator->generate('login')]);
+            $response = new JsonResponse(['redirect' => $this->urlGenerator->generate('app_login')]);
         } else {
-            $response = new RedirectResponse($this->urlGenerator->generate('login'));
+            $response = new RedirectResponse($this->urlGenerator->generate('app_login'));
         }
 
         $event->setResponse($response);

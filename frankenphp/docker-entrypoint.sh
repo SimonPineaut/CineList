@@ -50,11 +50,6 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 
 		if [ "$( find ./migrations -iname '*.php' -print -quit )" ]; then
 			php bin/console doctrine:migrations:migrate --no-interaction --all-or-nothing
-
-			# After the installation, the following block must be deleted
-			echo 'Loading fixtures'
-			php bin/console load-fixtures
-			echo 'Fixtures loaded'
 		fi
 
 	fi

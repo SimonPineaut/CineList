@@ -58,7 +58,7 @@ class RegistrationController extends AbstractController
 
             $this->addFlash('success', 'Un email de confirmation vous a été envoyé. Veuillez vérifier votre boîte mail');
 
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('account/register.html.twig', [
@@ -84,7 +84,7 @@ class RegistrationController extends AbstractController
         if ($user->isVerified()) {
             $this->addFlash('warning', 'Votre compte est déjà validé, vous pouvez vous connecter');
             
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('app_login');
         };
 
         try {
@@ -97,7 +97,7 @@ class RegistrationController extends AbstractController
 
         $this->addFlash('success', 'Votre adresse email a bien été validée. Connectez-vous');
 
-        return $this->redirectToRoute('login');
+        return $this->redirectToRoute('app_login');
     }
 
     #[Route('/verify/resend', name: 'verify_resend_email')]

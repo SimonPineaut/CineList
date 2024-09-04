@@ -1,27 +1,32 @@
-<?php
+<?php 
 
 namespace App\Service;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class ApiService extends AbstractController
+class ApiService
 {
     private string $apiKey;
     private string $tmdbApiBaseUrl;
+    private LoggerInterface $logger;
 
     public function __construct(
         private CacheInterface $cache,
         private HttpClientInterface $client,
+        LoggerInterface $logger,  // Inject LoggerInterface
         #[Autowire('%tmdb_api_base_url%')] string $tmdbApiBaseUrl,
         #[Autowire('%api_key%')] string $apiKey
     ) {
         $this->apiKey = $apiKey;
         $this->tmdbApiBaseUrl = $tmdbApiBaseUrl;
+        $this->logger = $logger; // Assign logger
     }
 
     public function isValidateApiKey(): bool
@@ -43,11 +48,13 @@ class ApiService extends AbstractController
     public function fetchFromApi(string $method, string $endpoint, array $params = []): array
     {
         $cacheKey = $this->generateCacheKey($method, $endpoint, $params);
-
         return $this->cache->get($cacheKey, function () use ($method, $endpoint, $params) {
             try {
                 $response = $this->client->request($method, $endpoint, [
-                    'query' => array_merge($params, ['api_key' => $this->apiKey]),
+                    'query' => array_merge($params, [
+                        'api_key' => $this->apiKey,
+                        'language' => 'fr',
+                    ]),
                 ]);
 
                 if ($response->getStatusCode() !== Response::HTTP_OK) {
@@ -67,9 +74,8 @@ class ApiService extends AbstractController
         $page = $request->get('page', 1);
 
         if (!is_numeric($page) || (int)$page < 1) {
-            throw $this->createNotFoundException('Ressource non trouvée, vérifiez l\'URL');
+            throw new NotFoundHttpException('Ressource non trouvée, vérifiez l\'URL');
         }
-
         return (int)$page;
     }
 
@@ -80,6 +86,6 @@ class ApiService extends AbstractController
 
     private function logApiError(\Exception $e, string $context): void
     {
-        $this->get('logger')->error("{$context}: " . $e->getMessage());
+        $this->logger->error("{$context}: " . $e->getMessage());  // Use injected logger
     }
 }

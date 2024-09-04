@@ -61,7 +61,7 @@ class MovieController extends AbstractController
     {
         $searchTerm = $request->get('query');
 
-        return $this->renderMoviePage('movie/index.html.twig', $request, $this->tmdbApiBaseUrl . '/search/movie', [
+        return $this->renderMoviePage('movie/index.html.twig', $request, $this->tmdbApiBaseUrl . '/search/multi', [
             'query' => $searchTerm,
         ]);
     }
@@ -74,7 +74,7 @@ class MovieController extends AbstractController
         $movies = array_map(fn($id) => $this->getCachedMovieDetails($id), $favoriteMovies);
 
         return $this->render('movie/favorites.html.twig', [
-            'movies' => $movies,
+            'results' => $movies,
             'favoriteMovies' => $favoriteMovies,
         ]);
     }
@@ -168,19 +168,19 @@ class MovieController extends AbstractController
     {
         $page = $this->apiService->getPage($request);
         $advancedSearch = $request->getQueryString();
-        $params = array_merge(['language' => 'fr', 'page' => $page], $additionalParams);
-        $results = $this->apiService->fetchFromApi('GET', $url, $params);
-        $currentPage = $results['page'];
-        $totalPages = min($results['total_pages'], 500);
-        $totalResults = $results['total_results'];
-        $movies = $results['results'];
+        $params = array_merge(['page' => $page], $additionalParams);
+        $response = $this->apiService->fetchFromApi('GET', $url, $params);
+        $currentPage = $response['page'] ?? 1;
+        $totalPages = min($response['total_pages'], 500);
+        $totalResults = $response['total_results'];
+        $results = $response['results'];
         $favoriteMovies = $this->getUserFavoriteMovies();
 
         return $this->render($template, [
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
             'totalResults' => $totalResults,
-            'movies' => $movies,
+            'results' => $results,
             'favoriteMovies' => $favoriteMovies,
             'page' => $page,
             'advancedSearch' => $advancedSearch ?? [],
@@ -220,7 +220,7 @@ class MovieController extends AbstractController
     private function getMovieRecommendations(string $id): array
     {
         return $this->cache->get("movie_{$id}_recommendations", function () use ($id) {
-            $recommendations = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/movie/{$id}/recommendations", ['language' => 'fr']);
+            $recommendations = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/movie/{$id}/recommendations");
             return $recommendations['results'];
         });
     }
@@ -228,7 +228,7 @@ class MovieController extends AbstractController
     private function getMovieTrailer(string $id): array
     {
         return $this->cache->get("movie_{$id}_trailer", function () use ($id) {
-            $videos = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/movie/{$id}/videos", ['language' => 'fr']);
+            $videos = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/movie/{$id}/videos");
             $trailer = array_filter($videos['results'], function ($video) {
                 return $video['type'] === 'Trailer' && $video['site'] === 'YouTube';
             });
@@ -257,6 +257,7 @@ class MovieController extends AbstractController
     {
         return $this->cache->get("movie_{$movieID}_all_actors", function () use ($movieID) {
             $credits = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/movie/{$movieID}/credits", []);
+
             return $credits['cast'];
         });
     }
@@ -271,7 +272,7 @@ class MovieController extends AbstractController
     private function getCachedMovieDetails(int $id): array
     {
         return $this->cache->get("movie_{$id}_details", function () use ($id) {
-            return $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/movie/{$id}", ['language' => 'fr']);
+            return $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/movie/{$id}");
         });
     }
 }

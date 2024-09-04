@@ -8,7 +8,7 @@ export const toggleFavoriteStatus = async (event) => {
     event.preventDefault();
     const targetIcon = event.target;
     const movieElement = targetIcon.closest('.movie');
-    const movieId = movieElement.dataset.movieId;
+    const movieId = movieElement.dataset.resultId;
     const isAdding = targetIcon.classList.contains('not-favorite');
     const action = isAdding ? 'add' : 'remove';
 
@@ -34,7 +34,7 @@ export const toggleFavoriteStatus = async (event) => {
 export const handlePlaylistModal = async (event) => {
     event.preventDefault();
     const playlistIcon = event.currentTarget;
-    const movieId = playlistIcon.closest('.movie').dataset.movieId;
+    const movieId = playlistIcon.closest('.movie').dataset.resultId;
     const playlistModal = document.querySelector(`#playlistModal${movieId}`);
     const closeModalBtn = document.querySelector(`#closePlaylistModalBtn${movieId}`);
     const existingPlaylistBlock = playlistModal.querySelector('#existingPlaylistBlock');
@@ -92,7 +92,7 @@ export const handlePlaylistModal = async (event) => {
 
 export const handleNewPlaylistClick = (event) => {
     const movieElement = event.currentTarget.closest('.movie');
-    const movieId = movieElement.dataset.movieId;
+    const movieId = movieElement.dataset.resultId;
     const title = event.currentTarget.previousElementSibling.value || 'Playlist sans nom';
     createPlaylist(movieId, title);
     const playlistCountElement = document.querySelector('#playlistCount');
@@ -104,7 +104,7 @@ export const handleNewPlaylistClick = (event) => {
 
 export const handleExistingPlaylistClick = (event) => {
     const movieElement = event.currentTarget.closest('.movie');
-    const movieId = movieElement.dataset.movieId;
+    const movieId = movieElement.dataset.resultId;
     const playlistId = event.target.previousElementSibling.value;
     addToPlaylist(movieId, playlistId);
     setTimeout(() => closePlaylistModal(movieId), 500);
@@ -137,7 +137,7 @@ export const deletePlaylist = async () => {
 export const removeFromPlaylist = async (event) => {
     const element = event.target;
     const playlistElement = element.closest('.playlist-element');
-    const movieId = element.dataset.movieId;
+    const movieId = element.dataset.resultId;
     const playlistId = playlistElement.dataset.playlistId;
     await fetchData(`${origin}/playlist/remove-from-playlist`, {
         method: 'POST',

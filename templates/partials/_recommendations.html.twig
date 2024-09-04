@@ -15,8 +15,9 @@
                             <img class="w-100 rounded-top n-a" src="{{ asset('images/na2.webp') }}" alt="Affiche non disponible">
                         </a>
                     {% endif %}
-                    <div class="">
-                        {{ (recommendation.vote_average * 10)|round }}%
+                    <div>
+                        <div class="bg-dark custom-blue-2">{{ recommendation.title|u.truncate(22, '...') }}</div>
+                        <div class="bg-dark">{{ (recommendation.vote_average * 10)|round }}%</div>
                     </div>
                 </div>
             {% endfor %}

@@ -1,25 +1,27 @@
 .page-full-casting {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 25px;
+   display: flex;
+   justify-content: center;
+   align-items: stretch;
+   flex-wrap: wrap;
+   gap: 25px;
 
-    .actor-card {
-        width: 15%;
+   .actor-card {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      width: 15%;
+      border-radius: 6px;
+      overflow: hidden;
+      text-align: center;
 
-        .actor-name-link {
-           text-decoration: underline;
-           overflow: hidden;
-        }
-    }
+      .person-img {
+         height: 100%;
+         border-radius: 6px 6px 0 0;
+         transition: transform 0.3s ease;
+      }
+   }
 
-    .person-img {
-       width: 100%;
-       border-radius: 6px 6px 0 0;
-
-       &:hover {
-          transform: scale(1.01);
-       }
-    }
+   .actor-card:hover .person-img {
+      transform: scale(1.01);
+   }
 }

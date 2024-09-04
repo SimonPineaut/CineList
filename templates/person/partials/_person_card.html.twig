@@ -1,0 +1,15 @@
+{% for result in results %} 
+    <div class="movie" data-result-id="{{ result.id }}">
+        {% if result.profile_path %}
+            <a class="movie-img-link" href="{{ path('person_show', {'id': result.id}) }}">
+                <img class="w-100 rounded-top" src="{{ 'https://image.tmdb.org/t/p/w500' ~ result.profile_path }}" alt="Affiche du film">
+            </a>
+        {% else %}
+            <a class="movie-img-link" href="{{ path('person_show', {'id': result.id}) }}">
+                <img class="w-100 rounded-top n-a" src="{{ asset('images/na2.webp') }}" alt="Photo non disponible" alt="Photo de la personne">
+            </a>
+        {% endif %}
+        <span class="custom-blue-2 bg-dark text-center pt-2 pb-1">{{ result.name }}</span>
+        <span class="bg-dark text-light text-center rounded-bottom p-1">{{ result.known_for_department|trans() }}</span>
+    </div>
+{% endfor %}

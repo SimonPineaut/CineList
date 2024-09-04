@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Carrière de {{ name }}{% endblock %}
+ 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-image: url("{{ asset('images/wallpapers/movie/main.webp') }}");
+            background-position: center;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="text-center my-5">
+        <h2 class="d-inline custom-blue-2 bg-dark rounded fw-bold fs-2 p-4 mx-auto">Filmographie complète de {{ name }}</h2>
+    </div>
+    {% if results is defined and results is not empty %}
+        <div class="page page-movies">
+            {% for result in results %} 
+                <div class="movie" data-result-id="{{ result.id }}">
+                    {% if result.character is defined %}
+                        <div class="p-2 bg-light text-dark fw-bold text-center rounded-top">{{ result.character }}</div>
+                    {% elseif result.job is defined %}
+                        <div class="p-2 bg-light text-dark fw-bold text-center rounded-top">{{ result.job }}</div>
+                    {% endif %}
+                    {% include "partials/modals/_playlist_modal.html.twig" %}
+                    <div class="position-relative">
+                        {% if is_granted("ROLE_USER") %}
+                            {% include "movie/partials/_action_icons.html.twig" %}
+                        {% endif %}
+                    </div>
+                    {% if result.poster_path %}
+                        <a class="movie-img-link" href="{{ path('movie_show', {'id': result.id}) }}">
+                            <img class="w-100" src="{{ 'https://image.tmdb.org/t/p/w500' ~ result.poster_path }}" alt="Affiche du film">
+                        </a>
+                    {% else %}
+                        <a class="movie-img-link" href="{{ path('movie_show', {'id': result.id}) }}">
+                            <img class="w-100 n-a" src="{{ asset('images/na2.webp') }}" alt="Affiche non disponible" alt="Affiche du film">
+                        </a>
+                    {% endif %}
+                    <div class="text-center bg-dark rounded-bottom p-2">
+                        <a class="text-decoration-none fw-bold text-light my-3" href="{{ path('movie_show', {'id': result.id}) }}">
+                            {{ result.title|u.truncate(22, '...') }}
+                        </a>
+                        <div class="d-flex mt-2">
+                            <div class="d-flex align-items-center w-100">
+                                <img class="movie-year-img" src="{{ asset('icons/release-date.svg') }}" alt="Date de sortie">
+                                {% if result.release_date is defined %}
+                                    <span class="fw-bold text-light">{{ result.release_date|date('Y') }}</span>
+                                {% else %}
+                                    <span class="fw-bold text-light">N/A</span>
+                                {% endif %}
+                            </div>
+                            <div class="movie-gauge-container">
+                                {% if result.vote_average is defined %}
+                                    <canvas 
+                                        id="gauge{{ result.id }}"
+                                        class="gauge"  
+                                        data-result-id="{{ result.id }}"
+                                        data-result-note="{{ (result.vote_average * 10)|round }}" 
+                                        data-result-note-count="{{ result.vote_count }}">
+                                    </canvas>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

@@ -99,7 +99,7 @@ class PlaylistController extends AbstractController
     public function updateStatus(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $playlistData = json_decode($request->getContent(), true);
-        $playlist = $this->playlistRepository->find($playlistData['playlistId']) 
+        $playlist = $this->playlistRepository->find($playlistData['playlistId'])
             ?? throw new NotFoundHttpException('Playlist not found');
 
         $playlist->setIsPublic(!$playlist->isPublic());
@@ -139,7 +139,7 @@ class PlaylistController extends AbstractController
     public function addToPlaylist(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $playlistData = json_decode($request->getContent(), true);
-        $playlist = $this->playlistRepository->find($playlistData['playlistId']) 
+        $playlist = $this->playlistRepository->find($playlistData['playlistId'])
             ?? throw new NotFoundHttpException('Playlist not found');
 
         if (in_array($playlistData['movieId'], $playlist->getMovieIds())) {
@@ -163,7 +163,7 @@ class PlaylistController extends AbstractController
     public function removeFromPlaylist(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $playlistData = json_decode($request->getContent(), true);
-        $playlist = $this->playlistRepository->find($playlistData['playlistId']) 
+        $playlist = $this->playlistRepository->find($playlistData['playlistId'])
             ?? throw new NotFoundHttpException('Playlist not found');
 
         $playlist->removeMovieId($playlistData['movieId']);
@@ -181,7 +181,7 @@ class PlaylistController extends AbstractController
     public function deletePlaylist(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $playlistData = json_decode($request->getContent(), true);
-        $playlist = $this->playlistRepository->find($playlistData['playlistId']) 
+        $playlist = $this->playlistRepository->find($playlistData['playlistId'])
             ?? throw new NotFoundHttpException('Playlist not found');
 
         $entityManager->remove($playlist);
@@ -211,7 +211,7 @@ class PlaylistController extends AbstractController
     {
         return $this->render('playlist/show.html.twig', [
             'playlist' => $playlist,
-            'movies' => $this->getMoviesByPlaylist([$playlist])[$playlist->getId()],
+            'results' => $this->getMoviesByPlaylist([$playlist])[$playlist->getId()],
         ]);
     }
 
@@ -222,8 +222,7 @@ class PlaylistController extends AbstractController
             $moviesByPlaylist[$playlist->getId()] = array_map(
                 fn($movieId) => $this->apiService->fetchFromApi(
                     'GET',
-                    "{$this->tmdbApiBaseUrl}/movie/{$movieId}",
-                    ['language' => 'fr']
+                    "{$this->tmdbApiBaseUrl}/movie/{$movieId}"
                 ),
                 $playlist->getMovieIds()
             );

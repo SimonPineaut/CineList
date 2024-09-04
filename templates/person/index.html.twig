@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}CineList{% endblock %}
-
+{% block title %}Personnes{% endblock %}
+ 
 {% block stylesheets %}
     {{ parent() }}
     <style>
@@ -21,12 +21,12 @@
     {% if results is defined and results is not empty %}
         {% include "partials/_pagination.html.twig" %}
         <div class="page page-movies">
-            {% include "partials/_card.html.twig" %}
+            {% include "person/partials/_person_card.html.twig" %}
         </div>
         {% include "partials/_pagination.html.twig" %}
     {% else %}
         <div class="vh-100">
-            <p class="w-75 mx-auto text-center rounded bg-dark text-light mt-5 p-3 fs-3">Aucun film trouvé</p>
+            <p class="w-75 mx-auto text-center rounded bg-dark text-light mt-5 p-3 fs-3">Aucune personne trouvée</p>
         </div>
     {% endif %}
 {% endblock %}

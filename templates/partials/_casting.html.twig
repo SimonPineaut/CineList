@@ -4,7 +4,7 @@
                 {% if actor.profile_path %}
                     <div class="actor">
                         <a href="{{ path('person_show', {'id': actor.id}) }}">
-                            <img class="person-img rounded" src="{{ 'https://image.tmdb.org/t/p/w500' ~ actor.profile_path }}" alt="Affiche du film">
+                            <img class="person-img rounded mb-2" src="{{ 'https://image.tmdb.org/t/p/w500' ~ actor.profile_path }}" alt="Affiche du film">
                         </a>
                         <a class="actor-name-link" href="{{ path('person_show', {'id': actor.id}) }}">{{ actor.name }}</a>
                     </div>

@@ -20,9 +20,9 @@ function getNoteColor(note) {
 const gaugeElements = document.querySelectorAll('.gauge');
 
 gaugeElements.forEach(gaugeElement => {
-    const movieId = gaugeElement.dataset.movieId;
-    const note = gaugeElement.dataset.movieNote;
-    const noteCount = gaugeElement.dataset.movieNoteCount;
+    const movieId = gaugeElement.dataset.resultId;
+    const note = gaugeElement.dataset.resultNote;
+    const noteCount = gaugeElement.dataset.resultNoteCount;
     const color = getNoteColor(note);
 
     const canvas = document.querySelector(`#gauge${movieId}`);

@@ -39,16 +39,16 @@
         </div>
     </div>
     <div class="edit-playlist-movie-container">
-        {% for movie in movies %}
+        {% for result in results %}
             <div class="playlist-element" data-playlist-id="{{ playlist.id }}">
                 {% if app.user == playlist.user %}
                     <span class="remove-from-playlist-btn" id="removeFromPlaylistBtn">
-                        <img data-movie-id="{{ movie.id }}"src="{{ asset('icons/delete.svg') }}" alt="">
+                        <img data-result-id="{{ result.id }}"src="{{ asset('icons/delete.svg') }}" alt="">
                     </span>
                 {% endif %}
-                <a href="{{ path('movie_show', {'id': movie.id }) }}" class="text-decoration-none custom-blue-2">
-                    <img src="{{'https://image.tmdb.org/t/p/w500' ~ movie.poster_path }}" alt="">
-                    <span class="position-relative">{{ movie.title|u.truncate(22, '...') }}</span>
+                <a href="{{ path('movie_show', {'id': result.id }) }}" class="text-decoration-none custom-blue-2">
+                    <img src="{{'https://image.tmdb.org/t/p/w500' ~ result.poster_path }}" alt="">
+                    <span class="position-relative">{{ result.title|u.truncate(22, '...') }}</span>
                 </a>
             </div>
         {% endfor %}

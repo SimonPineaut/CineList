@@ -28,18 +28,30 @@
                         {{ _self.navbar_link('movie_genres', 'Genres') }}
                     </li>
                     <li class="nav-item">
+                        {{ _self.navbar_link('persons', 'Personnes') }}
+                    </li>
+                    <li class="nav-item">
                         {{ _self.navbar_link('playlist_index', 'Playlists') }}
                     </li>
                 </div>
                 {% set query = app.request.query.get('query') %}
-                <form class="d-flex align-items-center" action="{{ path('movie_search', {'page' : 1}) }}" method="get">
+                {% if app.request.get('_route') == 'persons' or app.request.get('_route') == 'person_search' %}
+                    <form class="d-flex align-items-center" action="{{ path('person_search', {'page' : 1}) }}" method="get">
+                {% else %}
+                    <form class="d-flex align-items-center" action="{{ path('movie_search', {'page' : 1}) }}" method="get">
+                {% endif %}
                     <div class="d-flex flex-column">
                         <button class="border-0 bg-transparent" type="submit">
                             <img class="search-icon" src="{{ asset('icons/search.svg') }}">
                         </button>
                     </div>
-                    <input class="rounded-pill text-center border-0 p-2" type="search" name="query" placeholder="chercher un film" value="{{ query }}"
+                    {% if app.request.get('_route') == 'persons' or app.request.get('_route') == '_person_search' %}
+                        <input class="rounded-pill text-center border-0 p-2" type="search" name="query" placeholder="chercher une personne" value="{{ query }}"
                         aria-label="Search">
+                    {% else %}
+                        <input class="rounded-pill text-center border-0 p-2" type="search" name="query" placeholder="chercher un film" value="{{ query }}"
+                        aria-label="Search">
+                    {% endif %}
                     <div class="d-flex flex-column">
                         <button id="advancedSearchBtn" class="border-0 bg-transparent">
                             <img class="advanced-search-icon" src="{{ asset('icons/sliders2.svg') }}">

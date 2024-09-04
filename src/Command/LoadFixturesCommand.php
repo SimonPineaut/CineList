@@ -81,7 +81,7 @@ class LoadFixturesCommand extends Command
 
             for ($i = 0; $i <= 4; $i++) {
                 $playlist = new Playlist();
-                $playlist->setName($demoUser->getUsername() . ' n°' . $i);
+                $playlist->setName('Demo playlist n°' . $i);
                 $playlist->setCreatedAt(new DateTimeImmutable());
                 $playlist->setUser($demoUser);
                 $playlist->setIsPublic((bool)random_int(0, 1));

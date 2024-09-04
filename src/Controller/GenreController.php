@@ -25,9 +25,7 @@ class GenreController extends AbstractController
     #[Route('genres/movie', name: 'movie_genres', methods: ['GET'])]
     public function getGenres(): Response
     {
-        $results = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/genre/movie/list", [
-            'language' => 'fr',
-        ]);
+        $results = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/genre/movie/list");
         $genres = $results['genres'];
 
         return $this->render('movie/genres.html.twig', [
@@ -43,10 +41,7 @@ class GenreController extends AbstractController
         $favoriteMovies = $user->getFavoriteMovies();
         $page = $this->apiService->getPage($request);
 
-        $results = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/discover/movie?with_genres={$genreId}", [
-            'language' => 'fr',
-            'page' => $page,
-        ]);
+        $results = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/discover/movie?with_genres={$genreId}");
 
         $currentPage = $results['page'];
         $totalPages = $results['total_pages'] > 500 ? 500 : $results['total_pages'];
@@ -55,7 +50,7 @@ class GenreController extends AbstractController
         return $this->render('movie/index.html.twig', [
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
-            'movies' => $movies,
+            'results' => $movies,
             'favoriteMovies' => $favoriteMovies ?? [],
             'page' => $page,
             'genreId' => $genreId,
@@ -66,9 +61,7 @@ class GenreController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function getGenreFormOptions(): Array
     {
-        $results = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/genre/movie/list", [
-            'language' => 'fr',
-        ]);
+        $results = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/genre/movie/list");
         $genres = $results['genres'];
         $formattedGenres = [];
         foreach ($genres as $genre) {

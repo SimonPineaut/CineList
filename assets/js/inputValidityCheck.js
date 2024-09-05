@@ -58,8 +58,12 @@ export const checkPasswordValidity = async (event) => {
     } else {
         passwordInput.style.outline = '4px solid #FF0000'
         validityMessageElement.style.color = '#FF0000'
-        validityMessageElement.innerText = 'Au moins 8 caractères dont un chiffre, une majuscule, une minuscule et un caractère spécial parmi @$!%*?&'
-        
+        validityMessageElement.style.maxWidth = '100%'
+        validityMessageElement.innerText = `Au moins 8 caractères dont 
+        un chiffre,
+        une majuscule,
+        une minuscule,
+        un caractère parmi @$!%*?&`
     }
     passwordInput.addEventListener('focusout', () => {
         validityMessageElement.innerText = ''
@@ -77,13 +81,15 @@ export const comparePasswords = (event) => {
             confirmPasswordInput.style.outline = '4px solid #ff0000'
             newPasswordInput.style.outline = '4px solid #ff0000'
             validityMessageElement.style.color = '#ff0000'
-            validityMessageElement.innerText = 'Les mots de passe ne sont pas de même taille'
+            validityMessageElement.innerText = `Les mots de passe ne 
+            sont pas de même taille`
         } else {
             if (confirmPassword !== newPassword) {
                 confirmPasswordInput.style.outline = '4px solid #ff0000'
                 newPasswordInput.style.outline = '4px solid #ff0000'
                 validityMessageElement.style.color = '#ff0000'
-                validityMessageElement.innerText = 'Les mots de passe ne correspondent pas'
+                validityMessageElement.innerText =  `Les mots de passe 
+                ne correspondent pas`
             } else {
                 confirmPasswordInput.style.outline = '4px solid #5fed2c'
                 newPasswordInput.style.outline = '4px solid #5fed2c'

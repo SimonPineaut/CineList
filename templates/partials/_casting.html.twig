@@ -12,7 +12,7 @@
         {% endfor %}
     </div>
     {% if actors %}
-        <a href="{{ path('movie_casting', { 'movieId': movie.id}) }}">
+        <a href="{{ path('movie_casting', { 'movieId': result.id}) }}">
             <img class="more" src="{{ asset('icons/more-light.svg') }}" alt="">
         </a>
     {% endif %}

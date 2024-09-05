@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ movie.title }}{% endblock %}
+{% block title %}{{ result.title }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -16,9 +16,9 @@
 
 {% block body %}
 	<div class="col-4 text-center bg-dark text-light rounded fs-6 p-2 mx-auto my-4">
-		<span class="fs-4 fw-bolder">{{ movie.title }}</span>
+		<span class="fs-4 fw-bolder">{{ result.title }}</span>
 	</div>
-	<div class="movie container mt-4" data-movie-id="{{ movie.id }}">
+	<div class="movie container mt-4" data-result-id="{{ result.id }}">
 		<div class="row">
 			<div class="col-2">
 				{% include "partials/modals/_playlist_modal.html.twig" %}
@@ -27,15 +27,15 @@
 						{% include "movie/partials/_action_icons.html.twig" %}
 					{% endif %}
 				</div>
-				{% if movie.poster_path is not null %}
-					<img class="w-100 rounded" src={{ "https://image.tmdb.org/t/p/w500" ~ movie.poster_path }}>
+				{% if result.poster_path is not null %}
+					<img class="w-100 rounded" src={{ "https://image.tmdb.org/t/p/w500" ~ result.poster_path }}>
 				{% else %}
 					<img class="w-100 rounded n-a" src={{ asset('images/na2.webp') }}>
 				{% endif %}
 		
-				{% if movie.genres is not null %}
+				{% if result.genres is not null %}
 					<div class="genres">
-						{% for genre in movie.genres %}
+						{% for genre in result.genres %}
 						
 						<a href="{{ path('movie_genre', {'genreId': genre.id, 'genreName': genre.name, 'page': 1}) }}"><span>{{ genre.name }}</span></a>
 						{% endfor %}
@@ -46,11 +46,11 @@
 				<div class="d-flex justify-content-between">
 					<div class="movie-show-year">
 						<img src="{{ asset('icons/release-date.svg') }}">
-						<span>{{ movie.release_date|date('d/m/Y') }}</span>
+						<span>{{ result.release_date|date('d/m/Y') }}</span>
 					</div>
-					{% if movie.origin_country is not null %}
+					{% if result.origin_country is not null %}
 						<div class="flags">
-							{% for origin_country in movie.origin_country %}
+							{% for origin_country in result.origin_country %}
 								<span class="fi fi-{{ origin_country|lower }}"></span>
 							{% endfor %}
 						</div>
@@ -67,23 +67,23 @@
 					{% endif %}
 					<div class="movie-gauge-container">
 						<canvas 
-							id="gauge{{ movie.id }}"
+							id="gauge{{ result.id }}"
 							class="gauge"  
-							data-movie-id="{{ movie.id }}"
-							data-movie-note="{{ (movie.vote_average * 10)|round }}" 
-							data-movie-note-count="{{ movie.vote_count }}">
+							data-result-id="{{ result.id }}"
+							data-result-note="{{ (result.vote_average * 10)|round }}" 
+							data-result-note-count="{{ result.vote_count }}">
 						</canvas>
 					</div>
 				</div>
 		
-				{% if movie.tagline is not null %}
+				{% if result.tagline is not null %}
 					<cite class="text-light my-2">
-						<p class="tagline">{{movie.tagline}}</p>
+						<p class="tagline">{{result.tagline}}</p>
 					</cite>
 				{% endif %}
 		
-				{% if movie.overview is not null %}
-					<p class="overview">{{movie.overview}}</p>
+				{% if result.overview is not null %}
+					<p class="overview">{{result.overview}}</p>
 				{% endif %}
 				{% include "partials/_casting.html.twig" %}
 			</div>

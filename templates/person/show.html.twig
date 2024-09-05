@@ -6,7 +6,7 @@
     {{ parent() }}
     <style>
         body {
-            background-image: url("{{ asset('images/wallpapers/person/show.webp') }}");
+            background-image: url("{{ asset('images/wallpapers/account/login.webp') }}");
             background-position: center;
             background-attachment: fixed;
             background-size: cover;
@@ -25,12 +25,12 @@
                 {% endif %}
             </div>
             <div class="person-text col-8 d-flex flex-column justify-content-evenly bg-dark text-center text-light p-2 rounded">
-                <div class="fw-bold custom-blue-2">
+                <div>
                     {% if person.name is not null %}
-                        <h2>{{person.name}}</h2>
+                        <h2 class="fw-bold custom-blue-2">{{person.name}}</h2>
                     {% endif %}
                     {% if person.birthday is not null %}
-                        <p>Né(e) le {{ person.birthday|date('d/m/Y') }}</p>
+                        <p class="fw-bold custom-blue-2">Né(e) le {{ person.birthday|date('d/m/Y') }}</p>
                     {% endif %}
                     {% if person.place_of_birth is not null %}
                         <p>à {{person.place_of_birth}}</p>
@@ -48,60 +48,63 @@
                 </div>
             </div>
         </div>
-        <div class="mb-3">
-            <p class="d-inline bg-dark text-light rounded fs-4 p-2">
-                Films les mieux notés de <span class="fw-bold custom-blue-2">{{ person.name }}</span>
-            </p>
-            <a class="login-btn d-inline" href="{{ path('person_credits', {'personId': person.id, 'name': person.name}) }}">Filmographie complète</a>
-        </div>
-        <div class="recommendations-container person-top-movies mb-2">
-            <div class="recommendations bg-dark rounded my-2">
-                {% for movie in relatedMovies %}
-                    <div class="recommendation">
-                        {% if movie.poster_path %}
-                                <a href="{{ path('movie_show', {'id': movie.id}) }}" class="recommendation-link">
-                                    <img class="recommendation-img" src="{{ 'https://image.tmdb.org/t/p/w500' ~ movie.poster_path }}" alt="Affiche du film">
-                                </a>
-                        {% else %}
-                            <a class="movie-img-link" href="{{ path('movie_show', {'id': movie.id}) }}">
-                                <img class="w-100 rounded-top n-a" src="{{ asset('images/na2.webp') }}" alt="Affiche non disponible">
-                            </a>
-                        {% endif %}
-                        <div>
-                            <div class="bg-dark custom-blue-2">{{ movie.title|u.truncate(22, '...') }}</div>
-                            <div class="bg-dark">{{ (movie.vote_average * 10)|round }}%</div>
-                        </div>
-                    </div>
-                {% endfor %}
+        {% if relatedMovies is defined and relatedMovies is not empty%}
+            <div class="mb-3">
+                <p class="d-inline bg-dark text-light rounded fs-4 p-2">
+                    Films les mieux notés de <span class="fw-bold custom-blue-2">{{ person.name }}</span>
+                </p>
+                <a class="login-btn d-inline" href="{{ path('person_credits', {'personId': person.id, 'name': person.name}) }}">Filmographie complète</a>
             </div>
-        </div>
-
-        <div class="bg-dark d-inline text-light rounded fs-4 p-2 mx-auto my-4">
-            Derrière la caméra
-        </div>
-        <div class="recommendations-container person-top-movies">
-            <div class="recommendations bg-dark rounded mt-3">
-                {% for movie in crew %}
-                    <div class="recommendation">
-                        {% if movie.job is defined %}
-                            <div class="p-2 bg-custom-blue-2 text-dark fw-bold text-center rounded-top">{{ movie.job }}</div>
-                        {% endif %}
-                        {% if movie.poster_path %}
-                                <a href="{{ path('movie_show', {'id': movie.id}) }}" class="recommendation-link">
-                                    <img class="recommendation-img" src="{{ 'https://image.tmdb.org/t/p/w500' ~ movie.poster_path }}" alt="Affiche du film">
+            <div class="recommendations-container person-top-movies mb-2">
+                <div class="recommendations bg-dark rounded my-2">
+                    {% for movie in relatedMovies %}
+                        <div class="recommendation">
+                            {% if movie.poster_path %}
+                                    <a href="{{ path('movie_show', {'id': movie.id}) }}" class="recommendation-link">
+                                        <img class="recommendation-img rounded" src="{{ 'https://image.tmdb.org/t/p/w500' ~ movie.poster_path }}" alt="Affiche du film">
+                                    </a>
+                            {% else %}
+                                <a class="movie-img-link" href="{{ path('movie_show', {'id': movie.id}) }}">
+                                    <img class="w-100 rounded-top n-a" src="{{ asset('images/na2.webp') }}" alt="Affiche non disponible">
                                 </a>
-                        {% else %}
-                            <a class="movie-img-link" href="{{ path('movie_show', {'id': movie.id}) }}">
-                                <img class="w-100 rounded-top n-a" src="{{ asset('images/na2.webp') }}" alt="Affiche non disponible">
-                            </a>
-                        {% endif %}
-                        <div>
-                            <div class="bg-dark custom-blue-2">{{ movie.title|u.truncate(22, '...') }}</div>
-                            <div class="bg-dark">{{ (movie.vote_average * 10)|round }}%</div>
+                            {% endif %}
+                            <div>
+                                <div class="bg-dark custom-blue-2">{{ movie.title|u.truncate(22, '...') }}</div>
+                                <div class="bg-dark">{{ (movie.vote_average * 10)|round }}%</div>
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
-        </div>
+        {% endif %}
+        {% if crew is defined and crew is not empty%}
+            <div class="bg-dark d-inline text-light rounded fs-4 p-2 mx-auto my-4">
+                Derrière la caméra
+            </div>
+            <div class="recommendations-container person-top-movies">
+                <div class="recommendations bg-dark rounded mt-3">
+                    {% for movie in crew %}
+                        <div class="recommendation">
+                            {% if movie.job is defined %}
+                                <div class="p-2 bg-custom-blue-2 text-dark fw-bold text-center rounded-top">{{ movie.job }}</div>
+                            {% endif %}
+                            {% if movie.poster_path %}
+                                    <a href="{{ path('movie_show', {'id': movie.id}) }}" class="recommendation-link">
+                                        <img class="recommendation-img rounded-bottom" src="{{ 'https://image.tmdb.org/t/p/w500' ~ movie.poster_path }}" alt="Affiche du film">
+                                    </a>
+                            {% else %}
+                                <a class="movie-img-link" href="{{ path('movie_show', {'id': movie.id}) }}">
+                                    <img class="w-100 rounded-top n-a" src="{{ asset('images/na2.webp') }}" alt="Affiche non disponible">
+                                </a>
+                            {% endif %}
+                            <div>
+                                <div class="bg-dark custom-blue-2">{{ movie.title|u.truncate(22, '...') }}</div>
+                                <div class="bg-dark">{{ (movie.vote_average * 10)|round }}%</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

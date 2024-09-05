@@ -1,45 +1,105 @@
 {% for result in results %} 
-    <div class="movie" data-result-id="{{ result.id }}">
-        {% include "partials/modals/_playlist_modal.html.twig" %}
-        <div class="position-relative">
-            {% if is_granted("ROLE_USER") %}
-                {% include "movie/partials/_action_icons.html.twig" %}
+    {% if result.media_type is not defined or result.media_type == 'movie' %}
+       <div class="movie" data-result-id="{{ result.id }}">
+            {% include "partials/modals/_playlist_modal.html.twig" %}
+            <div class="position-relative">
+                {% if is_granted("ROLE_USER") %}
+                    {% include "movie/partials/_action_icons.html.twig" %}
+                {% endif %}
+            </div>
+            {% if result.poster_path %}
+                <a class="movie-img-link" href="{{ path('movie_show', {'id': result.id}) }}">
+                    <img class="w-100 rounded-top" src="{{ 'https://image.tmdb.org/t/p/w500' ~ result.poster_path }}" alt="Affiche du film">
+                </a>
+            {% else %}
+                <a class="movie-img-link" href="{{ path('movie_show', {'id': result.id}) }}">
+                    <img class="w-100 rounded-top n-a" src="{{ asset('images/na2.webp') }}" alt="Affiche non disponible" alt="Affiche du film">
+                </a>
             {% endif %}
-        </div>
-        {% if result.poster_path %}
-            <a class="movie-img-link" href="{{ path('movie_show', {'id': result.id}) }}">
-                <img class="w-100 rounded-top" src="{{ 'https://image.tmdb.org/t/p/w500' ~ result.poster_path }}" alt="Affiche du film">
-            </a>
-        {% else %}
-            <a class="movie-img-link" href="{{ path('movie_show', {'id': result.id}) }}">
-                <img class="w-100 rounded-top n-a" src="{{ asset('images/na2.webp') }}" alt="Affiche non disponible" alt="Affiche du film">
-            </a>
-        {% endif %}
-        <div class="text-center bg-dark rounded-bottom p-2">
-            <a class="text-decoration-none fw-bold text-light my-3" href="{{ path('movie_show', {'id': result.id}) }}">
-                {{ result.title|u.truncate(22, '...') }}
-            </a>
-            <div class="d-flex mt-2">
-                <div class="d-flex align-items-center w-100">
-                    <img class="movie-year-img" src="{{ asset('icons/release-date.svg') }}" alt="Date de sortie">
-                    {% if result.release_date is defined %}
-                        <span class="fw-bold text-light">{{ result.release_date|date('Y') }}</span>
-                    {% else %}
-                        <span class="fw-bold text-light">N/A</span>
-                    {% endif %}
-                </div>
-                <div class="movie-gauge-container">
-                    {% if result.vote_average is defined %}
-                        <canvas 
-                            id="gauge{{ result.id }}"
-                            class="gauge"  
-                            data-result-id="{{ result.id }}"
-                            data-result-note="{{ (result.vote_average * 10)|round }}" 
-                            data-result-note-count="{{ result.vote_count }}">
-                        </canvas>
-                    {% endif %}
+            <div class="text-center bg-dark rounded-bottom p-2">
+                <a class="text-decoration-none fw-bold text-light my-3" href="{{ path('movie_show', {'id': result.id}) }}">
+                    {{ result.title|u.truncate(22, '...') }}
+                </a>
+                <div class="d-flex mt-2">
+                    <div class="d-flex align-items-center w-100">
+                        <img class="movie-year-img" src="{{ asset('icons/release-date.svg') }}" alt="Date de sortie">
+                        {% if result.release_date is defined %}
+                            <span class="fw-bold text-light">{{ result.release_date|date('Y') }}</span>
+                        {% else %}
+                            <span class="fw-bold text-light">N/A</span>
+                        {% endif %}
+                    </div>
+                    <div class="movie-gauge-container">
+                        {% if result.vote_average is defined %}
+                            <canvas 
+                                id="gauge{{ result.id }}"
+                                class="gauge"  
+                                data-result-id="{{ result.id }}"
+                                data-result-note="{{ (result.vote_average * 10)|round }}" 
+                                data-result-note-count="{{ result.vote_count }}">
+                            </canvas>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% elseif result.media_type == 'person' %}
+        <div class="movie" data-result-id="{{ result.id }}">
+            <span class="custom-blue-2 bg-dark text-center pb-2 pt-1 rounded-top fw-bold">{{ result.name }}</span>
+            {% if result.profile_path %}
+                <a class="movie-img-link" href="{{ path('person_show', {'id': result.id}) }}">
+                    <img class="w-100" src="{{ 'https://image.tmdb.org/t/p/w500' ~ result.profile_path }}" alt="Affiche du film">
+                </a>
+            {% else %}
+                <a class="movie-img-link" href="{{ path('person_show', {'id': result.id}) }}">
+                    <img class="w-100 rounded-top n-a" src="{{ asset('images/na2.webp') }}" alt="Photo non disponible" alt="Photo de la personne">
+                </a>
+            {% endif %}
+            <span class="bg-dark text-light text-center rounded-bottom p-1">{{ result.known_for_department|trans() }}</span>
+        </div>
+    {% elseif result.media_type == 'tv' %}
+        <div class="movie" data-result-id="{{ result.id }}">
+            {% include "partials/modals/_playlist_modal.html.twig" %}
+            <div class="position-relative">
+                {% if is_granted("ROLE_USER") %}
+                    {% include "movie/partials/_action_icons.html.twig" %}
+                {% endif %}
+            </div>
+            {% if result.poster_path %}
+                <span class="movie-img-link">
+                    <img class="w-100 rounded-top" src="{{ 'https://image.tmdb.org/t/p/w500' ~ result.poster_path }}" alt="Affiche du film">
+                </span>
+            {% else %}
+                <span class="movie-img-link">
+                    <img class="w-100 rounded-top n-a" src="{{ asset('images/na2.webp') }}" alt="Affiche non disponible" alt="Affiche du film">
+                </span>
+            {% endif %}
+            <div class="text-center bg-dark rounded-bottom p-2">
+                <span class="text-decoration-none fw-bold text-light my-3">
+                    {{ result.name|u.truncate(22, '...') }}
+                </span>
+                <div class="d-flex mt-2">
+                    <div class="d-flex align-items-center w-100">
+                        <img class="movie-year-img" src="{{ asset('icons/release-date.svg') }}" alt="Date de sortie">
+                        {% if result.release_date is defined %}
+                            <span class="fw-bold text-light">{{ result.release_date|date('Y') }}</span>
+                        {% else %}
+                            <span class="fw-bold text-light">N/A</span>
+                        {% endif %}
+                    </div>
+                    <div class="movie-gauge-container">
+                        {% if result.vote_average is defined %}
+                            <canvas 
+                                id="gauge{{ result.id }}"
+                                class="gauge"  
+                                data-result-id="{{ result.id }}"
+                                data-result-note="{{ (result.vote_average * 10)|round }}" 
+                                data-result-note-count="{{ result.vote_count }}">
+                            </canvas>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endfor %}

@@ -46,23 +46,12 @@ class MovieController extends AbstractController
         $trailer = $this->getMovieTrailer($id);
 
         return $this->render('movie/show.html.twig', [
-            'movie' => $movie,
+            'result' => $movie,
             'recommendations' => $recommendations,
             'directors' => $directors,
             'actors' => $actors,
             'favoriteMovies' => $favoriteMovies,
             'trailer' => $trailer,
-        ]);
-    }
-
-    #[IsGranted('ROLE_USER')]
-    #[Route('search/movie', name: 'movie_search', methods: ['GET'])]
-    public function search(Request $request): Response
-    {
-        $searchTerm = $request->get('query');
-
-        return $this->renderMoviePage('movie/index.html.twig', $request, $this->tmdbApiBaseUrl . '/search/multi', [
-            'query' => $searchTerm,
         ]);
     }
 
@@ -97,71 +86,6 @@ class MovieController extends AbstractController
             'actors' => $actors,
             'movie' => $movie,
         ]);
-    }
-
-    #[Route('search/advanced', name: 'movie_advanced_search', methods: ['GET'])]
-    public function advancedSearch(Request $request): Response
-    {
-        $advancedSearch = $request->getQueryString();
-
-        return $this->renderMoviePage('movie/index.html.twig', $request, $this->tmdbApiBaseUrl . '/discover/movie?' . $advancedSearch);
-    }
-
-    #[IsGranted('ROLE_USER')]
-    #[Route('search/advanced/form', name: 'movie_advanced_search_form', methods: ['GET'])]
-    public function getAdvancedSearchForm(Request $request): Response
-    {
-        $queryParams = $request->query->all();
-
-        $transform = function (&$value, $key) {
-            if (in_array($key, ['primary_release_date_gte', 'primary_release_date_lte'])) {
-                $value = (int) (new \DateTime($value))->format('Y');
-            } elseif (in_array($key, ['vote_average_gte', 'vote_average_lte', 'vote_count_lte', 'vote_count_lte'])) {
-                $value = (int) $value;
-            } elseif (in_array($key, [ 'with_genres', 'without_genres'])) {
-                $value = explode(",", $value);
-            }
-        };
-
-        array_walk($queryParams, $transform);
-
-        $form = $this->createForm(AdvancedSearchType::class, $queryParams);
-
-        return $this->render('movie/partials/_advanced_search_form.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    #[IsGranted('ROLE_USER')]
-    #[Route('search/advanced/validate', name: 'movie_advanced_search_validate', methods: ['POST'])]
-    public function validateAdvancedSearchData(Request $request): Response
-    {
-        $form = $this->createForm(AdvancedSearchType::class);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $filteredData = array_filter($data, function ($value) {
-                return $value !== null && $value !== '' && $value !== [];
-            });
-            $formattedData = $this->formatAdvancedSearchData($filteredData);
-            $queryString = http_build_query($formattedData);
-
-            return $this->json([
-                'success' => true,
-                'data' => $queryString,
-            ]);
-        } elseif ($form->isSubmitted()) {
-            $errors = [];
-            foreach ($form->getErrors(true) as $error) {
-                $errors[] = $error->getMessage();
-            }
-
-            return $this->json([
-                'success' => false,
-                'errors' => $errors,
-            ]);
-        }
     }
 
     private function renderMoviePage(string $template, Request $request, string $url, array $additionalParams = []): Response

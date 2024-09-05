@@ -16,14 +16,14 @@
 
 {% block body %}
     <div class="text-center my-5">
-        <h2 class="d-inline custom-blue-2 bg-dark rounded fw-bold fs-2 p-4 mx-auto">Filmographie complète de {{ name }}</h2>
+        <h2 class="d-inline custom-blue-2 bg-dark rounded fs-2 p-4 mx-auto">Filmographie complète de <a href="{{ path('person_show', {'id': personId}) }}" class="custom-blue-1 fw-bold">{{ name }}</a></h2>
     </div>
     {% if results is defined and results is not empty %}
         <div class="page page-movies">
             {% for result in results %} 
                 <div class="movie" data-result-id="{{ result.id }}">
                     {% if result.character is defined %}
-                        <div class="p-2 bg-light text-dark fw-bold text-center rounded-top">{{ result.character }}</div>
+                        <div class="p-2 bg-light text-dark fw-bold text-center rounded-top">{{ result.character|replace({'(Voice)': '(voix)','(voice)': '(voix)','Self': name,'uncredited': 'non crédité','archive footage': 'image d\'archive','Archival Footage': 'image d\'archive','- Nominee': '- Nominé(e)'}) }}</div>
                     {% elseif result.job is defined %}
                         <div class="p-2 bg-light text-dark fw-bold text-center rounded-top">{{ result.job }}</div>
                     {% endif %}

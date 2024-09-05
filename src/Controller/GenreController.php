@@ -40,8 +40,9 @@ class GenreController extends AbstractController
         $user = $this->getUser();
         $favoriteMovies = $user->getFavoriteMovies();
         $page = $this->apiService->getPage($request);
+        $params = ['page' => $this->apiService->getPage($request)];
 
-        $results = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/discover/movie?with_genres={$genreId}");
+        $results = $this->apiService->fetchFromApi('GET', $this->tmdbApiBaseUrl . "/discover/movie?with_genres={$genreId}", $params);
 
         $currentPage = $results['page'];
         $totalPages = $results['total_pages'] > 500 ? 500 : $results['total_pages'];

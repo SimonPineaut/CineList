@@ -70,3 +70,48 @@ const handleFormResponse = async (data) => {
         });
     }
 };
+
+export const handleSearchInput = async function () {
+    let query = this.value;
+    if (query.length > 2) {
+        try {
+            const response = await fetch(`/search/suggestions?query=${query}`);
+            const data = await response.json();
+            let suggestions = document.querySelector('#suggestions');
+            suggestions.innerHTML = '';
+            data.forEach(item => {
+                let div = document.createElement('div');
+                div.classList = 'd-flex'
+                let a = document.createElement('a');
+                a.href = `${origin}/show/movie/${item.id}`;
+                a.classList.add('suggestion-item');
+                a.textContent = item.name || item.title;
+                if (item.poster_path) {
+                    let img = document.createElement('img');
+                    img.src = `https://image.tmdb.org/t/p/w500${item.poster_path}`;
+                    img.style.width = '75px';
+                    img.style.height = '100px';
+                    div.appendChild(img);
+                }
+                div.appendChild(a);
+                suggestions.appendChild(div);
+            });
+        } catch (error) {
+            console.error('Erreur de suggestion:', error);
+        }
+    }
+};
+
+
+//                     <div class="card" style="width: 18rem;">
+//   <img class="card-img-top" src="..." alt="Card image cap">
+//   <div class="card-body">
+//     <h5 class="card-title">Card title</h5>
+//     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+//     <a href="#" class="btn btn-primary">Go somewhere</a>
+//   </div>
+// </div>
+//                 });
+//             });
+//     }
+// };

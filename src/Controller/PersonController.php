@@ -57,14 +57,14 @@ class PersonController extends AbstractController
         $moviesAsCrew = $this->mergeCrewMovies($crewMovies);
         $moviesAsCast = $this->getPersonCastMovies($personId);
 
-        $movies = [];
-        $ids = [];
-        foreach (array_merge($moviesAsCast, $moviesAsCrew) as $item) {
-            if (!in_array($item['id'], $ids)) {
-                $ids[] = $item['id'];
-                $movies[] = $item;
-            }
-        };
+        $movies = array_merge($moviesAsCast, $moviesAsCrew);
+        // $ids = [];
+        // foreach (array_merge($moviesAsCast, $moviesAsCrew) as $item) {
+        //     if (!in_array($item['id'], $ids)) {
+        //         $ids[] = $item['id'];
+        //         $movies[] = $item;
+        //     }
+        // };
         $favoriteMovies = $this->getUser()->getFavoriteMovies();
 
         return $this->render('person/career.html.twig', [

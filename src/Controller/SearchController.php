@@ -7,6 +7,8 @@ use App\Form\AdvancedSearchType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SearchController extends AbstractController
 {
     public function __construct(
+        private HttpClientInterface $client,
         private ApiService $apiService,
         #[Autowire('%tmdb_api_base_url%')] private string $tmdbApiBaseUrl
     ) {}
@@ -24,13 +27,28 @@ class SearchController extends AbstractController
     {
         $searchTerm = $request->get('query');
 
-        return $this->renderSearchResults('movie/index.html.twig', $request, $this->tmdbApiBaseUrl . '/search/multi?vote_count.gte=100', [
+        return $this->renderSearchResults('movie/index.html.twig', $request, $this->tmdbApiBaseUrl . '/discover/multi?vote_count.gte=100', [
             'query' => $searchTerm,
         ]);
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('search/advanced', name: 'movie_advanced_search', methods: ['GET'])]
+    #[Route('search/suggestions', name: 'search_suggestions', methods: ['GET'])]
+    public function suggestions(Request $request): JsonResponse
+    {
+        $query = $request->query->get('query');
+        if (!$query) {
+            return new JsonResponse(['results' => []]);
+        }
+        $data = $this->apiService->fetchFromApi('GET', 'https://api.themoviedb.org/3/search/movie', [
+            'query' => $query,
+        ]);
+
+        return new JsonResponse(array_splice($data['results'], 0, 5));
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('search/advanced', name: 'advanced_search', methods: ['GET'])]
     public function advancedSearch(Request $request): Response
     {
         $advancedSearch = $request->getQueryString();
@@ -39,7 +57,7 @@ class SearchController extends AbstractController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('search/advanced/form', name: 'movie_advanced_search_form', methods: ['GET'])]
+    #[Route('search/advanced/form', name: 'advanced_search_form', methods: ['GET'])]
     public function getAdvancedSearchForm(Request $request): Response
     {
         $queryParams = $request->query->all();
@@ -49,7 +67,7 @@ class SearchController extends AbstractController
                 $value = (int) (new \DateTime($value))->format('Y');
             } elseif (in_array($key, ['vote_average_gte', 'vote_average_lte', 'vote_count_lte', 'vote_count_lte'])) {
                 $value = (int) $value;
-            } elseif (in_array($key, [ 'with_genres', 'without_genres'])) {
+            } elseif (in_array($key, ['with_genres', 'without_genres'])) {
                 $value = explode(",", $value);
             }
         };
@@ -58,13 +76,13 @@ class SearchController extends AbstractController
 
         $form = $this->createForm(AdvancedSearchType::class, $queryParams);
 
-        return $this->render('movie/partials/_advanced_search_form.html.twig', [
+        return $this->render('partials/_advanced_search_form.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('search/advanced/validate', name: 'movie_advanced_search_validate', methods: ['POST'])]
+    #[Route('search/advanced/validate', name: 'advanced_search_validate', methods: ['POST'])]
     public function validateAdvancedSearchData(Request $request): Response
     {
         $form = $this->createForm(AdvancedSearchType::class);

@@ -4,7 +4,7 @@
             {% include "partials/modals/_playlist_modal.html.twig" %}
             <div class="position-relative">
                 {% if is_granted("ROLE_USER") %}
-                    {% include "movie/partials/_action_icons.html.twig" %}
+                    {% include "partials/_action_icons.html.twig" %}
                 {% endif %}
             </div>
             {% if result.poster_path %}
@@ -62,7 +62,7 @@
             {% include "partials/modals/_playlist_modal.html.twig" %}
             <div class="position-relative">
                 {% if is_granted("ROLE_USER") %}
-                    {% include "movie/partials/_action_icons.html.twig" %}
+                    {% include "partials/_action_icons.html.twig" %}
                 {% endif %}
             </div>
             {% if result.poster_path %}

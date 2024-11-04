@@ -18,3 +18,20 @@
         text-align: start;
     }
 }
+
+#suggestions {
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    background-color: #333;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#suggestions .suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+#suggestions .suggestion-item:hover {
+    background-color: #22b4e2;
+}

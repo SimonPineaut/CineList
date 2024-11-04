@@ -35,14 +35,15 @@
                     </li>
                 </div>
                 {% set query = app.request.query.get('query') %}
-                <form class="d-flex align-items-center" action="{{ path('search', {'page' : 1}) }}" method="get">
+                <form class="d-flex align-items-center position-relative" action="{{ path('search', {'page' : 1}) }}" method="get">
                     <div class="d-flex flex-column">
                         <button class="border-0 bg-transparent" type="submit">
                             <img class="search-icon" src="{{ asset('icons/search.svg') }}">
                         </button>
                     </div>
-                    <input class="rounded-pill text-center border-0 p-2" type="search" name="query" placeholder="Recherche" value="{{ query }}"
+                    <input id="searchInput" class="rounded-pill text-center border-0 p-2" type="search" name="query" placeholder="Recherche" value="{{ query }}"
                         aria-label="Search">
+                    <div id="suggestions" class="position-absolute w-100"></div>
                     <div class="d-flex flex-column">
                         <button id="advancedSearchBtn" class="border-0 bg-transparent">
                             <img class="advanced-search-icon" src="{{ asset('icons/sliders2.svg') }}">

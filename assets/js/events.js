@@ -2,15 +2,16 @@ import { toggleFavoriteStatus, handlePlaylistModal, handleNewPlaylistClick, hand
 import { displayLogoutModal, displayDeletePlaylistModal, displayDeleteAccountModal } from './modals.js';
 import { togglePasswordVisibility } from './passwordVisibility.js';
 import { displayFlashMessages } from './flashMessages.js';
-import { showModal, closeModal } from './advancedSearch.js';
+import { showModal, closeModal, handleSearchInput } from './search.js';
 import { checkUsernameValidity, checkEmailValidity, checkPasswordValidity, comparePasswords } from './inputValidityCheck.js';
 
 export const initializeEventListeners = () => {
     const favoriteIcons = document.querySelectorAll('.not-favorite, .favorite');
     const symfonyFlashMessages = document.querySelectorAll('#flashMessage');
-    // advanced search
+    // search
     const advancedSearchBtn = document.getElementById('advancedSearchBtn');
     const closeAdvancedSearchModalBtn = document.getElementById('closeModal');
+    const searchInput = document.getElementById('searchInput');
     // playlist
     const playlistLinks = document.querySelectorAll('#playlistLink');
     const existingPlaylistBtns = document.querySelectorAll('#existingPlaylistBtn');
@@ -30,6 +31,7 @@ export const initializeEventListeners = () => {
     const confirmPasswordInput = document.querySelector('#modify_password_form_confirmPassword');
 
     logoutBtn?.addEventListener('click', () => displayLogoutModal());
+    searchInput?.addEventListener('input', handleSearchInput)
     deleteAccountBtn?.addEventListener('click', () => displayDeleteAccountModal());
     favoriteIcons?.forEach(icon => icon.addEventListener('click', toggleFavoriteStatus));
     playlistLinks?.forEach(link => link.addEventListener('click', handlePlaylistModal));

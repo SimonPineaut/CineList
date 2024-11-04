@@ -15,13 +15,13 @@
 {% endblock %}
 
 {% block body %}
-    {% if app.request.get('_route') == 'movie_advanced_search' %}
+    {% if app.request.get('_route') == 'advanced_search' %}
         {% include "partials/_search_results_reminder.html.twig" %}
     {% endif %}
     {% if results is defined and results is not empty %}
         {% include "partials/_pagination.html.twig" %}
         <div class="page page-movies">
-            {% include "person/partials/_person_card.html.twig" %}
+            {% include "partials/_card.html.twig" %}
         </div>
         {% include "partials/_pagination.html.twig" %}
     {% else %}
